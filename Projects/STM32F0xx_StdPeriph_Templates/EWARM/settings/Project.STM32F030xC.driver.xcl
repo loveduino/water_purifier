@@ -1,0 +1,19 @@
+ -B 
+
+"--endian=little" 
+
+"--cpu=ARM7TDMI" 
+
+"--fpu=None" 
+
+"--semihosting" 
+
+"--device=Default" 
+
+"--drv_interface=SWD" 
+
+"--stlink_reset_strategy=0,0" 
+
+
+
+

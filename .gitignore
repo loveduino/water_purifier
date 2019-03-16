@@ -1,0 +1,16 @@
+
+*.pdf
+*.png
+*.zip
+*.html
+
+*.doc
+*.docx
+*.chm
+*.eww
+*.eww
+*.wsdt
+
+_htmresc/
+Projects/settings/
+Projects/STM32F0xx_APP/EWARM/
