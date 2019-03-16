@@ -154,52 +154,52 @@ void TIM14_IRQHandler(void)
 }
 #endif /* LSI_TIM_MEASURE */
 
-/**
-  * @brief  This function handles TIM3 Capture Compare interrupt request.
-  * @param  None
-  * @retval None
-  */
-void TIM3_IRQHandler(void)
-{ 
-    static uint16_t IC1ReadValue1 = 0, IC1ReadValue2 = 0;
-    static uint16_t CaptureNumber = 0;
-    uint32_t Capture = 0;
-    
-    if(TIM_GetITStatus(TIM3, TIM_IT_CC1) == SET) 
-    {
-        /* Clear TIM3 Capture compare interrupt pending bit */
-        TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
-        if(CaptureNumber == 0)
-        {
-            /* Get the Input Capture value */
-            IC1ReadValue1 = TIM_GetCapture1(TIM3);
-            CaptureNumber = 1;
-        }
-        else if(CaptureNumber == 1)
-        {
-            /* Get the Input Capture value */
-            IC1ReadValue2 = TIM_GetCapture1(TIM3); 
-            
-            /* Capture computation */
-            if (IC1ReadValue2 > IC1ReadValue1)
-            {
-                Capture = (IC1ReadValue2 - IC1ReadValue1); 
-            }
-            else if (IC1ReadValue2 < IC1ReadValue1)
-            {
-                Capture = ((0xFFFF - IC1ReadValue1) + IC1ReadValue2); 
-            }
-            else
-            {
-                Capture = 0;
-            }
-            /* Frequency computation */ 
-            TIM3Freq = (uint32_t) SystemCoreClock / Capture;
-            CaptureNumber = 0;
-            //printf("TIM3Freq = %d\r\n", TIM3Freq);
-        }
-    }
-}
+///**
+//  * @brief  This function handles TIM3 Capture Compare interrupt request.
+//  * @param  None
+//  * @retval None
+//  */
+//void TIM3_IRQHandler(void)
+//{ 
+//    static uint16_t IC1ReadValue1 = 0, IC1ReadValue2 = 0;
+//    static uint16_t CaptureNumber = 0;
+//    uint32_t Capture = 0;
+//    
+//    if(TIM_GetITStatus(TIM3, TIM_IT_CC1) == SET) 
+//    {
+//        /* Clear TIM3 Capture compare interrupt pending bit */
+//        TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
+//        if(CaptureNumber == 0)
+//        {
+//            /* Get the Input Capture value */
+//            IC1ReadValue1 = TIM_GetCapture1(TIM3);
+//            CaptureNumber = 1;
+//        }
+//        else if(CaptureNumber == 1)
+//        {
+//            /* Get the Input Capture value */
+//            IC1ReadValue2 = TIM_GetCapture1(TIM3); 
+//            
+//            /* Capture computation */
+//            if (IC1ReadValue2 > IC1ReadValue1)
+//            {
+//                Capture = (IC1ReadValue2 - IC1ReadValue1); 
+//            }
+//            else if (IC1ReadValue2 < IC1ReadValue1)
+//            {
+//                Capture = ((0xFFFF - IC1ReadValue1) + IC1ReadValue2); 
+//            }
+//            else
+//            {
+//                Capture = 0;
+//            }
+//            /* Frequency computation */ 
+//            TIM3Freq = (uint32_t) SystemCoreClock / Capture;
+//            CaptureNumber = 0;
+//            //printf("TIM3Freq = %d\r\n", TIM3Freq);
+//        }
+//    }
+//}
 
 /*******************************************************************************
 * Function Name  : EXTI1_IRQHandler

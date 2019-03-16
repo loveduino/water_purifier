@@ -158,6 +158,96 @@ void Display(void)
   } 
 }
 
+
+uint8_t g_PorbeAoutputLevel = 0;
+
+static void TIM_Config(void)
+{
+    uint16_t PrescalerValue = 0;
+    
+  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
+
+  /* TIM3 clock enable */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+
+  /* Enable the TIM3 gloabal Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+  
+    /* -----------------------------------------------------------------------
+    TIM3 Configuration: Output Compare Timing Mode:
+    
+    In this example TIM3 input clock (TIM3CLK) is set to APB1 clock (PCLK1),  
+      => TIM3CLK = PCLK1 = SystemCoreClock = 48 MHz
+          
+    To get TIM3 counter clock at 6 MHz, the prescaler is computed as follows:
+       Prescaler = (TIM3CLK / TIM3 counter clock) - 1
+       Prescaler = (PCLK1 /6 MHz) - 1
+                                              
+    CC1 update rate = TIM3 counter clock / CCR1_Val = 146.48 Hz
+    ==> Toggling frequency = 73.24 Hz
+    
+    C2 update rate = TIM3 counter clock / CCR2_Val = 219.7 Hz
+    ==> Toggling frequency = 109.8 Hz
+    
+    CC3 update rate = TIM3 counter clock / CCR3_Val = 439.4 Hz
+    ==> Toggling frequency = 219.7 Hz
+    
+    CC4 update rate = TIM3 counter clock / CCR4_Val = 878.9 Hz
+    ==> Toggling frequency = 439.4 Hz
+
+    Note: 
+     SystemCoreClock variable holds HCLK frequency and is defined in system_stm32f0xx.c file.
+     Each time the core clock (HCLK) changes, user had to call SystemCoreClockUpdate()
+     function to update SystemCoreClock variable value. Otherwise, any configuration
+     based on this variable will be incorrect.    
+  ----------------------------------------------------------------------- */   
+
+
+  /* Compute the prescaler value */
+  PrescalerValue = (uint16_t) (SystemCoreClock  / 1000000) - 1;
+
+  /* Time base configuration */
+  TIM_TimeBaseStructure.TIM_Period = 680;
+  TIM_TimeBaseStructure.TIM_Prescaler = 0;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+
+  TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+
+  /* Prescaler configuration */
+  TIM_PrescalerConfig(TIM3, PrescalerValue, TIM_PSCReloadMode_Immediate);
+
+  TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
+  
+  /* TIM3 enable counter */
+  TIM_Cmd(TIM3, ENABLE);
+}
+
+void TIM3_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
+    {
+        TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+        if (g_PorbeAoutputLevel == 1)
+        {
+            g_PorbeAoutputLevel = 0;
+            TDS_A_L;
+            TDS_B_H;
+        }
+        else
+        {
+            g_PorbeAoutputLevel = 1;
+            TDS_A_H;
+            TDS_B_L;
+        }
+    }
+}
+
+
 void prvAdcTask( void *pvParameters )
 {
 	/* Just to stop compiler warnings. */
@@ -169,6 +259,13 @@ void prvAdcTask( void *pvParameters )
     /* DMA configuration */
     DMA_Config();
     
+    I2C_EE_Config();
+    g_PorbeAoutputLevel = 0;
+    TDS_A_L;
+    TDS_B_H;
+    
+    TIM_Config();
+            
 	for( ;; )
     {
         static int count = 0;
@@ -177,24 +274,21 @@ void prvAdcTask( void *pvParameters )
         {
             count  = 0;
             
-            STM_EVAL_LEDOn(RUN_LED);
-            wait_us(50);
+            while(g_PorbeAoutputLevel == 0);                /* wait to output hige level */
+            wait_us(5);
             
             /* Test DMA1 TC flag */
             while((DMA_GetFlagStatus(DMA1_FLAG_TC1)) == RESET );
             /* Clear DMA TC flag */
             DMA_ClearFlag(DMA1_FLAG_TC1);
             
-            water.raw_water_ppm = (uint16_t)((float)RegularConvData_Tab[1]   * 3300 / 4095 * 0.4 - 10.2);
-            if (water.raw_water_ppm > 999)
-                water.raw_water_ppm = 0;
+            water.raw_water_ppm = (uint16_t)((float)RegularConvData_Tab[1]   * 3300 / 4095/* * 0.4 - 10.2*/);
+//            if (water.raw_water_ppm > 999)
+//                water.raw_water_ppm = 0;
             
-            water.clean_water_ppm = (uint16_t)((float)RegularConvData_Tab[0]   * 3300 / 4095 * 0.4 - 10.2);
-            if (water.clean_water_ppm > 999)
-                water.clean_water_ppm = 0;
-            
-            wait_us(50);
-            STM_EVAL_LEDOff(RUN_LED);
+            water.clean_water_ppm = (uint16_t)((float)RegularConvData_Tab[0]   * 3300 / 4095/* * 0.4 - 10.2*/);
+//            if (water.clean_water_ppm > 999)
+//                water.clean_water_ppm = 0;
         }
         
         /* Test DMA1 TC flag */

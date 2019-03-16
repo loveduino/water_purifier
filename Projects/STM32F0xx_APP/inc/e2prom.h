@@ -18,6 +18,6 @@ void I2C_EE_BufferWrite(uint8_t WriteAddr, const uint8_t* const pBuffer, uint16_
 void I2C_EE_BufferRead(uint8_t ReadAddr, uint8_t* const pBuffer, uint16_t NumByteToRead);
 int I2C_EE_BufferWriteSafe(uint8_t WriteAddr, const uint8_t* const pBuffer, uint16_t NumByteToWrite);
 
-
+void I2C_EE_Config(void);
 
 #endif
