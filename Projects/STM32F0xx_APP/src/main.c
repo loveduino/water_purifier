@@ -258,7 +258,7 @@ int main(void)
     }
 #endif
     
-    //IWDG_Config();
+    IWDG_Config();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
     
