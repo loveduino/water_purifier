@@ -3,9 +3,14 @@
 #include "main.h"
 #include "i2c_soft.h"
 #include "e2prom.h"
+#include "semphr.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
 #define I2C_PageSize           8			/* AT24C02每页有8个字节 */
 
+
+SemaphoreHandle_t xE2promMutex = NULL;
 
 /*
  * 函数名：I2C_EE_WaitEepromStandbyState
@@ -36,6 +41,8 @@ void I2C_EE_WaitEepromStandbyState(void)
 */
 void I2C_EE_BufferWrite(uint8_t WriteAddr, const uint8_t* const pBuffer, uint16_t NumByteToWrite)
 {
+    if (xE2promMutex)
+        xSemaphoreTake( xE2promMutex, pdMS_TO_TICKS(10) );
     uint8_t *_pBuffer = (uint8_t *)pBuffer;
     uint8_t NumOfFirstPageAvailable = I2C_PageSize - WriteAddr % I2C_PageSize;
     //页是绝对的，按整页大小排列，不是从开始写入的地址开始算。
@@ -70,6 +77,8 @@ void I2C_EE_BufferWrite(uint8_t WriteAddr, const uint8_t* const pBuffer, uint16_
             I2C_EE_WaitEepromStandbyState();
         }
     }
+    if (xE2promMutex)
+        xSemaphoreGive(xE2promMutex);
 }
 
 /*
@@ -84,17 +93,23 @@ void I2C_EE_BufferWrite(uint8_t WriteAddr, const uint8_t* const pBuffer, uint16_
 */
 void I2C_EE_BufferRead(uint8_t ReadAddr, uint8_t* const pBuffer, uint16_t NumByteToRead)
 {
+    if (xE2promMutex)
+        xSemaphoreTake( xE2promMutex, pdMS_TO_TICKS(10) );
     uint8_t *_pBuffer = (uint8_t *)pBuffer;
     //读取数据可以一直读到最后一个地址.序列读没有一页8个字节的限制
     //读没有页的问题，可以从任意地址开始读取任意大小数据，只是超过整个存储器容量时地址才回卷。
     I2C_ReadRegisterBytes(E2PROM_SLAVE_ADDR, ReadAddr, _pBuffer, NumByteToRead);
+    if (xE2promMutex)
+        xSemaphoreGive(xE2promMutex);
 }
 
 int I2C_EE_BufferWriteSafe(uint8_t WriteAddr, const uint8_t* const pBuffer, uint16_t NumByteToWrite)
 {
-    uint8_t* pReadBuffer = (uint8_t*)malloc(sizeof(uint8_t) * NumByteToWrite);
+    uint8_t* pReadBuffer = (uint8_t*)pvPortMalloc(sizeof(uint8_t) * NumByteToWrite);
     if (NULL == pReadBuffer)
+    {
         return -2;
+    }
     uint8_t count = 1;
     do {
         I2C_EE_BufferWrite(WriteAddr, pBuffer, NumByteToWrite);
@@ -104,11 +119,15 @@ int I2C_EE_BufferWriteSafe(uint8_t WriteAddr, const uint8_t* const pBuffer, uint
             break;
         }
     }while (count++ < 3);
-    free(pReadBuffer);
+    vPortFree(pReadBuffer);
     if (count >= 3)
+    {
         return -1;
+    }
     else
+    {
         return count;
+    }
 }
 
 void I2C_EE_Config(void)
@@ -122,5 +141,7 @@ void I2C_EE_Config(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; 
     GPIO_Init(E2WP_PORT, &GPIO_InitStructure);
+    
+    xE2promMutex = xSemaphoreCreateMutex();
 }
 

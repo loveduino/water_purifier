@@ -414,7 +414,6 @@ OK
         //}
         
         //printf("AT+CIPSTART=\"TCP\",\"water.51204433.com\",9992\r\n");
-        //if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"water.51204433.com\",\"9992\"\r\n", "CONNECT", 2000, 30))
         if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"lot.youheone.com\",\"9992\"\r\n", "CONNECT", 2000, 30))
         //if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"122.114.122.174\",\"42127\"\r\n", "CONNECT", 2000, 30))
         {

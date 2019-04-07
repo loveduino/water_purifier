@@ -15,12 +15,11 @@ extern __IO uint16_t  ADC1ConvertedValue;
 void prvAdcTask( void *pvParameters );
 
 
-//PC14
+//PF1
 #define TDS_A_H     do{STM_EVAL_LEDOff(RUN_LED);}while(0)
 #define TDS_A_L     do{STM_EVAL_LEDOn(RUN_LED);}while(0)
 
-
-//PF1
+//PC14
 #define TDS_B_H     do{E2WP_ENABLE;}while(0)
 #define TDS_B_L     do{E2WP_DISABLE;}while(0)
 

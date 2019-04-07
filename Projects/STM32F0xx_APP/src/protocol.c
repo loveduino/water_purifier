@@ -14,11 +14,11 @@
 
 //说明：固件版本号V1_1.0.3中V0表示bootloader，V1为设备A区运行固件，版本号V2为设备B区运行固件
 #if BOOTLOADER
-#define HW_VERSION         "V0_0.2.0"          //V0表示bootloader
+#define HW_VERSION         "V0_0.3.1"          //V0表示bootloader
 #elif APP_A
-#define HW_VERSION         "V1_0.2.0"          //V1为设备A区运行固件
+#define HW_VERSION         "V1_0.3.1"          //V1为设备A区运行固件
 #elif APP_B
-#define HW_VERSION         "V2_0.2.0"          //V2为设备B区运行固件
+#define HW_VERSION         "V2_0.3.1"          //V2为设备B区运行固件
 #endif
 
 

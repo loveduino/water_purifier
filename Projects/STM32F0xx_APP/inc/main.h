@@ -99,6 +99,13 @@ typedef enum{
     WORK_BUSH//›_Ï´
 }WorkMode_t;
 
+
+typedef struct _delay_show_tds_t{
+    bool is_make_water;
+    uint32_t make_water_count;
+}delay_show_tds_t;
+
+
 void WorkMode(WorkMode_t work_mode);
 
 #endif /* __MAIN_H */

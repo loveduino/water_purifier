@@ -131,9 +131,26 @@ const char * __getzone(void)//没有生效
     return ": GMT+8:GMT+9:+0800";
 }
 
+delay_show_tds_t delay_show_tds;
 
 void WorkMode(WorkMode_t work_mode)
 {
+    static WorkMode_t work_mode_last;
+    
+    if (work_mode_last != work_mode)
+    {
+        work_mode_last = work_mode;
+        if (WORK_MAKE == work_mode)
+        {
+            delay_show_tds.is_make_water = 1;
+            delay_show_tds.make_water_count = 0;
+        }
+        else
+        {
+            delay_show_tds.is_make_water = 0;
+            delay_show_tds.make_water_count = 0;
+        }
+    }
     switch (work_mode)
     {
     case WORK_STOP:
@@ -277,7 +294,6 @@ int main(void)
     
     /* We should never get here as control is now taken by the scheduler */
     for( ;; );
-    
 }
 
 
@@ -297,15 +313,6 @@ void Main_task(void * pvParameters)
     
     /*Initialize Leds */ 
     prvSetupHardware();
-    
-//    uint8_t write_buff[256] = {0};
-//    uint8_t read_buff[256] = {0};
-//    for (int i = 0; i < 256; i++)
-//    {
-//        write_buff[i] = 5;
-//    }
-//    I2C_EE_BufferWrite(0, (uint8_t *)&write_buff[0], 256);
-//    I2C_EE_BufferRead(0, (uint8_t *)&read_buff[0], 256);
     
     xSerialPortInit( ser115200, 100, 1000 );
     
@@ -401,9 +408,6 @@ void vTestModeTimerCallback( TimerHandle_t pxTimer )
     water.is_test_mode_switch_off = 1;
     is_beep_on = true;
 }
-
-
-
 
 static void prvLedTask(void * pvParameters)
 {
@@ -722,7 +726,6 @@ static void prvDeviceMakeWaterTask(void * pvParameters)
                 is_send_device_status = true;
             }
         }
-        
         vTaskDelay( pdMS_TO_TICKS(100) );
     }
 }
@@ -745,6 +748,18 @@ static void prvDataTimeTask( void *pvParameters )
     
 	for( ;; )
 	{
+        
+        if (delay_show_tds.is_make_water == 1)
+        {
+            delay_show_tds.make_water_count++;
+            if (delay_show_tds.make_water_count >= 10)
+            {
+                delay_show_tds.make_water_count = 0;
+                delay_show_tds.is_make_water = 0;
+            }
+        }
+        
+        
 //        static int i = 0;
 //        if (i++ >= 3600)//沒小時从时钟芯片同步一次系统时钟
 //        {
@@ -769,7 +784,6 @@ static void prvDataTimeTask( void *pvParameters )
         else
             water.remain_days = 0;
             
-
         //使用天数 = （现在的时间搓-绑定的时间搓）/ (每天的一共时间搓)
         uint16_t filter_used_value_1 = (now - water.save.filter_used_timestamp_1 ) / (3600 * 24);
         if (water.save.filter_max_value_1 > filter_used_value_1)
@@ -907,9 +921,8 @@ static void prvSetupHardware( void )
 {
     /* Initialize Leds mounted on STM320518-EVAL board */
     STM_EVAL_LEDInit(BUSH_LED);
-    STM_EVAL_LEDInit(RUN_LED);
-    
-    STM_EVAL_LEDOff(RUN_LED);
+
+    //STM_EVAL_LEDOff(RUN_LED);
     
     STM_EVAL_LEDOff(BUSH_LED);
     
@@ -919,6 +932,10 @@ static void prvSetupHardware( void )
     BEEP_OFF;
     
     I2C_Config();
+#ifndef TDA_AB_TOGGLE
+    I2C_EE_Config();
+    E2WP_DISABLE;//keyi xie 
+#endif
 }
     
 static void RCC_Configuration(void)

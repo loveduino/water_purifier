@@ -54,23 +54,11 @@ static void ADC_Config(void)
   ADC_Cmd(ADC1, ENABLE);     
   
   /* Wait the ADRDY flag */
-  while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_ADRDY)); 
+  //while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_ADRDY)); 
   
   /* ADC1 regular Software Start Conv */ 
   //ADC_StartOfConversion(ADC1);
 }
-
-
-//uint16_t ADC_Get_Result(uint32_t ch)
-//{
-//    ADC_ChannelConfig(ADC1, ch, ADC_SampleTime_239_5Cycles);
-//    ADC1->CHSELR = ch;
-//    while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_ADRDY)){};
-//    ADC_StartOfConversion(ADC1);
-//    while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET){};
-//    return ADC_GetConversionValue(ADC1)&0x00000fff;
-//}
-
 
 uint16_t ADC_Get_Result(uint32_t ch, uint16_t count)
 {
@@ -87,6 +75,9 @@ uint16_t ADC_Get_Result(uint32_t ch, uint16_t count)
     return sum / count;
 }
 
+float raw_water_voltage = 0.0;
+float clean_water_voltage = 0.0;
+
 void prvAdcTask( void *pvParameters )
 {
 	/* Just to stop compiler warnings. */
@@ -94,51 +85,46 @@ void prvAdcTask( void *pvParameters )
     
     /* ADC1 configuration */
     ADC_Config();
-    
-    I2C_EE_Config();
-    TDS_A_H;
-    TDS_B_L;
-    
-    float adc_value = 0;
+
+    STM_EVAL_LEDInit(RUN_LED);
+    STM_EVAL_LEDOff(RUN_LED);
+    TDS_A_L;
             
 	for( ;; )
     {
+        float adc_value = 0;
         static int count = 0;
         
-        //if (count++ == 2)
+        if (count++ == 2)
         {
             count  = 0;
+            TDS_A_L;
+            //wait_us(500);
+            vTaskDelay( pdMS_TO_TICKS(1) );
+            
+            extern delay_show_tds_t delay_show_tds;
+            
+            //在制水前10s是不会更新tds值的。
+            if (delay_show_tds.is_make_water == 0)
+            {
+                raw_water_voltage = adc_value = (uint16_t)((float)ADC_Get_Result(ADC_Channel_1, 10)   * 3300 / 4095/* * 0.4 - 10.2*/);
+                if (adc_value < 6)
+                    water.raw_water_ppm = 0;
+                else
+                    water.raw_water_ppm = (uint16_t)(adc_value*adc_value*0.0007+adc_value*0.2505+1.7221);
+                
+                clean_water_voltage = adc_value = (uint16_t)((float)ADC_Get_Result(ADC_Channel_0, 10)   * 3300 / 4095/* * 0.4 - 10.2*/);
+                if (adc_value < 6)
+                    water.clean_water_ppm = 0;
+                else
+                    water.clean_water_ppm = (uint16_t)(adc_value*adc_value*0.0007+adc_value*0.2505+1.7221);
+            }
+            
+            //wait_us(500);
+            vTaskDelay( pdMS_TO_TICKS(1) );
             
             TDS_A_H;
-            TDS_B_L;
-            //wait_us(500);
             vTaskDelay( pdMS_TO_TICKS(1) );
-            
-            
-            adc_value = (uint16_t)((float)ADC_Get_Result(ADC_Channel_1, 10)   * 3300 / 4095/* * 0.4 - 10.2*/);;
-            if (adc_value < 15)
-                water.raw_water_ppm = 0;
-            else
-                water.raw_water_ppm = (uint16_t)(adc_value*adc_value*0.0003+adc_value*0.0807+3.6521);
-//            if (water.raw_water_ppm > 999)
-//                water.raw_water_ppm = 0;
-            
-            adc_value = (uint16_t)((float)ADC_Get_Result(ADC_Channel_0, 10)   * 3300 / 4095/* * 0.4 - 10.2*/);;
-            if (adc_value < 15)
-                water.clean_water_ppm = 0;
-            else
-                water.clean_water_ppm = (uint16_t)(adc_value*adc_value*0.0003+adc_value*0.0807+3.6521);
-//            if (water.clean_water_ppm > 999)
-//                water.clean_water_ppm = 0;
-            
-            //wait_us(500);
-            vTaskDelay( pdMS_TO_TICKS(1) );
-            
-            TDS_A_L;
-            TDS_B_H;
-            vTaskDelay( pdMS_TO_TICKS(1) );
-            TDS_A_L;
-            TDS_B_L;
         }
         
         if (ADC_Get_Result(ADC_Channel_2, 10) > (uint16_t)(1.5/3.3*4095))
@@ -157,6 +143,6 @@ void prvAdcTask( void *pvParameters )
             is_send_device_status = true;
         }
         
-        vTaskDelay( pdMS_TO_TICKS(100) );
+        vTaskDelay( pdMS_TO_TICKS(1000) );
     }
 }
