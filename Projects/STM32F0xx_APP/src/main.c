@@ -752,7 +752,7 @@ static void prvDataTimeTask( void *pvParameters )
         if (delay_show_tds.is_make_water == 1)
         {
             delay_show_tds.make_water_count++;
-            if (delay_show_tds.make_water_count >= 10)
+            if (delay_show_tds.make_water_count >= 60)
             {
                 delay_show_tds.make_water_count = 0;
                 delay_show_tds.is_make_water = 0;

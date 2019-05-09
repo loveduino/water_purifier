@@ -46,10 +46,10 @@ void GPRS_PWRKEY_Init (void)
     GPIO_Init(GPRS_PWRKEY_PORT, &GPIO_InitStructure);
 }
 
-//PWRKEY Òı½Å¿ª»ú
-//µ¥Æ¬»úÊä³ö¸ßµçÆ½À­µÍPWRKEYÒı½Å£¬PWRKEYÒı½ÅµÍµçÆ½ÓĞĞ§
-//½« PWRKEY ÖÃÎªµÍµçÆ½£¬µ±STATUS Òı½ÅÊä³ö¸ß µçÆ½Ö®ºó£¬±íÊ¾¿ª»ú³É¹¦£¬ PWRKEY Òı½Å¿ÉÒÔÊÍ·Å£¬Í¨¹ı¼ì²âSTATUS Òı½ÅµÄµçÆ½À´ÅĞ±ğÄ£¿éÊÇ·ñ¿ª»ú¡£
-// >1sÓĞĞ§
+//PWRKEY å¼•è„šå¼€æœº
+//å•ç‰‡æœºè¾“å‡ºé«˜ç”µå¹³æ‹‰ä½PWRKEYå¼•è„šï¼ŒPWRKEYå¼•è„šä½ç”µå¹³æœ‰æ•ˆ
+//å°† PWRKEY ç½®ä¸ºä½ç”µå¹³ï¼Œå½“STATUS å¼•è„šè¾“å‡ºé«˜ ç”µå¹³ä¹‹åï¼Œè¡¨ç¤ºå¼€æœºæˆåŠŸï¼Œ PWRKEY å¼•è„šå¯ä»¥é‡Šæ”¾ï¼Œé€šè¿‡æ£€æµ‹STATUS å¼•è„šçš„ç”µå¹³æ¥åˆ¤åˆ«æ¨¡å—æ˜¯å¦å¼€æœºã€‚
+// >1sæœ‰æ•ˆ
 void GPRS_PWRKEY_On (void)
 {
     GPIO_SetBits(GPRS_PWRKEY_PORT, GPRS_PWRKEY_PIN);
@@ -57,11 +57,11 @@ void GPRS_PWRKEY_On (void)
     GPIO_ResetBits(GPRS_PWRKEY_PORT, GPRS_PWRKEY_PIN);
 }
 
-//Õı³£¹Ø»ú£º¿ØÖÆ PWRKEY Òı½Å¹Ø»ú
-//¹Ø»úÄ£Ê½¿ÉÒÔÓÃSTATUS ¹Ü½ÅÀ´Ö¸Ê¾£¬ µÍµçÆ½Ö¸Ê¾Ä£¿éÒÑ½øÈë¹Ø»úÄ£Ê½¡£
-//¹Ø»ú¹ı³ÌÖĞ£¬Ä£¿éĞèÒª×¢Ïú GSM ÍøÂç£¬×¢ÏúÊ±¼äÓëµ±Ç°ÍøÂç×´Ì¬ÓĞ¹Ø£¬¾­²â¶¨
-//ÓÃÊ±Ô¼ 2s~12s£¬Òò´Ë½¨ÒéÑÓ³¤ 12s ºóÔÙ¶ÔÄ£¿é½øĞĞ¶Ïµç»òÖØÆôµÄ²Ù×÷£¬ÒÔÈ·±£ÔÚÍê
-//È«¹Ø»úÖ®Ç°ÈÃÈí¼ş±£´æºÃÖØÒªÊı¾İ¡£
+//æ­£å¸¸å…³æœºï¼šæ§åˆ¶ PWRKEY å¼•è„šå…³æœº
+//å…³æœºæ¨¡å¼å¯ä»¥ç”¨STATUS ç®¡è„šæ¥æŒ‡ç¤ºï¼Œ ä½ç”µå¹³æŒ‡ç¤ºæ¨¡å—å·²è¿›å…¥å…³æœºæ¨¡å¼ã€‚
+//å…³æœºè¿‡ç¨‹ä¸­ï¼Œæ¨¡å—éœ€è¦æ³¨é”€ GSM ç½‘ç»œï¼Œæ³¨é”€æ—¶é—´ä¸å½“å‰ç½‘ç»œçŠ¶æ€æœ‰å…³ï¼Œç»æµ‹å®š
+//ç”¨æ—¶çº¦ 2s~12sï¼Œå› æ­¤å»ºè®®å»¶é•¿ 12s åå†å¯¹æ¨¡å—è¿›è¡Œæ–­ç”µæˆ–é‡å¯çš„æ“ä½œï¼Œä»¥ç¡®ä¿åœ¨å®Œ
+//å…¨å…³æœºä¹‹å‰è®©è½¯ä»¶ä¿å­˜å¥½é‡è¦æ•°æ®ã€‚
 void GPRS_PWRKEY_Off (void)
 {
     GPIO_SetBits(GPRS_PWRKEY_PORT, GPRS_PWRKEY_PIN);
@@ -238,35 +238,35 @@ netRoot:
             ;
         //printf(at_result);
         //\r\nAT+CGSN\r\r\n866050034443331\r\n\r\nOK
-        if (strstr(at_result, "OK") != NULL)//°ÑIMEI¸øÅª³öÀ´
+        if (strstr(at_result, "OK") != NULL)//æŠŠIMEIç»™å¼„å‡ºæ¥
         {
             uint8_t iccid[10] = {0};
             get_imei_form_str(iccid, at_result);
-            if (0 != memcmp(g_data_format.iccid, iccid, sizeof(g_data_format.iccid)))//´Óe2promÖĞ¶Á³öÀ´µÄÖµÓ¦¸ÃÊÇºÍ2gÄ£¿é·µ»ØµÄÒ»Ñù²Å¶Ô
+            if (0 != memcmp(g_data_format.iccid, iccid, sizeof(g_data_format.iccid)))//ä»e2promä¸­è¯»å‡ºæ¥çš„å€¼åº”è¯¥æ˜¯å’Œ2gæ¨¡å—è¿”å›çš„ä¸€æ ·æ‰å¯¹
             {
                 memcpy(g_data_format.iccid, iccid, sizeof(g_data_format.iccid));
                 I2C_EE_BufferWriteSafe(0+sizeof(save_data_default), (uint8_t *)&g_data_format.iccid[0], sizeof(g_data_format.iccid));
-                NVIC_SystemReset();//ÖØÆô
+                NVIC_SystemReset();//é‡å¯
             }
         }
         vTaskDelay(5000);
         //printf("AT+CPIN?\r\n");OK
         if (!Uart_SendATCmd("AT+CPIN?\r\n", "OK", 1000, 5))
             ;//continue;
-//        //»ù±¾ĞÅÏ¢{
-//        //¼ì²éÍøÂçĞÅºÅÇ¿¶È
+//        //åŸºæœ¬ä¿¡æ¯{
+//        //æ£€æŸ¥ç½‘ç»œä¿¡å·å¼ºåº¦
 //        printf("AT+CSQ\r\n");
 //        if (!Uart_SendATCmd("AT+CSQ\r\n", "OK", 1000, 5))
 //            ;//continue;
-//        //²éÑ¯µ±Ç°ÔËÓªÉÌ£¬¸ÃÖ¸ÁîÖ»ÓĞÔÚÁ¬ÉÏÍøÂçºó£¬²Å·µ»ØÔËÓªÉÌ£¬·ñÔò·µ»Ø¿Õ
+//        //æŸ¥è¯¢å½“å‰è¿è¥å•†ï¼Œè¯¥æŒ‡ä»¤åªæœ‰åœ¨è¿ä¸Šç½‘ç»œåï¼Œæ‰è¿”å›è¿è¥å•†ï¼Œå¦åˆ™è¿”å›ç©º
 //        printf("AT+COPS?\r\n");
 //        if (!Uart_SendATCmd("AT+COPS?\r\n", "OK", 1000, 5))
 //            ;//continue;
-//        //²éÑ¯Ä£¿éĞÍºÅ£¬Èç·µ»Ø£º SIMCOM_SIM800C
+//        //æŸ¥è¯¢æ¨¡å—å‹å·ï¼Œå¦‚è¿”å›ï¼š SIMCOM_SIM800C
 //        printf("AT+CGMM\r\n");
 //        if (!Uart_SendATCmd("AT+CGMM\r\n", "OK", 1000, 5))
 //            ;//continue;
-//        //²éÑ¯±¾»úºÅÂë£¬±ØĞëÔÚ SIM ¿¨ÔÚÎ»µÄÊ±ºò²Å¿ÉÒÔ²éÑ¯
+//        //æŸ¥è¯¢æœ¬æœºå·ç ï¼Œå¿…é¡»åœ¨ SIM å¡åœ¨ä½çš„æ—¶å€™æ‰å¯ä»¥æŸ¥è¯¢
 //        printf("AT+CNUM\r\n");
 //        if (!Uart_SendATCmd("AT+CNUM\r\n", "OK", 2000, 5))
 //            ;//continue;
@@ -285,7 +285,7 @@ re_get_csq:
         memset(at_result, 0x00, sizeof(at_result));
         if (!Uart_SendATCmdOut("AT+CSQ\r\n", "OK", at_result, 1000, 5))
             ;
-        if (strstr(at_result, "+CSQ: ") != NULL)//°ÑIMEI¸øÅª³öÀ´
+        if (strstr(at_result, "+CSQ: ") != NULL)//æŠŠIMEIç»™å¼„å‡ºæ¥
         {
             water.rssi = atoi(strstr(at_result, "+CSQ: ")+strlen("+CSQ: "));
         }
@@ -293,9 +293,9 @@ re_get_csq:
             goto re_get_csq;
         
         extern time_t time_dat;
-        if ((time_dat < 1514764800) || (time_dat > 1925000000))//±±¾©Ê±¼ä2018Äê1ÔÂ1ÈÕ8Ê±0·Ö0Ãë
+        if ((time_dat < 1514764800) || (time_dat > 1925000000))//åŒ—äº¬æ—¶é—´2018å¹´1æœˆ1æ—¥8æ—¶0åˆ†0ç§’
         {
-            //»ñÈ¡»ùÕ¾Ê±¼ä
+            //è·å–åŸºç«™æ—¶é—´
             {
                 if (!Uart_SendATCmd("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"\r\n", "OK", 2000, 2))
                     ;//continue;
@@ -303,8 +303,8 @@ re_get_csq:
                     ;//continue;
                 if (!Uart_SendATCmd("AT+SAPBR=1,1\r\n", "OK", 5000, 2))
                     ;//continue;
-                //SIM800C¶¨Î»ĞÅÏ¢½âÎö
-                //²ÎÊı 1 ¡®0¡¯±íÊ¾»ùÕ¾¶¨Î»»ñÈ¡³É¹¦²ÎÊı 2 ¾­¶È²ÎÊı 3 Î³¶È²ÎÊı 4 º£°Î²ÎÊı 5 ÈÕÆÚºÍÊ±¼ä£¬ÕâÀïµÄÊ±¼äÊÇÊÀ½çÊ±¼ä£¨UTC£©£¬×ª»»³É±±¾©Ê±¼ä         £¨BTC£©ÒªÔÚÔ­À´µÄÊ±¼äÉÏ¼Ó 8 ¸öĞ¡Ê±£¬¼´ÏÖÔÚÊÇ±±¾©Ê±¼ä 18:05:46
+                //SIM800Cå®šä½ä¿¡æ¯è§£æ
+                //å‚æ•° 1 â€˜0â€™è¡¨ç¤ºåŸºç«™å®šä½è·å–æˆåŠŸå‚æ•° 2 ç»åº¦å‚æ•° 3 çº¬åº¦å‚æ•° 4 æµ·æ‹”å‚æ•° 5 æ—¥æœŸå’Œæ—¶é—´ï¼Œè¿™é‡Œçš„æ—¶é—´æ˜¯ä¸–ç•Œæ—¶é—´ï¼ˆUTCï¼‰ï¼Œè½¬æ¢æˆåŒ—äº¬æ—¶é—´         ï¼ˆBTCï¼‰è¦åœ¨åŸæ¥çš„æ—¶é—´ä¸ŠåŠ  8 ä¸ªå°æ—¶ï¼Œå³ç°åœ¨æ˜¯åŒ—äº¬æ—¶é—´ 18:05:46
                 memset(at_result, 0x00, sizeof(at_result));
                 if (!Uart_SendATCmdOut("AT+CLBS=4,1\r\n", "OK", at_result, 2000, 5))
                     ;
@@ -313,15 +313,15 @@ re_get_csq:
                 {
                     /*
                     struct tm {
-                    int tm_sec;   // Ãë£¬Õı³£·¶Î§´Ó 0 µ½ 59£¬µ«ÔÊĞíÖÁ 61
-                    int tm_min;   // ·Ö£¬·¶Î§´Ó 0 µ½ 59
-                    int tm_hour;  // Ğ¡Ê±£¬·¶Î§´Ó 0 µ½ 23
-                    int tm_mday;  // Ò»ÔÂÖĞµÄµÚ¼¸Ìì£¬·¶Î§´Ó 1 µ½ 31
-                    int tm_mon;   // ÔÂ£¬·¶Î§´Ó 0 µ½ 11
-                    int tm_year;  // ×Ô 1900 ÄêÆğµÄÄêÊı
-                    int tm_wday;  // Ò»ÖÜÖĞµÄµÚ¼¸Ìì£¬·¶Î§´Ó 0 µ½ 6£¬´ÓĞÇÆÚÈÕËãÆğ£¬ĞÇÆÚÈÕ±íÊ¾Îª 0
-                    int tm_yday;  // Ò»ÄêÖĞµÄµÚ¼¸Ìì£¬·¶Î§´Ó 0 µ½ 365£¬´Ó 1 ÔÂ 1 ÈÕËãÆğ
-                    int tm_isdst; // ÏÄÁîÊ±
+                    int tm_sec;   // ç§’ï¼Œæ­£å¸¸èŒƒå›´ä» 0 åˆ° 59ï¼Œä½†å…è®¸è‡³ 61
+                    int tm_min;   // åˆ†ï¼ŒèŒƒå›´ä» 0 åˆ° 59
+                    int tm_hour;  // å°æ—¶ï¼ŒèŒƒå›´ä» 0 åˆ° 23
+                    int tm_mday;  // ä¸€æœˆä¸­çš„ç¬¬å‡ å¤©ï¼ŒèŒƒå›´ä» 1 åˆ° 31
+                    int tm_mon;   // æœˆï¼ŒèŒƒå›´ä» 0 åˆ° 11
+                    int tm_year;  // è‡ª 1900 å¹´èµ·çš„å¹´æ•°
+                    int tm_wday;  // ä¸€å‘¨ä¸­çš„ç¬¬å‡ å¤©ï¼ŒèŒƒå›´ä» 0 åˆ° 6ï¼Œä»æ˜ŸæœŸæ—¥ç®—èµ·ï¼Œæ˜ŸæœŸæ—¥è¡¨ç¤ºä¸º 0
+                    int tm_yday;  // ä¸€å¹´ä¸­çš„ç¬¬å‡ å¤©ï¼ŒèŒƒå›´ä» 0 åˆ° 365ï¼Œä» 1 æœˆ 1 æ—¥ç®—èµ·
+                    int tm_isdst; // å¤ä»¤æ—¶
                 }
                     */
                     char *index = strstr(at_result, "+CLBS: 0");
@@ -335,8 +335,8 @@ re_get_csq:
                     read_time.tm_min =  atoi(index + findStrChrN(index, ':', 2));
                     read_time.tm_sec =  atoi(index + findStrChrN(index, ':', 3));  
                     read_time.tm_isdst = -1;
-                    //mktime()ÓÃÀ´½«²ÎÊıtimeptrËùÖ¸µÄtm½á¹¹Êı¾İ×ª»»³É´Ó¹«Ôª1970Äê1ÔÂ1ÈÕ0Ê±0·Ö0 ÃëËãÆğÖÁ½ñµÄUTCÊ±¼äËù¾­¹ıµÄÃëÊı¡£
-                    time_dat = mktime(&read_time);  //²¢½«Ê±¼ä³õÊ¼»¯¸øÏµÍ³time¿âÊ±¼ä
+                    //mktime()ç”¨æ¥å°†å‚æ•°timeptræ‰€æŒ‡çš„tmç»“æ„æ•°æ®è½¬æ¢æˆä»å…¬å…ƒ1970å¹´1æœˆ1æ—¥0æ—¶0åˆ†0 ç§’ç®—èµ·è‡³ä»Šçš„UTCæ—¶é—´æ‰€ç»è¿‡çš„ç§’æ•°ã€‚
+                    time_dat = mktime(&read_time);  //å¹¶å°†æ—¶é—´åˆå§‹åŒ–ç»™ç³»ç»Ÿtimeåº“æ—¶é—´
                 }
                 
                 if (!Uart_SendATCmd("AT+SAPBR=0,1\r\n", "OK", 2000, 2))
@@ -344,7 +344,7 @@ re_get_csq:
             }
         }
         
-        //»ñÈ¡»ùÕ¾µÄlacºÍcid
+        //è·å–åŸºç«™çš„lacå’Œcid
         {
             uint8_t get_lac_cid_count = 0;
         re_get_lac_cid:
@@ -372,17 +372,17 @@ OK
             char *index = NULL;
             
             index = strstr(at_result, ",\"") + strlen(",\"");
-            water.lac_value = (int)strtol(index, &str, 16);//Ê®Áù½øÖÆ  
+            water.lac_value = (int)strtol(index, &str, 16);//åå…­è¿›åˆ¶  
             
             index = strstr(index, ",\"") + strlen(",\"");
-            water.cid_value = (int)strtol(index, &str, 16);//Ê®Áù½øÖÆ  
+            water.cid_value = (int)strtol(index, &str, 16);//åå…­è¿›åˆ¶  
         }
         if ((water.lac_value == 0) && (water.cid_value == 0) && (get_csq_count < 3))
             goto re_get_lac_cid;
         }
         
-        //Í¸´«{
-        //ÉèÖÃ¸½×ÅºÍ·ÖÀë GPRS ÒµÎñ
+        //é€ä¼ {
+        //è®¾ç½®é™„ç€å’Œåˆ†ç¦» GPRS ä¸šåŠ¡
         //printf("AT+CGATT=1\r\n");
         
         if (!Uart_SendATCmd("AT+CGCLASS=\"B\"\r\n", "OK", 2000, 10));
@@ -391,37 +391,39 @@ OK
         
         vTaskDelay(1000);
         
-        if (!Uart_SendATCmd("AT+CGATT=1\r\n", "OK", 3000, 5))//ÈİÒ×³ö´í£¬ºóÃæ¾Í²»ÓÃÔÙ´¦ÀíÁË£¬·´ÕıÒ²»áÊ§°ÜµÄ
+        if (!Uart_SendATCmd("AT+CGATT=1\r\n", "OK", 3000, 5))//å®¹æ˜“å‡ºé”™ï¼Œåé¢å°±ä¸ç”¨å†å¤„ç†äº†ï¼Œåæ­£ä¹Ÿä¼šå¤±è´¥çš„
             ;//continue;
         //printf("AT+CIPMODE=1\r\n");
         if (!Uart_SendATCmd("AT+CIPMODE=1\r\n", "OK", 1000, 5))
             ;//continue;
-        //¿ªÊ¼ÈÎÎñ£¬ÉèÖÃAPN
+        //å¼€å§‹ä»»åŠ¡ï¼Œè®¾ç½®APN
         //printf("AT+CSTT=\"CMNET\"\r\n");
         if (!Uart_SendATCmd("AT+CSTT=\"CMNET\"\r\n", "OK", 2000, 5))
             ;//continue;
 
         vTaskDelay(1000);    
         
-        //½¨Á¢ÎŞÏßÁ´Â·
+        //å»ºç«‹æ— çº¿é“¾è·¯
         //printf("AT+CIICR\r\n");
         if (!Uart_SendATCmd("AT+CIICR\r\n", "OK", 2000, 5))
             ;//continue;
-        //»ñµÃ±¾µØIPµØÖ·
+        //è·å¾—æœ¬åœ°IPåœ°å€
         //printf("AT+CIFSR\r\n");10.177.167.229
         if (!Uart_SendATCmd("AT+CIFSR\r\n", ".", 2000, 5))
             ;//continue;
         //}
         
         //printf("AT+CIPSTART=\"TCP\",\"water.51204433.com\",9992\r\n");
-        if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"lot.youheone.com\",\"9992\"\r\n", "CONNECT", 2000, 30))
-        //if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"122.114.122.174\",\"42127\"\r\n", "CONNECT", 2000, 30))
+        //if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"water.51204433.com\",\"9992\"\r\n", "CONNECT", 2000, 30))//çº¿ä¸‹
+        if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"lot.youheone.com\",\"9992\"\r\n", "CONNECT", 2000, 30))//çº¿ä¸Š
+        //if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"122.114.122.174\",\"42127\"\r\n", "CONNECT", 2000, 30))//å®‰ä¿¡å¯
+        //if (!Uart_SendATCmd("AT+CIPSTART=\"TCP\",\"capi.51204433.com\",\"9995\"\r\n", "CONNECT", 2000, 30))//çº¿ä¸Š    
         {
             //printf("connect failed\n");
             goto netRoot;
         }
         
-        //ÁªÍø³É¹¦ºó£¬·äÃùÆ÷ÏòÁ½ÏÂ
+        //è”ç½‘æˆåŠŸåï¼Œèœ‚é¸£å™¨å‘ä¸¤ä¸‹
         for (int i = 0; i < 2; i++)
         {
             BEEP_ON;
@@ -446,7 +448,7 @@ static portTASK_FUNCTION( vEdpRecvProcessTask, pvParameters )
     
 	for ( ;; )
 	{
-        //»ñÈ¡µ±Ç°ÍøÂç×´Ì¬
+        //è·å–å½“å‰ç½‘ç»œçŠ¶æ€
         if (!edp.is_tcpip_connect)
         {
 //            if (NULL != xedpNetPingHandlerTask)
@@ -522,7 +524,7 @@ static portTASK_FUNCTION( AppTaskEdpNetPing, pvParameters )
         if (edp.is_tcpip_connect)
         {
             vTaskDelay( pdMS_TO_TICKS(2 * 1000) );
-            //printf("·¢ËÍping\r\n");
+            //printf("å‘é€ping\r\n");
             if (send_ping_again == 0)
             {
                 edp.is_ping_send = false;
@@ -549,7 +551,7 @@ static portTASK_FUNCTION( AppTaskEdpNetCheck, pvParameters )
 	/* Just to stop compiler warnings. */
 	( void ) pvParameters;
     
-    //printf("´´½¨EDP pingĞÅºÅ¼ì²âÈÎÎñ\r\n");
+    //printf("åˆ›å»ºEDP pingä¿¡å·æ£€æµ‹ä»»åŠ¡\r\n");
     
     
     for (;;)
@@ -557,17 +559,17 @@ static portTASK_FUNCTION( AppTaskEdpNetCheck, pvParameters )
         
         if (edp.is_ping_send == true)
         {
-            if (edp.is_ping_resp == true)//·¢ËÍÁËĞÄÌø£¬ÓĞ·µ»Ø£¬Ö¤Ã÷ÍøÂçÕı³£
+            if (edp.is_ping_resp == true)//å‘é€äº†å¿ƒè·³ï¼Œæœ‰è¿”å›ï¼Œè¯æ˜ç½‘ç»œæ­£å¸¸
             {
                 edp.is_ping_send = false;
                 edp.is_ping_resp = false;
                 send_ping_again = 0;
             }
-            if (count__++ >= 10)//µÈ´ı30s»¹ÊÇÃ»ÓĞÍøÂç·µ»Ø£¬ËµÃ÷ÍøÂç¹ÊÕÏ
+            if (count__++ >= 10)//ç­‰å¾…30sè¿˜æ˜¯æ²¡æœ‰ç½‘ç»œè¿”å›ï¼Œè¯´æ˜ç½‘ç»œæ•…éšœ
             {
                 count__ = 0;
                 extern bool is_iap_status;
-                if (!is_iap_status)//›]ÓĞÉı¼¶µÄÊ±ºò£¬ÅĞ¶Ï³¬Ê±Ã»ÓĞ»ØÓ¦Ê±£¬ÒÔÎªÍøÂç¹ÊÕÏ¡£
+                if (!is_iap_status)//æ²’æœ‰å‡çº§çš„æ—¶å€™ï¼Œåˆ¤æ–­è¶…æ—¶æ²¡æœ‰å›åº”æ—¶ï¼Œä»¥ä¸ºç½‘ç»œæ•…éšœã€‚
                 {
                     if (send_ping_again < 2)
                     {
@@ -578,7 +580,7 @@ static portTASK_FUNCTION( AppTaskEdpNetCheck, pvParameters )
                     }
                     else
                     {
-                        edp.is_tcpip_connect = false;//ÍøÂçÒì³££¬ÖØÆôÍøÂç
+                        edp.is_tcpip_connect = false;//ç½‘ç»œå¼‚å¸¸ï¼Œé‡å¯ç½‘ç»œ
                         edp.is_ping_send = false;
                         edp.is_ping_resp = false;
                     }
@@ -606,7 +608,7 @@ void prvGprsTask( void *pvParameters )
     GPRS_PWRKEY_Init();
     
 	xTaskCreate( vEdpRecvProcessTask, "EDP RECV PROCESS", 1000, NULL, tskIDLE_PRIORITY + 3, ( TaskHandle_t * ) &xEdpRecvProcessTaskHandle );
-    //´´½¨Edp Net CheckÈÎÎñ£¬¼ì²âedpµÄÁ¬½ÓÊÇ·ñÕı³£
+    //åˆ›å»ºEdp Net Checkä»»åŠ¡ï¼Œæ£€æµ‹edpçš„è¿æ¥æ˜¯å¦æ­£å¸¸
     xTaskCreate( AppTaskEdpNetCheck, "EDP NET CHECK", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xedpNetCheckHandlerTask );
     
     xTaskCreate( AppTaskEdpNetPing, "PING", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, ( TaskHandle_t * ) &xedpNetPingHandlerTask );

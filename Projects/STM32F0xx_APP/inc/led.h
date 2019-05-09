@@ -52,10 +52,10 @@
 #define D16_PIN 		            GPIO_Pin_10
 #define D16_PORT 		            GPIOB
 #define D16_RCC_AHBPeriph_PORT 	    RCC_AHBPeriph_GPIOB
-#define D17_PIN 		            GPIO_Pin_11//空
+#define D17_PIN 		            GPIO_Pin_11//empty
 #define D17_PORT 		            GPIOB
 #define D17_RCC_AHBPeriph_PORT 	    RCC_AHBPeriph_GPIOB
-#define D18_PIN 		            GPIO_Pin_7//空，跳线到D27
+#define D18_PIN 		            GPIO_Pin_7//empty
 #define D18_PORT 		            GPIOB
 #define D18_RCC_AHBPeriph_PORT 	    RCC_AHBPeriph_GPIOB
 #define D19_PIN 		            GPIO_Pin_15
@@ -82,7 +82,7 @@
 #define D26_PIN 		            GPIO_Pin_9
 #define D26_PORT 		            GPIOC
 #define D26_RCC_AHBPeriph_PORT 	    RCC_AHBPeriph_GPIOC
-#define D27_PIN 		            GPIO_Pin_7//硬件没有连接，用D18的来连接跳线
+#define D27_PIN 		            GPIO_Pin_7
 #define D27_PORT 		            GPIOB
 #define D27_RCC_AHBPeriph_PORT 	    RCC_AHBPeriph_GPIOB
 #define D28_PIN 		            GPIO_Pin_11
