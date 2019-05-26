@@ -78,45 +78,45 @@
 typedef void * xComPortHandle;
 
 typedef enum
-{ 
-	serCOM1, 
-	serCOM2, 
-	serCOM3, 
-	serCOM4, 
-	serCOM5, 
-	serCOM6, 
-	serCOM7, 
-	serCOM8 
+{
+	serCOM1,
+	serCOM2,
+	serCOM3,
+	serCOM4,
+	serCOM5,
+	serCOM6,
+	serCOM7,
+	serCOM8
 } eCOMPort;
 
-typedef enum 
-{ 
-	serNO_PARITY, 
-	serODD_PARITY, 
-	serEVEN_PARITY, 
-	serMARK_PARITY, 
-	serSPACE_PARITY 
+typedef enum
+{
+	serNO_PARITY,
+	serODD_PARITY,
+	serEVEN_PARITY,
+	serMARK_PARITY,
+	serSPACE_PARITY
 } eParity;
 
-typedef enum 
-{ 
-	serSTOP_1, 
-	serSTOP_2 
+typedef enum
+{
+	serSTOP_1,
+	serSTOP_2
 } eStopBits;
 
-typedef enum 
-{ 
-	serBITS_5, 
-	serBITS_6, 
-	serBITS_7, 
-	serBITS_8 
+typedef enum
+{
+	serBITS_5,
+	serBITS_6,
+	serBITS_7,
+	serBITS_8
 } eDataBits;
 
-typedef enum 
-{ 
-	ser50       = 50,		
-	ser75       = 75,		
-	ser110      = 110,		
+typedef enum
+{
+	ser50       = 50,
+	ser75       = 75,
+	ser110      = 110,
 	ser134	    = 134,
 	ser150      = 150,
 	ser200      = 200,
@@ -132,7 +132,6 @@ typedef enum
 	ser57600    = 57600,
 	ser115200   = 115200
 } eBaud;
-
 
 xComPortHandle xSerialPortInit( unsigned long ulWantedBaud, unsigned portBASE_TYPE uxTxQueueLength, unsigned portBASE_TYPE uxRxQueueLength );
 signed portBASE_TYPE xSerialReadable( xComPortHandle pxPort );

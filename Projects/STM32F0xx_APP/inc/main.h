@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    STM32F0xx_IAP/binary_template/main.h 
+  * @file    STM32F0xx_IAP/binary_template/main.h
   * @author  MCD Application Team
   * @version V1.0.0
   * @date    29-May-2012
@@ -16,15 +16,15 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
   ******************************************************************************
   */
-  
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
@@ -55,11 +55,11 @@
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
-//ÖÆË®±ÃºÍ½øË®µç´Å·§
+//åˆ¶æ°´æ³µå’Œè¿›æ°´ç”µç£é˜€
 #define EN1_PIN 		            GPIO_Pin_3
 #define EN1_PORT 		            GPIOA
 #define RCC_AHBPeriph_EN1_PORT 	    RCC_AHBPeriph_GPIOA
-//×éºÏµç´Å·§£¨³åÏ´·ÏË®ÓÃ£©
+//ç»„åˆç”µç£é˜€ï¼ˆå†²æ´—åºŸæ°´ç”¨ï¼‰
 #define EN2_PIN 		            GPIO_Pin_7
 #define EN2_PORT 		            GPIOA
 #define RCC_AHBPeriph_EN2_PORT 	    RCC_AHBPeriph_GPIOA
@@ -92,19 +92,16 @@ typedef enum{
 extern KeyClick_t KeyClick;
 extern bool key_fall_flag;
 
-
 typedef enum{
-    WORK_STOP = 0,//Í£Ö¹
-    WORK_MAKE,//ÑuË®
-    WORK_BUSH//›_Ï´
+    WORK_STOP = 0, //åœæ­¢
+    WORK_MAKE, //è£½æ°´
+    WORK_BUSH  //æ²–æ´—
 }WorkMode_t;
-
 
 typedef struct _delay_show_tds_t{
     bool is_make_water;
     uint32_t make_water_count;
 }delay_show_tds_t;
-
 
 void WorkMode(WorkMode_t work_mode);
 

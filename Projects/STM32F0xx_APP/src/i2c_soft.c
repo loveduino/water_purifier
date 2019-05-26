@@ -1,4 +1,4 @@
-#include "i2c_soft.h"   
+#include "i2c_soft.h"
 #include <stdbool.h>
 
 void I2C_Config(void)
@@ -8,56 +8,56 @@ void I2C_Config(void)
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_I2C_PORT, ENABLE);
     /* Configure I2C1 pins: SCL and SDA */
     GPIO_InitStructure.GPIO_Pin 	= SCL_PIN | SDA_PIN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//ÆÕÍ¨Êä³öÄ£Ê½  
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//ÍÆÍìÊä³ö  
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//100MHz  
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ÉÏÀ­  
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//æ™®é€šè¾“å‡ºæ¨¡å¼
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//æ¨æŒ½è¾“å‡º
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//100MHz
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ä¸Šæ‹‰
     GPIO_Init(I2C_PORT, &GPIO_InitStructure);
 }
 
 static void I2C_Delay(void)
-{	
-	int i = 10; 						//ÕâÀï¿ÉÒÔÓÅ»¯ËÙ¶È	£¬¾­²âÊÔ×îµÍµ½5»¹ÄÜĞ´Èë
-	
+{
+	int i = 10; 						//è¿™é‡Œå¯ä»¥ä¼˜åŒ–é€Ÿåº¦	ï¼Œç»æµ‹è¯•æœ€ä½åˆ°5è¿˜èƒ½å†™å…¥
+
 	while(i--)
 	{
         asm("nop");
 	}
 }
 
-//START:when CLK is high,DATA change form high to low 
+//START:when CLK is high,DATA change form high to low
 bool I2C_Start(void)
 {
 	SDA_OUT();
 	SDA_H;
 	SCL_H;
 	I2C_Delay();
-	if (!SDA_read)return false;	//SDAÏßÎªµÍµçÆ½Ôò×ÜÏßÃ¦,ÍË³ö
+	if (!SDA_read)return false;	//SDAçº¿ä¸ºä½ç”µå¹³åˆ™æ€»çº¿å¿™,é€€å‡º
 	SDA_L;
 	I2C_Delay();
-	if (SDA_read) return false;	//SDAÏßÎª¸ßµçÆ½Ôò×ÜÏß³ö´í,ÍË³ö
+	if (SDA_read) return false;	//SDAçº¿ä¸ºé«˜ç”µå¹³åˆ™æ€»çº¿å‡ºé”™,é€€å‡º
 	SDA_L;
-	I2C_Delay();				//Ç¯×¡I2C×ÜÏß£¬×¼±¸·¢ËÍ»ò½ÓÊÕÊı¾İ 
+	I2C_Delay();				//é’³ä½I2Cæ€»çº¿ï¼Œå‡†å¤‡å‘é€æˆ–æ¥æ”¶æ•°æ®
 	return true;
 }
 
 //STOP:when CLK is high DATA change form low to high
 void I2C_Stop(void)
 {
-	SDA_OUT(); 
+	SDA_OUT();
 	SCL_L;
 	I2C_Delay();
 	SDA_L;
 	I2C_Delay();
 	SCL_H;
 	I2C_Delay();
-	SDA_H;//·¢ËÍI2C×ÜÏß½áÊøĞÅºÅ
+	SDA_H;//å‘é€I2Cæ€»çº¿ç»“æŸä¿¡å·
 	I2C_Delay();
 }
 
-//²úÉúACKÓ¦´ğ
+//äº§ç”ŸACKåº”ç­”
 void I2C_Ack(void)
-{	
+{
 	SDA_OUT();
 	SCL_L;
 	I2C_Delay();
@@ -69,9 +69,9 @@ void I2C_Ack(void)
 	I2C_Delay();
 }
 
-//²»²úÉúACKÓ¦´ğ	
+//ä¸äº§ç”ŸACKåº”ç­”
 void I2C_NAck(void)
-{	
+{
 	SDA_OUT();
 	SCL_L;
 	I2C_Delay();
@@ -83,9 +83,9 @@ void I2C_NAck(void)
 	I2C_Delay();
 }
 
-//µÈ´ıÓ¦´ğĞÅºÅµ½À´
-//·µ»ØÖµ£ºfalse£¬½ÓÊÕÓ¦´ğÊ§°Ü
-//       true£¬½ÓÊÕÓ¦´ğ³É¹¦
+//ç­‰å¾…åº”ç­”ä¿¡å·åˆ°æ¥
+//è¿”å›å€¼ï¼šfalseï¼Œæ¥æ”¶åº”ç­”å¤±è´¥
+//       trueï¼Œæ¥æ”¶åº”ç­”æˆåŠŸ
 bool I2C_WaitAck(void)
 {
 	SDA_IN();
@@ -104,19 +104,19 @@ bool I2C_WaitAck(void)
 	return true;
 }
 
-void I2C_WriteByte(uint8_t WriteByte) //Êı¾İ´Ó¸ßÎ»µ½µÍÎ»
+void I2C_WriteByte(uint8_t WriteByte) //æ•°æ®ä»é«˜ä½åˆ°ä½ä½
 {
 	uint8_t i = 8;
-	
-	SDA_OUT(); 
+
+	SDA_OUT();
 	while (i--)
 	{
 		SCL_L;
 		I2C_Delay();
 		if (WriteByte & 0x80)
-			SDA_H;  
-		else 
-			SDA_L;   
+			SDA_H;
+		else
+			SDA_L;
 		WriteByte <<= 1;
 		I2C_Delay();
 		SCL_H;
@@ -125,7 +125,7 @@ void I2C_WriteByte(uint8_t WriteByte) //Êı¾İ´Ó¸ßÎ»µ½µÍÎ»
 	SCL_L;
 }
 
-uint8_t I2C_ReadByte(void)  //Êı¾İ´Ó¸ßÎ»µ½µÍÎ»
+uint8_t I2C_ReadByte(void)  //æ•°æ®ä»é«˜ä½åˆ°ä½ä½
 {
 	uint8_t i = 8;
 	uint8_t ReadByte = 0;
@@ -138,7 +138,7 @@ uint8_t I2C_ReadByte(void)  //Êı¾İ´Ó¸ßÎ»µ½µÍÎ»
 		SCL_L;
 		I2C_Delay();
 		SCL_H;
-		I2C_Delay();	
+		I2C_Delay();
 		if (SDA_read)
 		{
 			ReadByte |= 0x01;

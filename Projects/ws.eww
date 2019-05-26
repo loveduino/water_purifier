@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\STM32F0xx_APP\EWARM\Project.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\STM32F0xx_IAP\EWARM\Project.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\STM32F0xx_StdPeriph_Templates\EWARM\Project.ewp</path>
+  </project>
+  <batchBuild/>
+</workspace>
+
+

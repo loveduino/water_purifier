@@ -12,15 +12,14 @@
 #include "menu.h"
 #include "common.h"
 
-//ËµÃ÷£º¹Ì¼ş°æ±¾ºÅV1_1.0.3ÖĞV0±íÊ¾bootloader£¬V1ÎªÉè±¸AÇøÔËĞĞ¹Ì¼ş£¬°æ±¾ºÅV2ÎªÉè±¸BÇøÔËĞĞ¹Ì¼ş
+//è¯´æ˜ï¼šå›ºä»¶ç‰ˆæœ¬å·V1_1.0.3ä¸­V0è¡¨ç¤ºbootloaderï¼ŒV1ä¸ºè®¾å¤‡AåŒºè¿è¡Œå›ºä»¶ï¼Œç‰ˆæœ¬å·V2ä¸ºè®¾å¤‡BåŒºè¿è¡Œå›ºä»¶
 #if BOOTLOADER
-#define HW_VERSION         "V0_0.3.3"          //V0±íÊ¾bootloader
+#define HW_VERSION         "V0_0.3.4"          //V0è¡¨ç¤ºbootloader
 #elif APP_A
-#define HW_VERSION         "V1_0.3.3"          //V1ÎªÉè±¸AÇøÔËĞĞ¹Ì¼ş
+#define HW_VERSION         "V1_0.3.4"          //V1ä¸ºè®¾å¤‡AåŒºè¿è¡Œå›ºä»¶
 #elif APP_B
-#define HW_VERSION         "V2_0.3.3"          //V2ÎªÉè±¸BÇøÔËĞĞ¹Ì¼ş
+#define HW_VERSION         "V2_0.3.4"          //V2ä¸ºè®¾å¤‡BåŒºè¿è¡Œå›ºä»¶
 #endif
-
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -31,7 +30,7 @@ typedef struct{
     uint8_t iccid[10];
     uint8_t cmd;
     uint16_t length;
-    uint8_t data[100];//±ä³¤£¬¸ù¾İ¾ßÌå¹¦ÄÜ¾ö¶¨
+    uint8_t data[100];//å˜é•¿ï¼Œæ ¹æ®å…·ä½“åŠŸèƒ½å†³å®š
     uint8_t crc[2];
 }data_format_t;
 */
@@ -42,19 +41,19 @@ data_format_t g_data_format = {
 
 
 
-//ÉÏµçµÄ³õÊ¼»¯Öµ
-struct water_s water = 
+//ä¸Šç”µçš„åˆå§‹åŒ–å€¼
+struct water_s water =
 {
-    .device_status = 0,//±¸ÓÃ
-    .is_screen_status_off = 0,//ÆÁÄ»´ò¿ª£¨ÉÏµçÄ¬ÈÏÖµ£©
+    .device_status = 0,//å¤‡ç”¨
+    .is_screen_status_off = 0,//å±å¹•æ‰“å¼€ï¼ˆä¸Šç”µé»˜è®¤å€¼ï¼‰
     .used_days = 0,
     .remain_days = 0,
-    .filter_remain_value_1 = 0,//µÚÒ»¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .filter_remain_value_2 = 0,//µÚ¶ş¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .filter_remain_value_3 = 0,//µÚÈı¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .filter_remain_value_4 = 0,//µÚËÄ¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .filter_remain_value_5 = 0,//µÚÎå¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .rssi = 0,//ĞÅºÅÇ¿¶ÈÖµ
+    .filter_remain_value_1 = 0,//ç¬¬ä¸€çº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .filter_remain_value_2 = 0,//ç¬¬äºŒçº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .filter_remain_value_3 = 0,//ç¬¬ä¸‰çº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .filter_remain_value_4 = 0,//ç¬¬å››çº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .filter_remain_value_5 = 0,//ç¬¬äº”çº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .rssi = 0,//ä¿¡å·å¼ºåº¦å€¼
     .lac_value = 0,
     .cid_value = 0,
     .date_time = 0,
@@ -65,32 +64,32 @@ struct water_s water =
     .is_power_on_status = 1,
     .is_shortage_water_status = 0,
     .is_bushing_now = 0,
-    .is_test_mode_switch_off = 1,//¹Ø±Õµ÷ÊÔÄ£Ê½
+    .is_test_mode_switch_off = 1,//å…³é—­è°ƒè¯•æ¨¡å¼
     .test_used_days = 0,
     .test_used_flow = 0,
-    .flowmeter_count = 0,//Á÷Á¿¼Æ
-    .raw_water_ppm = 0,////Êµ¼Ê¼ì²âµ½µÄppmÖµ
-    .clean_water_ppm = 0,////Êµ¼Ê¼ì²âµ½µÄppmÖµ
-    .overhaul_status_switch = 0x00,//0x00½â³ı¼ìĞŞ  //0x01½øÈë¼ìĞŞ
-    .io_high_status = -1,//¼ÇÂ¼IO1×´Ì¬,¸ßÑ¹¿ª¹Ø×´Ì¬
+    .flowmeter_count = 0,//æµé‡è®¡
+    .raw_water_ppm = 0,////å®é™…æ£€æµ‹åˆ°çš„ppmå€¼
+    .clean_water_ppm = 0,////å®é™…æ£€æµ‹åˆ°çš„ppmå€¼
+    .overhaul_status_switch = 0x00,//0x00è§£é™¤æ£€ä¿®  //0x01è¿›å…¥æ£€ä¿®
+    .io_high_status = -1,//è®°å½•IO1çŠ¶æ€,é«˜å‹å¼€å…³çŠ¶æ€
     .io_high_last_status = -1,
-    .io_low_status = -1,//¼ÇÂ¼IO2×´Ì¬,µÍÑ¹¿ª¹Ø×´Ì¬
+    .io_low_status = -1,//è®°å½•IO2çŠ¶æ€,ä½å‹å¼€å…³çŠ¶æ€
     .io_low_last_status = -1
 };
 
-//ÉÏµçµÄ³õÊ¼»¯Öµ£¬Èç¹ûÒª»Ö¸´³ö³§¾ÍĞèÒª
-struct water_s water_default = 
+//ä¸Šç”µçš„åˆå§‹åŒ–å€¼ï¼Œå¦‚æœè¦æ¢å¤å‡ºå‚å°±éœ€è¦
+struct water_s water_default =
 {
-    .device_status = 0,//±¸ÓÃ
-    .is_screen_status_off = 0,//ÆÁÄ»´ò¿ª£¨ÉÏµçÄ¬ÈÏÖµ£©
+    .device_status = 0,//å¤‡ç”¨
+    .is_screen_status_off = 0,//å±å¹•æ‰“å¼€ï¼ˆä¸Šç”µé»˜è®¤å€¼ï¼‰
     .used_days = 0,
     .remain_days = 0,
-    .filter_remain_value_1 = 0,//µÚÒ»¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .filter_remain_value_2 = 0,//µÚ¶ş¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .filter_remain_value_3 = 0,//µÚÈı¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .filter_remain_value_4 = 0,//µÚËÄ¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .filter_remain_value_5 = 0,//µÚÎå¼¶ÂËĞ¾Ê£ÓàÖµ	HEX£¨2×Ö½Ú£©
-    .rssi = 0,//ĞÅºÅÇ¿¶ÈÖµ
+    .filter_remain_value_1 = 0,//ç¬¬ä¸€çº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .filter_remain_value_2 = 0,//ç¬¬äºŒçº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .filter_remain_value_3 = 0,//ç¬¬ä¸‰çº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .filter_remain_value_4 = 0,//ç¬¬å››çº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .filter_remain_value_5 = 0,//ç¬¬äº”çº§æ»¤èŠ¯å‰©ä½™å€¼	HEXï¼ˆ2å­—èŠ‚ï¼‰
+    .rssi = 0,//ä¿¡å·å¼ºåº¦å€¼
     .lac_value = 0,
     .cid_value = 0,
     .date_time = 0,
@@ -101,51 +100,51 @@ struct water_s water_default =
     .is_power_on_status = 1,
     .is_shortage_water_status = 0,
     .is_bushing_now = 0,
-    .is_test_mode_switch_off = 1,//¹Ø±Õµ÷ÊÔÄ£Ê½
+    .is_test_mode_switch_off = 1,//å…³é—­è°ƒè¯•æ¨¡å¼
     .test_used_days = 0,
     .test_used_flow = 0,
-    .flowmeter_count = 0,//Á÷Á¿¼Æ
-    .raw_water_ppm = 0,////Êµ¼Ê¼ì²âµ½µÄppmÖµ
-    .clean_water_ppm = 0,////Êµ¼Ê¼ì²âµ½µÄppmÖµ
-    .overhaul_status_switch = 0x00,//0x00½â³ı¼ìĞŞ  //0x01½øÈë¼ìĞŞ
-    .io_high_status = -1,//¼ÇÂ¼IO1×´Ì¬,¸ßÑ¹¿ª¹Ø×´Ì¬
+    .flowmeter_count = 0,//æµé‡è®¡
+    .raw_water_ppm = 0,////å®é™…æ£€æµ‹åˆ°çš„ppmå€¼
+    .clean_water_ppm = 0,////å®é™…æ£€æµ‹åˆ°çš„ppmå€¼
+    .overhaul_status_switch = 0x00,//0x00è§£é™¤æ£€ä¿®  //0x01è¿›å…¥æ£€ä¿®
+    .io_high_status = -1,//è®°å½•IO1çŠ¶æ€,é«˜å‹å¼€å…³çŠ¶æ€
     .io_high_last_status = -1,
-    .io_low_status = -1,//¼ÇÂ¼IO2×´Ì¬,µÍÑ¹¿ª¹Ø×´Ì¬
+    .io_low_status = -1,//è®°å½•IO2çŠ¶æ€,ä½å‹å¼€å…³çŠ¶æ€
     .io_low_last_status = -1
 };
 
-//±£´æÔÚe2promÀïÃæµÄÄ¬ÈÏÖµ
-const struct save_data save_data_default = 
+//ä¿å­˜åœ¨e2promé‡Œé¢çš„é»˜è®¤å€¼
+const struct save_data save_data_default =
 {
     .e2prom_init = 123456,
     .is_bind = 0,
-    .bind_timestamp = 0,//¼ÇÂ¼°ó¶¨ÄÇÌìµÄÊ±¼ä´Á
-    .work_mode = 0,//0	Á÷Á¿Ä£Ê½    1	Ê±³¤Ä£Ê½
+    .bind_timestamp = 0,//è®°å½•ç»‘å®šé‚£å¤©çš„æ—¶é—´æˆ³
+    .work_mode = 0,//0	æµé‡æ¨¡å¼    1	æ—¶é•¿æ¨¡å¼
     .used_flow = 0,
     .remain_flow = 0,
-    .used_days_timestamp = 0,//ÒÑÓÃÌìÊıÊ±¼ä´Á
-    .remain_days_timestamp = 0,//Ê£ÓàÌìÊıÊ±¼ä´Á
+    .used_days_timestamp = 0,//å·²ç”¨å¤©æ•°æ—¶é—´æˆ³
+    .remain_days_timestamp = 0,//å‰©ä½™å¤©æ•°æ—¶é—´æˆ³
     .clean_water_ppm = 0,
-    .clean_water_tds_switch = 1,//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+    .clean_water_tds_switch = 1,//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
     .raw_water_ppm = 0,
-    .raw_water_tds_switch = 1,//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
-    .filter_used_timestamp_1 = 0,//ÂËĞ¾µÄ¿ªÊ¼Ê¹ÓÃÊ±¼ä´Á
-    .filter_used_timestamp_2 = 0,//ÂËĞ¾µÄ¿ªÊ¼Ê¹ÓÃÊ±¼ä´Á
-    .filter_used_timestamp_3 = 0,//ÂËĞ¾µÄ¿ªÊ¼Ê¹ÓÃÊ±¼ä´Á
-    .filter_used_timestamp_4 = 0,//ÂËĞ¾µÄ¿ªÊ¼Ê¹ÓÃÊ±¼ä´Á
-    .filter_used_timestamp_5 = 0,//ÂËĞ¾µÄ¿ªÊ¼Ê¹ÓÃÊ±¼ä´Á
+    .raw_water_tds_switch = 1,//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
+    .filter_used_timestamp_1 = 0,//æ»¤èŠ¯çš„å¼€å§‹ä½¿ç”¨æ—¶é—´æˆ³
+    .filter_used_timestamp_2 = 0,//æ»¤èŠ¯çš„å¼€å§‹ä½¿ç”¨æ—¶é—´æˆ³
+    .filter_used_timestamp_3 = 0,//æ»¤èŠ¯çš„å¼€å§‹ä½¿ç”¨æ—¶é—´æˆ³
+    .filter_used_timestamp_4 = 0,//æ»¤èŠ¯çš„å¼€å§‹ä½¿ç”¨æ—¶é—´æˆ³
+    .filter_used_timestamp_5 = 0,//æ»¤èŠ¯çš„å¼€å§‹ä½¿ç”¨æ—¶é—´æˆ³
     .filter_max_value_1 = 0,
     .filter_max_value_2 = 0,
     .filter_max_value_3 = 0,
     .filter_max_value_4 = 0,
     .filter_max_value_5 = 0,
-    .force_flush_time = 18,//18ÃëµÄÇ¿ÖÆ³åÏ´
-    .period_flush_time = 3600*2,//ÀÛ¼ÆÖÆË®2Ğ¡Ê±½øĞĞÇ¿ÖÆ³åÏ´
-    .maintenance_time = 8*3600,//Á¬ĞøÖÆË®8Ğ¡Ê±½øÈë¼ìĞŞ×´Ì¬
-    .ping_time = 180,//ÉèÖÃĞÄÌø¼ä¸ôÊ±³¤180Ãë
+    .force_flush_time = 18,//18ç§’çš„å¼ºåˆ¶å†²æ´—
+    .period_flush_time = 3600*2,//ç´¯è®¡åˆ¶æ°´2å°æ—¶è¿›è¡Œå¼ºåˆ¶å†²æ´—
+    .maintenance_time = 8*3600,//è¿ç»­åˆ¶æ°´8å°æ—¶è¿›å…¥æ£€ä¿®çŠ¶æ€
+    .ping_time = 180,//è®¾ç½®å¿ƒè·³é—´éš”æ—¶é•¿180ç§’
     .reconnect_time = 0,
-    .screen_mode_switch.day = 0x00,//ÒÑÓÃÌìÊı
-    .screen_mode_switch.flow = 0x02//ÒÑÓÃÁ÷Á¿
+    .screen_mode_switch.day = 0x00,//å·²ç”¨å¤©æ•°
+    .screen_mode_switch.flow = 0x02//å·²ç”¨æµé‡
 };
 
 //int buf_to_struct(data_format_t *data_format, uint8_t *buf, int buf_len);
@@ -153,80 +152,81 @@ const struct save_data save_data_default =
 
 
 const cmd_process_t cmd_process[] = {
-    {CMD_HEARTBEAT, cmd_heartbeat_process},//0x01,//ĞÄÌøÖ¡
-    {CMD_BINDING_PACKAGE, cmd_binding_package_process},//0x02,//°ó¶¨Ì×²Í
-    {CMD_CLOSE_THE_SCREEN, cmd_close_the_screen_process},//0x03,//¹Ø±ÕÆÁÄ»
-    {CMD_OPEN_THE_SCREEN, cmd_open_the_screen_process},//0x04,//´ò¿ªÆÁÄ»
-    {CMD_POWER_OFF, cmd_power_off_process},//0x05,//¹Ø»ú
-    {CMD_POWER_ON, cmd_power_on_process},//0x06,//¿ª»ú
-    {CMD_STRONG_PUNCH, cmd_strong_push_process},//0x07,//Ç¿³å
-    {CMD_POSITIVE_VALUE, cmd_positive_value_process},//0x08,//³äÕıÖµ
-    
-    {CMD_FILTER_SEND, cmd_filter_send_process},//ÓÃ»§Éè±¸Ö÷¶¯ÉÏ±¨ÂËĞ¾×´Ì¬£¬Ã¿ÌìÉÏ±¨Ò»´ÎµÄ·½Ê½
-    {CMD_FILTER_REQUIRE, cmd_filter_require_process},//Ö÷¶¯»ñÈ¡ÂËĞ¾×´Ì¬
-    
-    {CMD_SYNCHRONIZE_WITH_WATER, cmd_synchronize_with_water_process},//0x0a,//ÓÃË®Í¬²½
-    //{CMD_TIME_SYNCHRONIZATION, cmd_time_synchronization_process},//0x0b,//ÓÃÊ±Í¬²½
-    {CMD_TIME_SYNCHRONIZATION_USED, cmd_time_synchronization_used_process},//ÓÃÊ±Í¬²½ 0xBAÒÑÓÃÌìÊı
-    {CMD_TIME_SYNCHRONIZATION_REMAIN, cmd_time_synchronization_remain_process},//ÓÃÊ±Í¬²½ 0xBBÊ£ÓàÌìÊı
-    {CMD_WORK_STATUS_SYNCHRONIZATION, cmd_work_status_synchronization_process},//0x0c,//¹¤×÷×´Ì¬Í¬²½
-    {CMD_QUERY_DEVICE_OPERATION_INFORMATION, cmd_query_device_operation_information_process},//0x0d,//²éÑ¯Éè±¸ÔËĞĞĞÅÏ¢
-    {CMD_FILTER_RESET_AND_MODIFICATION, cmd_filter_reset_and_modification_process},//0x0e,//ÂËĞ¾¸´Î»ÓëĞŞ¸Ä
-    {CMD_MODE_SWITCHING, cmd_mode_switching_process},//0x0f,//Ä£Ê½ÇĞ»»
-    {CMD_RESET, cmd_reset_process},//0x10,//»Ö¸´³ö³§ÉèÖÃ
-    //ĞŞ¸ÄÓòÃûºÍ¶Ë¿ÚºÅ
-    {CMD_PARAMETER_MODIFICATION, cmd_parameter_modification_process},//0x11,//²ÎÊıĞŞ¸Ä
-    {CMD_TIMING_FLUSH_PARAMETER_MODIFICATION, cmd_timing_flush_parameter_modification_process},//0x12,//¶¨Ê±³åÏ´²ÎÊıĞŞ¸Ä
-    {CMD_MAINTENANCE_PARAMETER_MODIFICATION, cmd_maintenance_parameter_modification_process},//0x13,//¼ìĞŞ²ÎÊıĞŞ¸Ä
-    {CMD_CONTROL_PARAMETER_MODIFICATION_1, cmd_control_parameter_modification_1_process},//0x14,//¿ØÖÆ²ÎÊıĞŞ¸Ä1
-    {CMD_CONTROL_PARAMETER_MODIFICATION_2, cmd_control_parameter_modification_2_process},//0x15,//¿ØÖÆ²ÎÊıĞŞ¸Ä2
-    {CMD_TEST_MODE_SWITCH, cmd_test_mode_switch_process},//0x16,//¿ªÆô¹Ø±Õ²âÊÔÄ£Ê½
-    {CMD_COMPUTER_BOARD_TIME_SYNCHRONIZATION_1, cmd_computer_board_time_synchronization_1},//0x17,// µçÄÔ°åÊ±¼äÍ¬²½1
-    {CMD_COMPUTER_BOARD_TIME_SYNCHRONIZATION_2, cmd_computer_board_time_synchronization_2},//0x18,// µçÄÔ°åÊ±¼äÍ¬²½2
-    {CMD_SYNCHRONIZATION_OF_WATER_CONSUMPTION_USED, cmd_synchronization_of_water_consumption_used},//0xAA,// ÓÃË®Á¿Í¬²½ 0xAAÒÑÓÃÁ÷Á¿
-    {CMD_SYNCHRONIZATION_OF_WATER_CONSUMPTION_REMAIN, cmd_synchronization_of_water_consumption_remain},//0xAB,// ÓÃË®Á¿Í¬²½ 0xABÊ£ÓàÁ÷Á¿
-    
-    {CMD_REMOTE_UPGRADE_VERSION, cmd_remote_upgrade_version},//·şÎñ¶Ë»ñÈ¡¹Ì¼şµ±Ç°°æ±¾ºÅ
-    {CMD_REMOTE_UPGRADE_DATA0, cmd_remote_upgrade_data0},//Ô¶³ÌÉı¼¶ÎÄ¼şÃû
-    {CMD_REMOTE_UPGRADE_DATA1, cmd_remote_upgrade_data1},//Ô¶³ÌÉı¼¶ÎÄ¼ş
-    {CMD_REMOTE_UPGRADE_DATA2, cmd_remote_upgrade_data2},//Ô¶³ÌÉı¼¶½áÊø
-    {CMD_REMOTE_UPGRADE_REBOOT, cmd_remote_upgrade_reboot},//Ô¶³ÌÖØÆô
-    {CMD_REMOTE_UPGRADE_NEW, cmd_remote_upgrade_new},//ÏÂ´ÎÆô¶¯Éè±¸Ê±ÊÇ·ñÔËĞĞĞÂ¹Ì¼ş
-    {CMD_REMOTE_UPGRADE_SWITCH, cmd_remote_upgrade_switch},//ÔËĞĞ¹Ì¼şÇĞ»»
-    
-    {CMD_SCREEN_MODE_SWITCH, cmd_screen_mode_switch},//ÆÁÄ»ÏÔÊ¾Ä£Ê½ÇĞ»»0x5A
-    {CMD_OVERHAUL_STATUS_SWITCH, cmd_overhaul_status_switch}//¼ìĞŞ×´Ì¬ÇĞ»»0x6A
+    {CMD_HEARTBEAT, cmd_heartbeat_process},//0x01,//å¿ƒè·³å¸§
+    {CMD_BINDING_PACKAGE, cmd_binding_package_process},//0x02,//ç»‘å®šå¥—é¤
+    {CMD_CLOSE_THE_SCREEN, cmd_close_the_screen_process},//0x03,//å…³é—­å±å¹•
+    {CMD_OPEN_THE_SCREEN, cmd_open_the_screen_process},//0x04,//æ‰“å¼€å±å¹•
+    {CMD_POWER_OFF, cmd_power_off_process},//0x05,//å…³æœº
+    {CMD_POWER_ON, cmd_power_on_process},//0x06,//å¼€æœº
+    {CMD_STRONG_PUNCH, cmd_strong_push_process},//0x07,//å¼ºå†²
+    {CMD_POSITIVE_VALUE, cmd_positive_value_process},//0x08,//å……æ­£å€¼
+
+    {CMD_FILTER_SEND, cmd_filter_send_process},//ç”¨æˆ·è®¾å¤‡ä¸»åŠ¨ä¸ŠæŠ¥æ»¤èŠ¯çŠ¶æ€ï¼Œæ¯å¤©ä¸ŠæŠ¥ä¸€æ¬¡çš„æ–¹å¼
+    {CMD_FILTER_REQUIRE, cmd_filter_require_process},//ä¸»åŠ¨è·å–æ»¤èŠ¯çŠ¶æ€
+
+    {CMD_SYNCHRONIZE_WITH_WATER, cmd_synchronize_with_water_process},//0x0a,//ç”¨æ°´åŒæ­¥
+    //{CMD_TIME_SYNCHRONIZATION, cmd_time_synchronization_process},//0x0b,//ç”¨æ—¶åŒæ­¥
+    {CMD_TIME_SYNCHRONIZATION_USED, cmd_time_synchronization_used_process},//ç”¨æ—¶åŒæ­¥ 0xBAå·²ç”¨å¤©æ•°
+    {CMD_TIME_SYNCHRONIZATION_REMAIN, cmd_time_synchronization_remain_process},//ç”¨æ—¶åŒæ­¥ 0xBBå‰©ä½™å¤©æ•°
+    {CMD_WORK_STATUS_SYNCHRONIZATION, cmd_work_status_synchronization_process},//0x0c,//å·¥ä½œçŠ¶æ€åŒæ­¥
+    {CMD_QUERY_DEVICE_OPERATION_INFORMATION, cmd_query_device_operation_information_process},//0x0d,//æŸ¥è¯¢è®¾å¤‡è¿è¡Œä¿¡æ¯
+    {CMD_FILTER_RESET_AND_MODIFICATION, cmd_filter_reset_and_modification_process},//0x0e,//æ»¤èŠ¯å¤ä½ä¸ä¿®æ”¹
+    {CMD_MODE_SWITCHING, cmd_mode_switching_process},//0x0f,//æ¨¡å¼åˆ‡æ¢
+    {CMD_RESET, cmd_reset_process},//0x10,//æ¢å¤å‡ºå‚è®¾ç½®
+    //ä¿®æ”¹åŸŸåå’Œç«¯å£å·
+    {CMD_PARAMETER_MODIFICATION, cmd_parameter_modification_process},//0x11,//å‚æ•°ä¿®æ”¹
+    {CMD_TIMING_FLUSH_PARAMETER_MODIFICATION, cmd_timing_flush_parameter_modification_process},//0x12,//å®šæ—¶å†²æ´—å‚æ•°ä¿®æ”¹
+    {CMD_MAINTENANCE_PARAMETER_MODIFICATION, cmd_maintenance_parameter_modification_process},//0x13,//æ£€ä¿®å‚æ•°ä¿®æ”¹
+    {CMD_CONTROL_PARAMETER_MODIFICATION_1, cmd_control_parameter_modification_1_process},//0x14,//æ§åˆ¶å‚æ•°ä¿®æ”¹1
+    {CMD_CONTROL_PARAMETER_MODIFICATION_2, cmd_control_parameter_modification_2_process},//0x15,//æ§åˆ¶å‚æ•°ä¿®æ”¹2
+    {CMD_TEST_MODE_SWITCH, cmd_test_mode_switch_process},//0x16,//å¼€å¯å…³é—­æµ‹è¯•æ¨¡å¼
+    {CMD_COMPUTER_BOARD_TIME_SYNCHRONIZATION_1, cmd_computer_board_time_synchronization_1},//0x17,// ç”µè„‘æ¿æ—¶é—´åŒæ­¥1
+    {CMD_COMPUTER_BOARD_TIME_SYNCHRONIZATION_2, cmd_computer_board_time_synchronization_2},//0x18,// ç”µè„‘æ¿æ—¶é—´åŒæ­¥2
+    {CMD_SYNCHRONIZATION_OF_WATER_CONSUMPTION_USED, cmd_synchronization_of_water_consumption_used},//0xAA,// ç”¨æ°´é‡åŒæ­¥ 0xAAå·²ç”¨æµé‡
+    {CMD_SYNCHRONIZATION_OF_WATER_CONSUMPTION_REMAIN, cmd_synchronization_of_water_consumption_remain},//0xAB,// ç”¨æ°´é‡åŒæ­¥ 0xABå‰©ä½™æµé‡
+
+    {CMD_REMOTE_UPGRADE_VERSION, cmd_remote_upgrade_version},//æœåŠ¡ç«¯è·å–å›ºä»¶å½“å‰ç‰ˆæœ¬å·
+    {CMD_REMOTE_UPGRADE_DATA0, cmd_remote_upgrade_data0},//è¿œç¨‹å‡çº§æ–‡ä»¶å
+    {CMD_REMOTE_UPGRADE_DATA1, cmd_remote_upgrade_data1},//è¿œç¨‹å‡çº§æ–‡ä»¶
+    {CMD_REMOTE_UPGRADE_DATA2, cmd_remote_upgrade_data2},//è¿œç¨‹å‡çº§ç»“æŸ
+    {CMD_REMOTE_UPGRADE_REBOOT, cmd_remote_upgrade_reboot},//è¿œç¨‹é‡å¯
+    {CMD_REMOTE_UPGRADE_NEW, cmd_remote_upgrade_new},//ä¸‹æ¬¡å¯åŠ¨è®¾å¤‡æ—¶æ˜¯å¦è¿è¡Œæ–°å›ºä»¶
+    {CMD_REMOTE_UPGRADE_SWITCH, cmd_remote_upgrade_switch},//è¿è¡Œå›ºä»¶åˆ‡æ¢
+
+    {CMD_SCREEN_MODE_SWITCH, cmd_screen_mode_switch},//å±å¹•æ˜¾ç¤ºæ¨¡å¼åˆ‡æ¢0x5A
+    {CMD_OVERHAUL_STATUS_SWITCH, cmd_overhaul_status_switch},//æ£€ä¿®çŠ¶æ€åˆ‡æ¢0x6A
+    {CMD_GET_DEVICE_WORK_STATUS, cmd_get_device_work_status},//è·å–è®¾å¤‡å·¥ä½œçŠ¶æ€0x1c
 };
 
 const uint8_t cmd_process_cnt = sizeof( cmd_process ) / sizeof( cmd_process[0] );
 
-//µçÄÔ°åÖ÷¶¯ÉÏ´«ÎŞĞèÓ¦´ğ
-int cmd_heartbeat_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x01,//ĞÄÌøÖ¡
+//ç”µè„‘æ¿ä¸»åŠ¨ä¸Šä¼ æ— éœ€åº”ç­”
+int cmd_heartbeat_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x01,//å¿ƒè·³å¸§
 {
     int ret = 0;
-    
+
     //void AppEdpNetCheckGive(void);
     //AppEdpNetCheckGive();
     edp.is_ping_resp = true;
-    
+
     return ret;
 }
 
-int cmd_binding_package_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x02,//°ó¶¨Ì×²Í
+int cmd_binding_package_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x02,//ç»‘å®šå¥—é¤
 {
     int ret = 0;
-    
+
     if ((0x00 == in_buf[0]) || (0x01 == in_buf[0]))
     {
         water.save.is_bind = 1;
-        water.save.work_mode = in_buf[0];//00£ºÁ÷Á¿Ä£Ê½   01£ºÊ±¼äÄ£Ê½
+        water.save.work_mode = in_buf[0];//00ï¼šæµé‡æ¨¡å¼   01ï¼šæ—¶é—´æ¨¡å¼
         water.save.filter_max_value_1 = (in_buf[1] << 8) + (in_buf[2] << 0);
         water.save.filter_max_value_2 = (in_buf[3] << 8) + (in_buf[4] << 0);
         water.save.filter_max_value_3 = (in_buf[5] << 8) + (in_buf[6] << 0);
         water.save.filter_max_value_4 = (in_buf[7] << 8) + (in_buf[8] << 0);
         water.save.filter_max_value_5 = (in_buf[9] << 8) + (in_buf[10] << 0);
-        
-        //´Ó°ó¶¨¿ªÊ¼´æ´¢Ê±¼ä´Á
+
+        //ä»ç»‘å®šå¼€å§‹å­˜å‚¨æ—¶é—´æˆ³
         time_t now = time(NULL);
         water.save.bind_timestamp = now;
         water.save.filter_used_timestamp_1 = now;
@@ -234,9 +234,9 @@ int cmd_binding_package_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf,
         water.save.filter_used_timestamp_3 = now;
         water.save.filter_used_timestamp_4 = now;
         water.save.filter_used_timestamp_5 = now;
-        
+
         water.save.used_days_timestamp = now;
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -244,14 +244,14 @@ int cmd_binding_package_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf,
     return ret;
 }
 
-int cmd_close_the_screen_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x03,//¹Ø±ÕÆÁÄ»
+int cmd_close_the_screen_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x03,//å…³é—­å±å¹•
 {
     int ret = 0;
-    
+
     //if (0x00 == in_buf[0])
     {
-        water.is_screen_status_off = 1;//¹Ø±ÕÆÁÄ»
-        
+        water.is_screen_status_off = 1;//å…³é—­å±å¹•
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -259,15 +259,15 @@ int cmd_close_the_screen_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf
     return ret;
 }
 
-int cmd_open_the_screen_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x04,//´ò¿ªÆÁÄ»
+int cmd_open_the_screen_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x04,//æ‰“å¼€å±å¹•
 {
     int ret = 0;
-    
+
     //if (0x00 == in_buf[0])
     {
-        
-        water.is_screen_status_off = 0;//´ò¿ªÆÁÄ»
-        
+
+        water.is_screen_status_off = 0;//æ‰“å¼€å±å¹•
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -275,23 +275,23 @@ int cmd_open_the_screen_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf,
     return ret;
 }
 
-int cmd_power_off_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x05,//¹Ø»ú
+int cmd_power_off_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x05,//å…³æœº
 {
     int ret = 0;
-    
+
     //if (0x00 == in_buf[0])
     {
-        if ((1 == water.save.is_bind) ||  (water.is_test_mode_switch_off == 1))//ÓÃÓÚ¹Ø±Õ£¬²¢¹Ø±ÕÖÆË®¹¦ÄÜ¡£±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+        if ((1 == water.save.is_bind) ||  (water.is_test_mode_switch_off == 1))//ç”¨äºå…³é—­ï¼Œå¹¶å…³é—­åˆ¶æ°´åŠŸèƒ½ã€‚å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
         {
-            //6	¹Ø»ú
-            //¹Ø±ÕÈí¼ş¶¨Ê±Æ÷£¬Èç¹ûÔÚÔËĞĞµÄ»°
+            //6	å…³æœº
+            //å…³é—­è½¯ä»¶å®šæ—¶å™¨ï¼Œå¦‚æœåœ¨è¿è¡Œçš„è¯
             water.is_bushing_now = 0;
             extern TimerHandle_t xForceFlushTimerHandler;
             if( xTimerIsTimerActive( xForceFlushTimerHandler ) != pdFALSE )
             {
                 xTimerStop( xForceFlushTimerHandler, 100 );
             }
-            
+
             water.is_power_on_status = 0;
             *out_len = in_len;
             memcpy(out_buf, in_buf, *out_len);
@@ -301,20 +301,20 @@ int cmd_power_off_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int i
     return ret;
 }
 
-int cmd_power_on_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x06,//¿ª»ú
+int cmd_power_on_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x06,//å¼€æœº
 {
     int ret = 0;
-    
+
     //if (0x00 == in_buf[0])
     {
-        if ((1 == water.save.is_bind) ||  (water.is_test_mode_switch_off == 1))//ÓÃÓÚ¿ª»ú£¬²¢¿ªÆôÖÆË®¹¦ÄÜ¡£±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+        if ((1 == water.save.is_bind) ||  (water.is_test_mode_switch_off == 1))//ç”¨äºå¼€æœºï¼Œå¹¶å¼€å¯åˆ¶æ°´åŠŸèƒ½ã€‚å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
         {
             water.is_power_on_status = 1;
-            water.io_high_status = -1;//¼ÇÂ¼IO1×´Ì¬,¸ßÑ¹¿ª¹Ø×´Ì¬
+            water.io_high_status = -1;//è®°å½•IO1çŠ¶æ€,é«˜å‹å¼€å…³çŠ¶æ€
             water.io_high_last_status = -1;
-            water.io_low_status = -1;//¼ÇÂ¼IO2×´Ì¬,µÍÑ¹¿ª¹Ø×´Ì¬
+            water.io_low_status = -1;//è®°å½•IO2çŠ¶æ€,ä½å‹å¼€å…³çŠ¶æ€
             water.io_low_last_status = -1;
-            
+
             *out_len = in_len;
             memcpy(out_buf, in_buf, *out_len);
             ret = 1;
@@ -323,16 +323,16 @@ int cmd_power_on_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in
     return ret;
 }
 
-int cmd_strong_push_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x07,//Ç¿³å
+int cmd_strong_push_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x07,//å¼ºå†²
 {
     int ret = 0;
-    
+
     if (0x00 == in_buf[0])
     {
-        if ((1 == water.save.is_bind) ||  (water.is_test_mode_switch_off == 1))//ÓÃÓÚÇ¿ÖÆ³åÏ´¡£±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+        if ((1 == water.save.is_bind) ||  (water.is_test_mode_switch_off == 1))//ç”¨äºå¼ºåˆ¶å†²æ´—ã€‚å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
         {
             //TODO
-            //ÓÃÓÚÇ¿ÖÆ³åÏ´
+            //ç”¨äºå¼ºåˆ¶å†²æ´—
             if ((water.is_overhaul_status != 1) && (water.is_drop_water_status != 1) && (water.is_power_on_status != 0) && (water.is_shortage_water_status != 1))
             {
                 extern TimerHandle_t xForceFlushTimerHandler;
@@ -341,7 +341,7 @@ int cmd_strong_push_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int
                     water.is_bushing_now = 1;
                 }
             }
-            
+
             *out_len = in_len;
             memcpy(out_buf, in_buf, *out_len);
             ret = 1;
@@ -351,27 +351,27 @@ int cmd_strong_push_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int
 }
 
 /*
-ÓÃÓÚÍ¬²½ÌìÊı¼°Á÷Á¿¡£±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
-1¡¢Èç¹ûÔÚÊ±³¤Ä£Ê½£¬Ôò¿ÉÏÔÊ¾ÒÑÓÃÌìÊı¡¢Ê£ÓàÌìÊı¡¢ÒÑÓÃÁ÷Á¿
-2¡¢Èç¹ûÔÚÁ÷Á¿Ä£Ê½£¬Ôò¿ÉÏÔÊ¾ÒÑÓÃÌìÊı¡¢Ê£ÓàÌìÊı¡¢ÒÑÓÃÁ÷Á¿¡¢Ê£ÓàÁ÷Á¿
-3¡¢Èç¹ûÇĞ»»Ì×²Í£¬ÀıÈçÊ±³¤Ä£Ê½ÇĞ»»ÎªÁ÷Á¿Ä£Ê½£¬Æ½Ì¨ĞèÒªµ¥¶ÀÏÂ·¢Ì×²Í¼°¶ÔÓ¦µÄÒÑÓÃÌìÊı¡¢Ê£ÓàÌìÊı¡¢ÒÑÓÃÁ÷Á¿¡¢Ê£ÓàÁ÷Á¿¸øÉè±¸¡£Èç¹ûÇĞ»»Á÷Á¿Ä£Ê½ÎªÊ±³¤Ä£Ê½£¬Æ½Ì¨Ò²ĞèÒªµ¥¶ÀÏÂ·¢Ì×²Í¼°¶ÔÓ¦µÄÒÑÓÃÌìÊı¡¢Ê£ÓàÌìÊı¡¢ÒÑÓÃÁ÷Á¿
+ç”¨äºåŒæ­¥å¤©æ•°åŠæµé‡ã€‚å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
+1ã€å¦‚æœåœ¨æ—¶é•¿æ¨¡å¼ï¼Œåˆ™å¯æ˜¾ç¤ºå·²ç”¨å¤©æ•°ã€å‰©ä½™å¤©æ•°ã€å·²ç”¨æµé‡
+2ã€å¦‚æœåœ¨æµé‡æ¨¡å¼ï¼Œåˆ™å¯æ˜¾ç¤ºå·²ç”¨å¤©æ•°ã€å‰©ä½™å¤©æ•°ã€å·²ç”¨æµé‡ã€å‰©ä½™æµé‡
+3ã€å¦‚æœåˆ‡æ¢å¥—é¤ï¼Œä¾‹å¦‚æ—¶é•¿æ¨¡å¼åˆ‡æ¢ä¸ºæµé‡æ¨¡å¼ï¼Œå¹³å°éœ€è¦å•ç‹¬ä¸‹å‘å¥—é¤åŠå¯¹åº”çš„å·²ç”¨å¤©æ•°ã€å‰©ä½™å¤©æ•°ã€å·²ç”¨æµé‡ã€å‰©ä½™æµé‡ç»™è®¾å¤‡ã€‚å¦‚æœåˆ‡æ¢æµé‡æ¨¡å¼ä¸ºæ—¶é•¿æ¨¡å¼ï¼Œå¹³å°ä¹Ÿéœ€è¦å•ç‹¬ä¸‹å‘å¥—é¤åŠå¯¹åº”çš„å·²ç”¨å¤©æ•°ã€å‰©ä½™å¤©æ•°ã€å·²ç”¨æµé‡
 */
-int cmd_positive_value_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x08,//³äÈ·¶¨Öµ
+int cmd_positive_value_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x08,//å……ç¡®å®šå€¼
 {
     int ret = 0;
-    
-    if (1 == water.save.is_bind)//ÓÃÓÚÍ¬²½ÌìÊı¼°Á÷Á¿¡£±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.is_bind)//ç”¨äºåŒæ­¥å¤©æ•°åŠæµé‡ã€‚å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         /*
-        0	Á÷Á¿Ä£Ê½
-        1	Ê±³¤Ä£Ê½
+        0	æµé‡æ¨¡å¼
+        1	æ—¶é•¿æ¨¡å¼
         */
         {
             water.used_days = (in_buf[0] << 8) + in_buf[1];
             water.remain_days = (in_buf[2] << 8) + in_buf[3] + 1;
-            
+
             water.save.used_flow = (uint32_t)((((uint32_t)in_buf[4] << 24) + ((uint32_t)in_buf[5] << 16) + ((uint32_t)in_buf[6] << 8) + ((uint32_t)in_buf[7] << 0)) / 0.917 + 0.5);
-            if (water.save.work_mode == 0)//0	Á÷Á¿Ä£Ê½
+            if (water.save.work_mode == 0)//0	æµé‡æ¨¡å¼
             {
                 water.save.remain_flow = (uint32_t)((((uint32_t)in_buf[8] << 24) + ((uint32_t)in_buf[9] << 16) + ((uint32_t)in_buf[10] << 8) + ((uint32_t)in_buf[11] << 0)) / 0.917 + 0.5);
             }
@@ -379,11 +379,11 @@ int cmd_positive_value_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, 
             {
                 water.save.remain_flow = 0xFFFFFFFF;
             }
-            
+
             time_t now = time(NULL);
             water.save.used_days_timestamp = now - water.used_days * 3600 * 24;
             water.save.remain_days_timestamp = now + water.remain_days * 3600 * 24;
-                        
+
             *out_len = in_len;
             memcpy(out_buf, in_buf, *out_len);
             ret = 1;
@@ -392,40 +392,40 @@ int cmd_positive_value_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, 
     return ret;
 }
 
-int cmd_filter_send_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //ÓÃ»§Éè±¸Ö÷¶¯ÉÏ±¨ÂËĞ¾×´Ì¬£¬Ã¿ÌìÉÏ±¨Ò»´ÎµÄ·½Ê½
+int cmd_filter_send_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //ç”¨æˆ·è®¾å¤‡ä¸»åŠ¨ä¸ŠæŠ¥æ»¤èŠ¯çŠ¶æ€ï¼Œæ¯å¤©ä¸ŠæŠ¥ä¸€æ¬¡çš„æ–¹å¼
 {
     int ret = 0;
     return ret;
 }
 
-int cmd_filter_require_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //Ö÷¶¯»ñÈ¡ÂËĞ¾×´Ì¬
+int cmd_filter_require_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //ä¸»åŠ¨è·å–æ»¤èŠ¯çŠ¶æ€
 {
     int ret = 0;
-    //ÂËĞ¾×´Ì¬ÉÏ´«
+    //æ»¤èŠ¯çŠ¶æ€ä¸Šä¼ 
     void EDP_SendFilter(void);
     EDP_SendFilter();
     return ret;
 }
 
-//ÓÃË®Á¿ÉÏ´«
-//Ã¿´ÎË®ÁúÍ·Í£Ö¹³öË®5ÃëºóÉÏ´«±¾´ÎÓÃË®Á¿£¬µ¥Î»/10ml¡£
-//µçÄÔ°åÖ÷¶¯ÉÏ´«ÎŞĞèÓ¦´ğ
-int cmd_synchronize_with_water_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0a,//ÓÃË®Í¬²½
+//ç”¨æ°´é‡ä¸Šä¼ 
+//æ¯æ¬¡æ°´é¾™å¤´åœæ­¢å‡ºæ°´5ç§’åä¸Šä¼ æœ¬æ¬¡ç”¨æ°´é‡ï¼Œå•ä½/10mlã€‚
+//ç”µè„‘æ¿ä¸»åŠ¨ä¸Šä¼ æ— éœ€åº”ç­”
+int cmd_synchronize_with_water_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0a,//ç”¨æ°´åŒæ­¥
 {
     int ret = 0;
-    
+
     return ret;
 }
 
 /*
-int cmd_time_synchronization_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0b,//ÓÃÊ±Í¬²½
+int cmd_time_synchronization_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0b,//ç”¨æ—¶åŒæ­¥
 {
     int ret = 0;
-    
-    if (1 == water.save.bind)//±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         water.used_days = (in_buf[0] << 8) + in_buf[1];
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -434,17 +434,17 @@ int cmd_time_synchronization_process(uint8_t* out_buf, int* out_len, uint8_t* in
 }
 */
 
-int cmd_time_synchronization_used_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//ÓÃÊ±Í¬²½ 0xBAÒÑÓÃÌìÊı
+int cmd_time_synchronization_used_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//ç”¨æ—¶åŒæ­¥ 0xBAå·²ç”¨å¤©æ•°
 {
     int ret = 0;
-    
-    if (1 == water.save.is_bind)//±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.is_bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         uint16_t used_days = (in_buf[0] << 8) + in_buf[1];
         time_t now = time(NULL);
-        //ĞŞ¸ÄÒÑ¾­ÓÃÁË¶àÉÙÌìµÄÊ±¼ä´ê£¬Ïò¹ıÈ¥·½Ïò×ß
+        //ä¿®æ”¹å·²ç»ç”¨äº†å¤šå°‘å¤©çš„æ—¶é—´æ“ï¼Œå‘è¿‡å»æ–¹å‘èµ°
         water.save.used_days_timestamp = now - used_days * 3600 * 24;
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -452,16 +452,16 @@ int cmd_time_synchronization_used_process(uint8_t* out_buf, int* out_len, uint8_
     return ret;
 }
 
-int cmd_time_synchronization_remain_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//ÓÃÊ±Í¬²½ 0xBBÊ£ÓàÌìÊı
+int cmd_time_synchronization_remain_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//ç”¨æ—¶åŒæ­¥ 0xBBå‰©ä½™å¤©æ•°
 {
     int ret = 0;
-    
-    if (1 == water.save.is_bind)//±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.is_bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         time_t now = time(NULL);
         water.remain_days = (in_buf[0] << 8) + in_buf[1] + 1;
         water.save.remain_days_timestamp = now + water.remain_days*3600*24,
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -470,85 +470,85 @@ int cmd_time_synchronization_remain_process(uint8_t* out_buf, int* out_len, uint
 }
 
 /*
-0x01ÖÆË®
-0x02Ë®Âú
-0x03È±Ë®
-0x04¼ìĞŞ
+0x01åˆ¶æ°´
+0x02æ°´æ»¡
+0x03ç¼ºæ°´
+0x04æ£€ä¿®
 */
-//Éè±¸ÔËĞĞ×´Ì¬¸üĞÂÊ±£¬Ö÷¶¯ÉÏ´«´ËÏûÏ¢,µçÄÔ°åÖ÷¶¯ÉÏ´«ÎŞĞèÓ¦´ğ
-int cmd_work_status_synchronization_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0c,//¹¤×÷×´Ì¬Í¬²½
+//è®¾å¤‡è¿è¡ŒçŠ¶æ€æ›´æ–°æ—¶ï¼Œä¸»åŠ¨ä¸Šä¼ æ­¤æ¶ˆæ¯,ç”µè„‘æ¿ä¸»åŠ¨ä¸Šä¼ æ— éœ€åº”ç­”
+int cmd_work_status_synchronization_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0c,//å·¥ä½œçŠ¶æ€åŒæ­¥
 {
     int ret = 0;
-    
+
     extern bool SendPacketStatusSuccess;
-    SendPacketStatusSuccess = true;//ÕhÃ÷½ÓÊÜµ½·µ»ØµÄÊı¾İÁË£¬¾Í²»ĞèÒªÔÙ´ÎÉÏ´«Éè±¸×´Ì¬ÁË
-    
+    SendPacketStatusSuccess = true;//èª¬æ˜æ¥å—åˆ°è¿”å›çš„æ•°æ®äº†ï¼Œå°±ä¸éœ€è¦å†æ¬¡ä¸Šä¼ è®¾å¤‡çŠ¶æ€äº†
+
     return ret;
 }
 
-//Á¢¿Ì·µ»ØĞÄÌøĞÅÏ¢µ½·şÎñÆ÷
-int cmd_query_device_operation_information_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0d,//²éÑ¯Éè±¸ÔËĞĞĞÅÏ¢
+//ç«‹åˆ»è¿”å›å¿ƒè·³ä¿¡æ¯åˆ°æœåŠ¡å™¨
+int cmd_query_device_operation_information_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0d,//æŸ¥è¯¢è®¾å¤‡è¿è¡Œä¿¡æ¯
 {
     int ret = 0;
-    
-    void EDP_SendPacketPing(void); //0x01,//ĞÄÌøÖ¡
+
+    void EDP_SendPacketPing(void); //0x01,//å¿ƒè·³å¸§
     EDP_SendPacketPing();
     return ret;
 }
 
-int cmd_filter_reset_and_modification_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0e,//ÂËĞ¾¸´Î»ÓëĞŞ¸Ä
+int cmd_filter_reset_and_modification_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0e,//æ»¤èŠ¯å¤ä½ä¸ä¿®æ”¹
 {
     int ret = 0;
-    
-    if (1 == water.save.is_bind)//±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.is_bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         uint16_t remain_value = (in_buf[1] << 8) + in_buf[2];
         time_t now = time(NULL);
-        
+
         switch (in_buf[0])
         {
         case 0x00: break;
-        case 0x01: water.save.filter_used_timestamp_1 = now; break;//ĞŞ¸ÄÒÑ¾­Ê¹ÓÃµÄÌìÊı¼ÇÂ¼µÄÊ±¼ä´ì£¬ÄÇÃ´×î´óÌìÊıÃ»ÓĞ±ä£¬Ê£ÓàÌìÊı¾ÍÊÇ×î´óµÄÌìÊı¡£ÒÑ¾­Ê¹ÓÃµÄÌìÊı¾ÍÊÇ0
+        case 0x01: water.save.filter_used_timestamp_1 = now; break;//ä¿®æ”¹å·²ç»ä½¿ç”¨çš„å¤©æ•°è®°å½•çš„æ—¶é—´æŒ«ï¼Œé‚£ä¹ˆæœ€å¤§å¤©æ•°æ²¡æœ‰å˜ï¼Œå‰©ä½™å¤©æ•°å°±æ˜¯æœ€å¤§çš„å¤©æ•°ã€‚å·²ç»ä½¿ç”¨çš„å¤©æ•°å°±æ˜¯0
         case 0x02: water.save.filter_used_timestamp_2 = now; break;
         case 0x03: water.save.filter_used_timestamp_3 = now; break;
         case 0x04: water.save.filter_used_timestamp_4 = now; break;
         case 0x05: water.save.filter_used_timestamp_5 = now; break;
-        case 0x06: 
+        case 0x06:
             water.save.filter_used_timestamp_1 = now;
             water.save.filter_used_timestamp_2 = now;
             water.save.filter_used_timestamp_3 = now;
             water.save.filter_used_timestamp_4 = now;
-            water.save.filter_used_timestamp_5 = now; 
+            water.save.filter_used_timestamp_5 = now;
             break;
         case 0x07:
-            if (remain_value > water.save.filter_max_value_1) 
-                water.save.filter_max_value_1 = remain_value; 
-            //ĞŞ¸ÄÁËÂËĞ¾µÄÊ£ÓàÖµ£¬È»ºóÂËĞ¾Ê¹ÓÃµÄÌìÊı¾ÍÊÇ ×î´óÖµ-Ê£ÓàÖµ¡£È»ºó¸ù¾İÒÑÓÃµÄÌìÊı£¬»ñµÃÕâ¸öÒÑÓÃµÄÊ±¼ä´êÏà¶ÔÓÚÏÖÔÚÌáÇ°ÁË¶à¾Ã£¬´Ó¶ø¼ä¸ôÇóµÃµÚÒ»´ÎÊ¹ÓÃ¶îÊ±¼ä´ê¡£ºóÃæ¼ÆËãµÄÊ±ºò£¬¾ÍÓÃÏÖÔÚÌìÊıÊ±¼ä´ê-µÚÒ»´ÎÊ¹ÓÃµÄÊ±¼ä´ê£¬¾ÍÊÇÂËĞ¾ÒÑ¾­Ê¹ÓÃµÄÌìÊıÁË¡£Ê£ÓàÖµ¾ÍÊÇ×î´óÖµ-Ê£ÓàÖµ
-            water.save.filter_used_timestamp_1 = now - (water.save.filter_max_value_1 - remain_value)*3600*24; //µ±Ç°µÄÊ±¼ä´ê - ÒÑ¾­µÄÊ±¼ä´ê£¬È»ºó±£´æ¼ÇÏÂÀ´£¬Ïàµ±ÓÚĞŞ¸ÄÁËÂËĞ¾¿ªÊ¼Ê¹ÓÃµÄÊ±¼ä´ê
+            if (remain_value > water.save.filter_max_value_1)
+                water.save.filter_max_value_1 = remain_value;
+            //ä¿®æ”¹äº†æ»¤èŠ¯çš„å‰©ä½™å€¼ï¼Œç„¶åæ»¤èŠ¯ä½¿ç”¨çš„å¤©æ•°å°±æ˜¯ æœ€å¤§å€¼-å‰©ä½™å€¼ã€‚ç„¶åæ ¹æ®å·²ç”¨çš„å¤©æ•°ï¼Œè·å¾—è¿™ä¸ªå·²ç”¨çš„æ—¶é—´æ“ç›¸å¯¹äºç°åœ¨æå‰äº†å¤šä¹…ï¼Œä»è€Œé—´éš”æ±‚å¾—ç¬¬ä¸€æ¬¡ä½¿ç”¨é¢æ—¶é—´æ“ã€‚åé¢è®¡ç®—çš„æ—¶å€™ï¼Œå°±ç”¨ç°åœ¨å¤©æ•°æ—¶é—´æ“-ç¬¬ä¸€æ¬¡ä½¿ç”¨çš„æ—¶é—´æ“ï¼Œå°±æ˜¯æ»¤èŠ¯å·²ç»ä½¿ç”¨çš„å¤©æ•°äº†ã€‚å‰©ä½™å€¼å°±æ˜¯æœ€å¤§å€¼-å‰©ä½™å€¼
+            water.save.filter_used_timestamp_1 = now - (water.save.filter_max_value_1 - remain_value)*3600*24; //å½“å‰çš„æ—¶é—´æ“ - å·²ç»çš„æ—¶é—´æ“ï¼Œç„¶åä¿å­˜è®°ä¸‹æ¥ï¼Œç›¸å½“äºä¿®æ”¹äº†æ»¤èŠ¯å¼€å§‹ä½¿ç”¨çš„æ—¶é—´æ“
             break;
         case 0x08:
-            if (remain_value > water.save.filter_max_value_2) 
-                water.save.filter_max_value_2 = remain_value; 
-            water.save.filter_used_timestamp_2 = now - (water.save.filter_max_value_2 - remain_value)*3600*24; //µ±Ç°µÄÊ±¼ä´ê - ÒÑ¾­µÄÊ±¼ä´ê£¬È»ºó±£´æ¼ÇÏÂÀ´£¬Ïàµ±ÓÚĞŞ¸ÄÁËÂËĞ¾¿ªÊ¼Ê¹ÓÃµÄÊ±¼ä´ê
+            if (remain_value > water.save.filter_max_value_2)
+                water.save.filter_max_value_2 = remain_value;
+            water.save.filter_used_timestamp_2 = now - (water.save.filter_max_value_2 - remain_value)*3600*24; //å½“å‰çš„æ—¶é—´æ“ - å·²ç»çš„æ—¶é—´æ“ï¼Œç„¶åä¿å­˜è®°ä¸‹æ¥ï¼Œç›¸å½“äºä¿®æ”¹äº†æ»¤èŠ¯å¼€å§‹ä½¿ç”¨çš„æ—¶é—´æ“
             break;
         case 0x09:
             if (remain_value > water.save.filter_max_value_3)
-                water.save.filter_max_value_3 = remain_value; 
-            water.save.filter_used_timestamp_3 = now - (water.save.filter_max_value_3 - remain_value)*3600*24; //µ±Ç°µÄÊ±¼ä´ê - ÒÑ¾­µÄÊ±¼ä´ê£¬È»ºó±£´æ¼ÇÏÂÀ´£¬Ïàµ±ÓÚĞŞ¸ÄÁËÂËĞ¾¿ªÊ¼Ê¹ÓÃµÄÊ±¼ä´ê
+                water.save.filter_max_value_3 = remain_value;
+            water.save.filter_used_timestamp_3 = now - (water.save.filter_max_value_3 - remain_value)*3600*24; //å½“å‰çš„æ—¶é—´æ“ - å·²ç»çš„æ—¶é—´æ“ï¼Œç„¶åä¿å­˜è®°ä¸‹æ¥ï¼Œç›¸å½“äºä¿®æ”¹äº†æ»¤èŠ¯å¼€å§‹ä½¿ç”¨çš„æ—¶é—´æ“
             break;
         case 0x0a:
-            if (remain_value > water.save.filter_max_value_4) 
-                water.save.filter_max_value_4 = remain_value; 
-            water.save.filter_used_timestamp_4 = now - (water.save.filter_max_value_4 - remain_value)*3600*24; //µ±Ç°µÄÊ±¼ä´ê - ÒÑ¾­µÄÊ±¼ä´ê£¬È»ºó±£´æ¼ÇÏÂÀ´£¬Ïàµ±ÓÚĞŞ¸ÄÁËÂËĞ¾¿ªÊ¼Ê¹ÓÃµÄÊ±¼ä´ê
+            if (remain_value > water.save.filter_max_value_4)
+                water.save.filter_max_value_4 = remain_value;
+            water.save.filter_used_timestamp_4 = now - (water.save.filter_max_value_4 - remain_value)*3600*24; //å½“å‰çš„æ—¶é—´æ“ - å·²ç»çš„æ—¶é—´æ“ï¼Œç„¶åä¿å­˜è®°ä¸‹æ¥ï¼Œç›¸å½“äºä¿®æ”¹äº†æ»¤èŠ¯å¼€å§‹ä½¿ç”¨çš„æ—¶é—´æ“
             break;
         case 0x0b:
-            if (remain_value > water.save.filter_max_value_5) 
-                water.save.filter_max_value_5 = remain_value; 
-            water.save.filter_used_timestamp_5 = now - (water.save.filter_max_value_5 - remain_value)*3600*24; //µ±Ç°µÄÊ±¼ä´ê - ÒÑ¾­µÄÊ±¼ä´ê£¬È»ºó±£´æ¼ÇÏÂÀ´£¬Ïàµ±ÓÚĞŞ¸ÄÁËÂËĞ¾¿ªÊ¼Ê¹ÓÃµÄÊ±¼ä´ê
+            if (remain_value > water.save.filter_max_value_5)
+                water.save.filter_max_value_5 = remain_value;
+            water.save.filter_used_timestamp_5 = now - (water.save.filter_max_value_5 - remain_value)*3600*24; //å½“å‰çš„æ—¶é—´æ“ - å·²ç»çš„æ—¶é—´æ“ï¼Œç„¶åä¿å­˜è®°ä¸‹æ¥ï¼Œç›¸å½“äºä¿®æ”¹äº†æ»¤èŠ¯å¼€å§‹ä½¿ç”¨çš„æ—¶é—´æ“
             break;
         default:break;
         }
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -556,18 +556,18 @@ int cmd_filter_reset_and_modification_process(uint8_t* out_buf, int* out_len, ui
     return ret;
 }
 
-//Ä£Ê½ÇĞ»»
-int cmd_mode_switching_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0f,//Ä£Ê½ÇĞ»»
+//æ¨¡å¼åˆ‡æ¢
+int cmd_mode_switching_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x0f,//æ¨¡å¼åˆ‡æ¢
 {
     int ret = 0;
     /*
-    0	Á÷Á¿Ä£Ê½
-    1	Ê±³¤Ä£Ê½
+    0	æµé‡æ¨¡å¼
+    1	æ—¶é•¿æ¨¡å¼
     */
     if ((0x00 == in_buf[0]) || (0x01 == in_buf[0]))
     {
         water.save.work_mode = in_buf[0];
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -575,14 +575,14 @@ int cmd_mode_switching_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, 
     return ret;
 }
 
-//ÓÃÓÚµçÄÔ°å²ÎÊı»Ö¸´³ö³§ÉèÖÃ×´Ì¬
-int cmd_reset_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x10,//»Ö¸´³ö³§ÉèÖÃ
+//ç”¨äºç”µè„‘æ¿å‚æ•°æ¢å¤å‡ºå‚è®¾ç½®çŠ¶æ€
+int cmd_reset_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x10,//æ¢å¤å‡ºå‚è®¾ç½®
 {
     int ret = 0;
-    
+
     if (0x00 == in_buf[0])
     {
-        //»Ö¸´³ö³§¾Í½â³ıÁË½‰¶¨
+        //æ¢å¤å‡ºå‚å°±è§£é™¤äº†ç¶å®š
         memcpy(&water, &water_default, sizeof(water_default));
         memcpy(&water.save, &save_data_default, sizeof(save_data_default));
         //clear e2prom
@@ -595,20 +595,20 @@ int cmd_reset_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_le
 }
 
 
-//ĞŞ¸ÄÓòÃûºÍ¶Ë¿ÚºÅ
+//ä¿®æ”¹åŸŸåå’Œç«¯å£å·
 
 
-//ĞŞ¸ÄÇ¿ÖÆ³åÏ´Ê±¼äÏµÍ³²ÎÊıĞŞ¸Ä
-int cmd_parameter_modification_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x11,//²ÎÊıĞŞ¸Ä
+//ä¿®æ”¹å¼ºåˆ¶å†²æ´—æ—¶é—´ç³»ç»Ÿå‚æ•°ä¿®æ”¹
+int cmd_parameter_modification_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x11,//å‚æ•°ä¿®æ”¹
 {
     int ret = 0;
-    
+
     water.save.force_flush_time = in_buf[0];
-    
+
     extern TimerHandle_t xForceFlushTimerHandler;
     void vForceFlushTimerCallback( TimerHandle_t pxTimer );
-    
-    //É¾³ı¶¨Ê±Æ÷£¬²¢ÖØĞÂ´´½¨¶¨Ê±Æ÷
+
+    //åˆ é™¤å®šæ—¶å™¨ï¼Œå¹¶é‡æ–°åˆ›å»ºå®šæ—¶å™¨
     water.is_bushing_now = 0;
     xTimerDelete( xForceFlushTimerHandler, pdMS_TO_TICKS(100) );
     xForceFlushTimerHandler = xTimerCreate(    "Force Flush Timer",   // Just a text name, not used by the kernel.
@@ -616,31 +616,31 @@ int cmd_parameter_modification_process(uint8_t* out_buf, int* out_len, uint8_t* 
                                  pdFALSE,        // The timers will auto-reload themselves when they expire.
                                  ( void * ) NULL, // Assign each timer a unique id equal to its array index.
                                  vForceFlushTimerCallback); // Each timer calls the same callback when it expires.
-    
+
     *out_len = in_len;
     memcpy(out_buf, in_buf, *out_len);
     ret = 1;
     return ret;
 }
 
-//¶¨Ê±³åÏ´²ÎÊıĞŞ¸Ä
-int cmd_timing_flush_parameter_modification_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x12,//¶¨Ê±³åÏ´²ÎÊıĞŞ¸Ä
+//å®šæ—¶å†²æ´—å‚æ•°ä¿®æ”¹
+int cmd_timing_flush_parameter_modification_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x12,//å®šæ—¶å†²æ´—å‚æ•°ä¿®æ”¹
 {
     int ret = 0;
-    
+
     water.save.period_flush_time = ((uint32_t)in_buf[0] << 16) + ((uint32_t)in_buf[1] << 8) + ((uint32_t)in_buf[2] << 0);
-    
+
     *out_len = in_len;
     memcpy(out_buf, in_buf, *out_len);
     ret = 1;
     return ret;
 }
 
-//ĞŞ¸Ä½øÈë¼ìĞŞ×´Ì¬Ê±³¤
-int cmd_maintenance_parameter_modification_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x13,//¼ìĞŞ²ÎÊıĞŞ¸Ä
+//ä¿®æ”¹è¿›å…¥æ£€ä¿®çŠ¶æ€æ—¶é•¿
+int cmd_maintenance_parameter_modification_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x13,//æ£€ä¿®å‚æ•°ä¿®æ”¹
 {
     int ret = 0;
-    
+
     water.save.maintenance_time = ((uint32_t)in_buf[0] << 16) + ((uint32_t)in_buf[1] << 8) + ((uint32_t)in_buf[2] << 0);
     *out_len = in_len;
     memcpy(out_buf, in_buf, *out_len);
@@ -648,30 +648,30 @@ int cmd_maintenance_parameter_modification_process(uint8_t* out_buf, int* out_le
     return ret;
 }
 
-//TDSÖµÉèÖÃ
-int cmd_control_parameter_modification_1_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x14,//¿ØÖÆ²ÎÊıĞŞ¸Ä1
+//TDSå€¼è®¾ç½®
+int cmd_control_parameter_modification_1_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x14,//æ§åˆ¶å‚æ•°ä¿®æ”¹1
 {
     int ret = 0;
-    
-    if (0x01 == in_buf[0])//0x01´¿Ë®
+
+    if (0x01 == in_buf[0])//0x01çº¯æ°´
     {
-        if ((0x00 == in_buf[1]) || (0x01 == in_buf[1]))//TDS¼ì²â¿ª¹Ø00¹Ø£¬01¿ª
+        if ((0x00 == in_buf[1]) || (0x01 == in_buf[1]))//TDSæ£€æµ‹å¼€å…³00å…³ï¼Œ01å¼€
         {
-            water.save.clean_water_tds_switch = in_buf[1];//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+            water.save.clean_water_tds_switch = in_buf[1];//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
             water.save.clean_water_ppm = (in_buf[2] << 8) + in_buf[3];
-            
+
             *out_len = in_len;
             memcpy(out_buf, in_buf, *out_len);
             ret = 1;
         }
     }
-    else if (0x02 == in_buf[0])//0x02Ô­Ë®
+    else if (0x02 == in_buf[0])//0x02åŸæ°´
     {
-        if ((0x00 == in_buf[1]) || (0x01 == in_buf[1]))//TDS¼ì²â¿ª¹Ø00¹Ø£¬01¿ª
+        if ((0x00 == in_buf[1]) || (0x01 == in_buf[1]))//TDSæ£€æµ‹å¼€å…³00å…³ï¼Œ01å¼€
         {
-            water.save.raw_water_tds_switch = in_buf[1];//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+            water.save.raw_water_tds_switch = in_buf[1];//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
             water.save.raw_water_ppm = (in_buf[2] << 8) + in_buf[3];
-            
+
             *out_len = in_len;
             memcpy(out_buf, in_buf, *out_len);
             ret = 1;
@@ -680,44 +680,44 @@ int cmd_control_parameter_modification_1_process(uint8_t* out_buf, int* out_len,
     return ret;
 }
 
-//ÁªÍø²ÎÊıĞŞ¸Ä
-int cmd_control_parameter_modification_2_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x15,//¿ØÖÆ²ÎÊıĞŞ¸Ä2
+//è”ç½‘å‚æ•°ä¿®æ”¹
+int cmd_control_parameter_modification_2_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len) //0x15,//æ§åˆ¶å‚æ•°ä¿®æ”¹2
 {
     int ret = 0;
-    if (0x01 == in_buf[0])//0x01ĞÄÌø¼ä¸ô
+    if (0x01 == in_buf[0])//0x01å¿ƒè·³é—´éš”
     {
         water.save.ping_time = (in_buf[1] << 8) + in_buf[2];
     }
-    else if (0x02 == in_buf[0])//0x02¶ÏÍøÖØÁ¬
+    else if (0x02 == in_buf[0])//0x02æ–­ç½‘é‡è¿
     {
-        water.save.reconnect_time = (in_buf[1] << 8) + in_buf[2];//Î´Ê¹ÓÃ
+        water.save.reconnect_time = (in_buf[1] << 8) + in_buf[2];//æœªä½¿ç”¨
     }
-    
+
     *out_len = in_len;
     memcpy(out_buf, in_buf, *out_len);
     ret = 1;
     return ret;
 }
 
-int cmd_test_mode_switch_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x16,//¿ªÆô¹Ø±Õ²âÊÔÄ£Ê½
+int cmd_test_mode_switch_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x16,//å¼€å¯å…³é—­æµ‹è¯•æ¨¡å¼
 {
     int ret = 0;
     /*
-    0x00  ¿ªÆô
-    0x01  ¹Ø±Õ
+    0x00  å¼€å¯
+    0x01  å…³é—­
     */
-    if (0x00 == in_buf[0])//¿ªÆôµ÷ÊÔÄ£Ê½
+    if (0x00 == in_buf[0])//å¼€å¯è°ƒè¯•æ¨¡å¼
     {
         water.is_test_mode_switch_off = 0;
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
     }
-    else if (0x01 == in_buf[0])//¹Ø±Õµ÷ÊÔÄ£Ê½
+    else if (0x01 == in_buf[0])//å…³é—­è°ƒè¯•æ¨¡å¼
     {
         water.is_test_mode_switch_off = 1;
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -725,50 +725,50 @@ int cmd_test_mode_switch_process(uint8_t* out_buf, int* out_len, uint8_t* in_buf
     return ret;
 }
 
-//Éè±¸Ïò·şÎñÆ÷ÇëÇóÊ±¼ä
-//Ïò·şÎñÆ÷·¢ËÍµ±Ç°µÄÉè±¸Ê±¼ä£¬²¢ÇÒ·şÎñÆ÷Ò²»áÏòÉè±¸·¢ËÍµ±Ç°µÄ·şÎñÆ÷Ê±¼ä
-//ÓÃÓÚµçÄÔ°æºÍ·şÎñÆ÷¶ËµÄÊ±¼äÍ¬²½£¬Éè±¸Ö÷¶¯ÉÏ´«£¬Éè±¸Ã¿´Î¿ª»úÆô¶¯£¬»òÕßÔÚ¹Ì¶¨µÄÊ±¼äµã£¨ÀıÈçÃ¿ÖÜĞÇÆÚÒ»Áè³¿03:00:00½øĞĞÊ±¼äÍ¬²½£©£¬Ïò·şÎñÆ÷ÇëÇóÊ±¼äÍ¬²½¡£
-int cmd_computer_board_time_synchronization_1(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x17,// µçÄÔ°åÊ±¼äÍ¬²½1
+//è®¾å¤‡å‘æœåŠ¡å™¨è¯·æ±‚æ—¶é—´
+//å‘æœåŠ¡å™¨å‘é€å½“å‰çš„è®¾å¤‡æ—¶é—´ï¼Œå¹¶ä¸”æœåŠ¡å™¨ä¹Ÿä¼šå‘è®¾å¤‡å‘é€å½“å‰çš„æœåŠ¡å™¨æ—¶é—´
+//ç”¨äºç”µè„‘ç‰ˆå’ŒæœåŠ¡å™¨ç«¯çš„æ—¶é—´åŒæ­¥ï¼Œè®¾å¤‡ä¸»åŠ¨ä¸Šä¼ ï¼Œè®¾å¤‡æ¯æ¬¡å¼€æœºå¯åŠ¨ï¼Œæˆ–è€…åœ¨å›ºå®šçš„æ—¶é—´ç‚¹ï¼ˆä¾‹å¦‚æ¯å‘¨æ˜ŸæœŸä¸€å‡Œæ™¨03:00:00è¿›è¡Œæ—¶é—´åŒæ­¥ï¼‰ï¼Œå‘æœåŠ¡å™¨è¯·æ±‚æ—¶é—´åŒæ­¥ã€‚
+int cmd_computer_board_time_synchronization_1(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x17,// ç”µè„‘æ¿æ—¶é—´åŒæ­¥1
 {
     int ret = 0;
-    
+
     time_t seconds = ((uint32_t)in_buf[1] << 24) + ((uint32_t)in_buf[2] << 16) + ((uint32_t)in_buf[3] << 8) + ((uint32_t)in_buf[4] << 0);
     PCF8563_SetTime(seconds);
     //seconds = PCF8563_ReadTime();
-    
+
     extern time_t time_dat;
-    time_dat = seconds;//ĞŞ¸ÄÏµÍ³Ê±¼ä
+    time_dat = seconds;//ä¿®æ”¹ç³»ç»Ÿæ—¶é—´
     return ret;
 }
 
 
 time_t seconds_aaaa;
 
-//·şÎñÆ÷Ç¿ÖÆ¸üĞÂÉè±¸Ê±¼ä
-//ÓÃÓÚµçÄÔ°æºÍ·şÎñÆ÷¶ËµÄÊ±¼äÍ¬²½£¬·şÎñ¶ËÏÂ·¢Éè±¸Ê±¼äÍ¬²½Ö¸Áî½øĞĞÊ±¼äÍ¬²½¡£
-int cmd_computer_board_time_synchronization_2(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x18,// µçÄÔ°åÊ±¼äÍ¬²½2
+//æœåŠ¡å™¨å¼ºåˆ¶æ›´æ–°è®¾å¤‡æ—¶é—´
+//ç”¨äºç”µè„‘ç‰ˆå’ŒæœåŠ¡å™¨ç«¯çš„æ—¶é—´åŒæ­¥ï¼ŒæœåŠ¡ç«¯ä¸‹å‘è®¾å¤‡æ—¶é—´åŒæ­¥æŒ‡ä»¤è¿›è¡Œæ—¶é—´åŒæ­¥ã€‚
+int cmd_computer_board_time_synchronization_2(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x18,// ç”µè„‘æ¿æ—¶é—´åŒæ­¥2
 {
     int ret = 0;
-    
+
     time_t seconds = ((uint32_t)in_buf[1] << 24) + ((uint32_t)in_buf[2] << 16) + ((uint32_t)in_buf[3] << 8) + ((uint32_t)in_buf[4] << 0);
-    
+
     PCF8563_SetTime(seconds);
     //seconds_aaaa = seconds = PCF8563_ReadTime();
 
     extern time_t time_dat;
-    time_dat = seconds;//ĞŞ¸ÄÏµÍ³Ê±¼ä
+    time_dat = seconds;//ä¿®æ”¹ç³»ç»Ÿæ—¶é—´
     return ret;
 }
 
-//ÓÃË®Á¿Í¬²½:ÒÑÓÃÁ÷Á¿
-int cmd_synchronization_of_water_consumption_used(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0xAA,// ÓÃË®Á¿Í¬²½ 0xAAÒÑÓÃÁ÷Á¿
+//ç”¨æ°´é‡åŒæ­¥:å·²ç”¨æµé‡
+int cmd_synchronization_of_water_consumption_used(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0xAA,// ç”¨æ°´é‡åŒæ­¥ 0xAAå·²ç”¨æµé‡
 {
     int ret = 0;
-    
-    if (1 == water.save.is_bind)//±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.is_bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         water.save.used_flow = (uint32_t)((((uint32_t)in_buf[0] << 24) + ((uint32_t)in_buf[1] << 16) + ((uint32_t)in_buf[2] << 8) + ((uint32_t)in_buf[3] << 0)) / 0.917 + 0.5);
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -776,15 +776,15 @@ int cmd_synchronization_of_water_consumption_used(uint8_t* out_buf, int* out_len
     return ret;
 }
 
-//ÓÃË®Á¿Í¬²½:Ê£ÓàÁ÷Á¿
-int cmd_synchronization_of_water_consumption_remain(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0xAB,// ÓÃË®Á¿Í¬²½ 0xABÊ£ÓàÁ÷Á¿
+//ç”¨æ°´é‡åŒæ­¥:å‰©ä½™æµé‡
+int cmd_synchronization_of_water_consumption_remain(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0xAB,// ç”¨æ°´é‡åŒæ­¥ 0xABå‰©ä½™æµé‡
 {
     int ret = 0;
-    
-    if (1 == water.save.is_bind)//±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.is_bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         water.save.remain_flow = (uint32_t)((((uint32_t)in_buf[0] << 24) + ((uint32_t)in_buf[1] << 16) + ((uint32_t)in_buf[2] << 8) + ((uint32_t)in_buf[3] << 0)) / 0.917 + 0.5);
-        
+
         *out_len = in_len;
         memcpy(out_buf, in_buf, *out_len);
         ret = 1;
@@ -797,7 +797,7 @@ bool is_iap_status = false;
 int32_t packets_received = 0;
 uint32_t flashdestination, ramsource;
 
-int cmd_remote_upgrade_version(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x1A,//·şÎñ¶Ë»ñÈ¡¹Ì¼şµ±Ç°°æ±¾ºÅ
+int cmd_remote_upgrade_version(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x1A,//æœåŠ¡ç«¯è·å–å›ºä»¶å½“å‰ç‰ˆæœ¬å·
 {
     int ret = 0;
     uint16_t i = 0;
@@ -812,24 +812,24 @@ int cmd_remote_upgrade_version(uint8_t* out_buf, int* out_len, uint8_t* in_buf, 
     out_buf[i++] = HW_VERSION[7];
     *out_len = i;
     ret = 1;
-    
+
     return ret;
 }
 
-int cmd_remote_upgrade_data0(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x2A,//Ô¶³ÌÉı¼¶ÎÄ¼şÃû
+int cmd_remote_upgrade_data0(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x2A,//è¿œç¨‹å‡çº§æ–‡ä»¶å
 {
     int32_t i, size = 0;
     uint8_t file_size[16], *file_ptr;
     uint8_t FileName[256] = {0};
-    
-    *out_len = 1;   
-        
+
+    *out_len = 1;
+
     if (in_buf[0] != 0x01)//128
     {
         out_buf[0] = 0;
         return 1;
     }
-    
+
     if (in_buf[1] != ((in_buf[2] ^ 0xff) & 0xff))
     {
         out_buf[0] = 0;
@@ -840,7 +840,7 @@ int cmd_remote_upgrade_data0(uint8_t* out_buf, int* out_len, uint8_t* in_buf, in
     flashdestination = APPLICATION_ADDRESS;
     FLASH_If_Init();
     is_iap_status = true;
-    if (packets_received == 0)//µÚÒ»°üÊı¾İ²»Ğ´Èëµ½flashÖĞ
+    if (packets_received == 0)//ç¬¬ä¸€åŒ…æ•°æ®ä¸å†™å…¥åˆ°flashä¸­
     {
         /* Filename packet */
         if (in_buf[3] != 0)
@@ -851,8 +851,8 @@ int cmd_remote_upgrade_data0(uint8_t* out_buf, int* out_len, uint8_t* in_buf, in
                 FileName[i++] = *file_ptr++;
             }
             FileName[i++] = '\0';
-            
-            //ÅĞ”àfile nameÊÇ·ñ·ûºÏÒªÇó
+
+            //åˆ¤æ–·file nameæ˜¯å¦ç¬¦åˆè¦æ±‚
 #if APP_A
             if (NULL == strstr((char*)FileName, "V2_"))
 #elif APP_B | BOOTLOADER
@@ -863,14 +863,14 @@ int cmd_remote_upgrade_data0(uint8_t* out_buf, int* out_len, uint8_t* in_buf, in
                 out_buf[0] = 0;
                 return 1;
             }
-            
+
             for (i = 0, file_ptr ++; (*file_ptr != ' ') && (i < (16 - 1));)
             {
                 file_size[i++] = *file_ptr++;
             }
             file_size[i++] = '\0';
             Str2Int(file_size, &size);
-            
+
             /* Test the size of the image to be sent */
             /* Image size is greater than Flash size */
             if (size > (USER_FLASH_SIZE + 1))
@@ -882,7 +882,7 @@ int cmd_remote_upgrade_data0(uint8_t* out_buf, int* out_len, uint8_t* in_buf, in
             packets_received  = 1;
             /* erase user application area */
             FLASH_If_Erase(APPLICATION_ADDRESS);
-            // Çå³ı±êÖ¾Î»£¬ËµÃ÷ÒÑ¾­ĞŞ¸ÄÁË¹Ì¼ş£¬»Ø²»È¥ÁË
+            // æ¸…é™¤æ ‡å¿—ä½ï¼Œè¯´æ˜å·²ç»ä¿®æ”¹äº†å›ºä»¶ï¼Œå›ä¸å»äº†
 #if APP_A
             const char app_run[10] = {0};
             I2C_EE_BufferWrite(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_B_OFFSET_ADDR, (uint8_t *)app_run, 10);
@@ -898,23 +898,23 @@ int cmd_remote_upgrade_data0(uint8_t* out_buf, int* out_len, uint8_t* in_buf, in
     return 1;
 }
 
-int cmd_remote_upgrade_data1(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x3A,//Ô¶³ÌÉı¼¶ÎÄ¼ş
+int cmd_remote_upgrade_data1(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x3A,//è¿œç¨‹å‡çº§æ–‡ä»¶
 {
     *out_len = 1;
-    
+
     if (in_buf[0] != 0x02)//1024
     {
         out_buf[0] = 0;
         return 1;
     }
-    
+
     if (in_buf[1] != ((in_buf[2] ^ 0xff) & 0xff))
     {
         out_buf[0] = 0;
         return 1;
     }
-        
-    if (packets_received != 0)//µÚÒ»°üÊı¾İ²»Ğ´Èëµ½flashÖĞ
+
+    if (packets_received != 0)//ç¬¬ä¸€åŒ…æ•°æ®ä¸å†™å…¥åˆ°flashä¸­
     {
         /* Write received data in Flash */
         if (FLASH_If_Write(&flashdestination, (uint32_t*) &in_buf[3], (uint16_t) 1024/4) == 0)
@@ -928,7 +928,7 @@ int cmd_remote_upgrade_data1(uint8_t* out_buf, int* out_len, uint8_t* in_buf, in
     return 1;
 }
 
-int cmd_remote_upgrade_data2(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x4A,//Ô¶³ÌÉı¼¶½áÊø
+int cmd_remote_upgrade_data2(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x4A,//è¿œç¨‹å‡çº§ç»“æŸ
 {
     *out_len = 1;
     is_iap_status = false;
@@ -937,16 +937,16 @@ int cmd_remote_upgrade_data2(uint8_t* out_buf, int* out_len, uint8_t* in_buf, in
         out_buf[0] = 0;
         return 1;
     }
-    
+
     if (in_buf[1] != ((in_buf[2] ^ 0xff) & 0xff))
     {
         out_buf[0] = 0;
         return 1;
     }
-    
+
     if (packets_received != 0)
     {
-        //if ()//¶ÔÉı¼¶µÄ½á¹û½øĞĞÅĞ¶Ï£¬Èç¹ûÕıÈ·¾ÍÉèÖÃ±êÖ¾Î»
+        //if ()//å¯¹å‡çº§çš„ç»“æœè¿›è¡Œåˆ¤æ–­ï¼Œå¦‚æœæ­£ç¡®å°±è®¾ç½®æ ‡å¿—ä½
         {
 #if APP_A
             const char app_run[10] = "app_b_on";
@@ -964,28 +964,28 @@ int cmd_remote_upgrade_data2(uint8_t* out_buf, int* out_len, uint8_t* in_buf, in
 }
 
 
-int cmd_remote_upgrade_reboot(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x7A,//Ô¶³ÌÖØÆô
+int cmd_remote_upgrade_reboot(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x7A,//è¿œç¨‹é‡å¯
 {
     int ret = 0;
     out_buf[0] = 0x01;
     *out_len = 1;
     ret = 1;
-    
+
     return ret;
 }
 
 
-int cmd_remote_upgrade_new(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x8A,//ÏÂ´ÎÆô¶¯Éè±¸Ê±ÊÇ·ñÔËĞĞĞÂ¹Ì¼ş
+int cmd_remote_upgrade_new(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x8A,//ä¸‹æ¬¡å¯åŠ¨è®¾å¤‡æ—¶æ˜¯å¦è¿è¡Œæ–°å›ºä»¶
 {
     *out_len = 1;
-    
+
 #if APP_A
         char buff[10] = "app_b_on";
         I2C_EE_BufferRead(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_B_OFFSET_ADDR, (uint8_t *)buff, 10);
         if (strstr(buff, "app_b_on"))
         {
             I2C_EE_BufferWrite(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_O_OFFSET_ADDR, (uint8_t *)buff, 10);
-            out_buf[0] = 0x01;//³É¹¦£º¹Ì¼şÕı³££¬ÏÂ´ÎÒÔĞÂ¹Ì¼şÔËĞĞ
+            out_buf[0] = 0x01;//æˆåŠŸï¼šå›ºä»¶æ­£å¸¸ï¼Œä¸‹æ¬¡ä»¥æ–°å›ºä»¶è¿è¡Œ
             return 1;
         }
 #elif APP_B | BOOTLOADER
@@ -994,26 +994,26 @@ int cmd_remote_upgrade_new(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int 
         if (strstr(buff, "app_a_on"))
         {
             I2C_EE_BufferWrite(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_O_OFFSET_ADDR, (uint8_t *)buff, 10);
-            out_buf[0] = 0x01;//³É¹¦£º¹Ì¼şÕı³££¬ÏÂ´ÎÒÔĞÂ¹Ì¼şÔËĞĞ
+            out_buf[0] = 0x01;//æˆåŠŸï¼šå›ºä»¶æ­£å¸¸ï¼Œä¸‹æ¬¡ä»¥æ–°å›ºä»¶è¿è¡Œ
             return 1;
         }
 #endif
-    out_buf[0] = 0x00;//Ê§°Ü£º¹Ì¼ş½ÓÊÜ´æÔÚÎÊÌâ£¬²»ÄÜÓÃĞÂ¹Ì¼şÔËĞĞ
+    out_buf[0] = 0x00;//å¤±è´¥ï¼šå›ºä»¶æ¥å—å­˜åœ¨é—®é¢˜ï¼Œä¸èƒ½ç”¨æ–°å›ºä»¶è¿è¡Œ
     return 1;
 }
 
-int cmd_remote_upgrade_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x9A,//33¡¢ÔËĞĞ¹Ì¼şÇĞ»»
+int cmd_remote_upgrade_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x9A,//33ã€è¿è¡Œå›ºä»¶åˆ‡æ¢
 {
     *out_len = 1;
-            
-    if (in_buf[0] == 0x00)//ÔËĞĞBOOTLOADER
+
+    if (in_buf[0] == 0x00)//è¿è¡ŒBOOTLOADER
     {
         char buff[10] = "app_o_on";
         I2C_EE_BufferWrite(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_O_OFFSET_ADDR, (uint8_t *)buff, 10);
         out_buf[0] = 0x01;
         return 1;
     }
-    else if (in_buf[0] == 0x01)//ÔËĞĞAÇø¹Ì¼ş
+    else if (in_buf[0] == 0x01)//è¿è¡ŒAåŒºå›ºä»¶
     {
         char buff[10] = {0};
         I2C_EE_BufferRead(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_A_OFFSET_ADDR, (uint8_t *)buff, 10);
@@ -1024,7 +1024,7 @@ int cmd_remote_upgrade_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, i
             return 1;
         }
     }
-    else if (in_buf[0] == 0x02)//ÔËĞĞBÇø¹Ì¼ş
+    else if (in_buf[0] == 0x02)//è¿è¡ŒBåŒºå›ºä»¶
     {
         char buff[10] = {0};
         I2C_EE_BufferRead(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_B_OFFSET_ADDR, (uint8_t *)buff, 10);
@@ -1039,17 +1039,17 @@ int cmd_remote_upgrade_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, i
     return 1;
 }
 
-int cmd_screen_mode_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//ÆÁÄ»ÏÔÊ¾Ä£Ê½ÇĞ»»0x5A
+int cmd_screen_mode_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//å±å¹•æ˜¾ç¤ºæ¨¡å¼åˆ‡æ¢0x5A
 {
     int ret = 0;
-    
-    if (1 == water.save.is_bind)//±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.is_bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         if ( ((in_buf[0] == 0x00) || (in_buf[0] == 0x01))  &&  ((in_buf[1] == 0x02) || (in_buf[1] == 0x03)) )
         {
-            water.save.screen_mode_switch.day = in_buf[0]; //0x00	ÒÑÓÃÌìÊı   0x01	Ê£ÓàÌìÊı
-            water.save.screen_mode_switch.flow = in_buf[1];//0x02	ÒÑÓÃÁ÷Á¿   0x03	Ê£ÓàÁ÷Á¿
-            
+            water.save.screen_mode_switch.day = in_buf[0]; //0x00	å·²ç”¨å¤©æ•°   0x01	å‰©ä½™å¤©æ•°
+            water.save.screen_mode_switch.flow = in_buf[1];//0x02	å·²ç”¨æµé‡   0x03	å‰©ä½™æµé‡
+
             *out_len = in_len;
             memcpy(out_buf, in_buf, *out_len);
             ret = 1;
@@ -1058,20 +1058,20 @@ int cmd_screen_mode_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int 
     return ret;
 }
 
-//µ±Á¬ĞøÖÆË®³¬¹ı8¸öĞ¡Ê±ËµÃ÷³öÏÖÁË¹ÊÕÏ£¬ĞèÒªÍ£»ú²Ù×÷£¬È»ºó·äÃùÆ÷ÌáĞÑÓÃ»§ÁË
-int cmd_overhaul_status_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//¼ìĞŞ×´Ì¬ÇĞ»»0x6A
+//å½“è¿ç»­åˆ¶æ°´è¶…è¿‡8ä¸ªå°æ—¶è¯´æ˜å‡ºç°äº†æ•…éšœï¼Œéœ€è¦åœæœºæ“ä½œï¼Œç„¶åèœ‚é¸£å™¨æé†’ç”¨æˆ·äº†
+int cmd_overhaul_status_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//æ£€ä¿®çŠ¶æ€åˆ‡æ¢0x6A
 {
     int ret = 0;
-    
-    if (1 == water.save.is_bind)//±ØĞë°ó¶¨Ì×²Íºó²Ù×÷£¬·ñÔòÎŞÏìÓ¦¡£
+
+    if (1 == water.save.is_bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
     {
         if ( (in_buf[0] == 0x00) || (in_buf[0] == 0x01) )
         {
-            water.overhaul_status_switch = in_buf[0]; //0x00½â³ı¼ìĞŞ  //0x01½øÈë¼ìĞŞ
-            
-            if (water.overhaul_status_switch)//0x01½øÈë¼ìĞŞ
+            water.overhaul_status_switch = in_buf[0]; //0x00è§£é™¤æ£€ä¿®  //0x01è¿›å…¥æ£€ä¿®
+
+            if (water.overhaul_status_switch)//0x01è¿›å…¥æ£€ä¿®
             {
-                //Éè±¸¹ÊÕÏ
+                //è®¾å¤‡æ•…éšœ
                 water.is_overhaul_status = 1;
                 water.is_overhaul_beep = 1;
             }
@@ -1080,99 +1080,128 @@ int cmd_overhaul_status_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, 
                 water.is_overhaul_status = 0;
                 water.is_overhaul_beep = 0;
                 water.is_bushing_now = 0;
-                water.io_high_status = -1;//¼ÇÂ¼IO1×´Ì¬,¸ßÑ¹¿ª¹Ø×´Ì¬
+                water.io_high_status = -1;//è®°å½•IO1çŠ¶æ€,é«˜å‹å¼€å…³çŠ¶æ€
                 water.io_high_last_status = -1;
-                water.io_low_status = -1;//¼ÇÂ¼IO2×´Ì¬,µÍÑ¹¿ª¹Ø×´Ì¬
+                water.io_low_status = -1;//è®°å½•IO2çŠ¶æ€,ä½å‹å¼€å…³çŠ¶æ€
                 water.io_low_last_status = -1;
             }
-            
+
             *out_len = in_len;
             memcpy(out_buf, in_buf, *out_len);
             ret = 1;
         }
     }
-    
+
+    return ret;
+}
+
+//89 86 02 b1 03 17 00 11 71 84 1C 00 01 01 B7 5D
+int cmd_get_device_work_status(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len)//0x1c, è·å–è®¾å¤‡å·¥ä½œçŠ¶æ€0x1c
+{
+    int ret = 0;
+
+    if (1 == water.save.is_bind)//å¿…é¡»ç»‘å®šå¥—é¤åæ“ä½œï¼Œå¦åˆ™æ— å“åº”ã€‚
+    {
+        if ( in_buf[0] == 0x01 )
+        {
+            uint8_t total_buf[100+15] = {0};
+            int total_len = 0;
+
+            g_data_format.cmd = 0x0C;
+            int i = 0;
+            g_data_format.data[i++] = (uint8_t)( (bool)water.is_make_water_status );//åˆ¶æ°´çŠ¶æ€
+            g_data_format.data[i++] = (uint8_t)( (bool)water.is_full_water_status );//æ°´æ»¡çŠ¶æ€
+            g_data_format.data[i++] = (uint8_t)( (bool)water.is_overhaul_status );//æ£€ä¿®
+            g_data_format.data[i++] = (uint8_t)( (bool)water.is_drop_water_status );//æ¼æ°´
+            g_data_format.data[i++] = (uint8_t)( (bool)water.is_power_on_status );//å¼€å…³æœº
+            g_data_format.data[i++] = (uint8_t)( (bool)water.is_shortage_water_status );//ç¼ºæ°´
+            g_data_format.length = i;
+
+            struct_to_buf(total_buf, &total_len, g_data_format);
+            vSerialPutBytes( NULL, total_buf, total_len );
+        }
+    }
     return ret;
 }
 
 //-------------------------------------------------------------
 
-void EDP_SendPacketPing(void) //0x01,//ĞÄÌøÖ¡
+void EDP_SendPacketPing(void) //0x01,//å¿ƒè·³å¸§
 {
     if (edp.is_tcpip_connect)
     {
         uint8_t total_buf[100+15] = {0};
         int total_len = 0;
-        
+
         water.date_time = time(NULL);
-        
+
         g_data_format.cmd = 0x01;
         int i = 0;
         uint32_t remain_flow = (uint32_t)(water.save.remain_flow * 0.917 + 0.5);
         uint32_t used_flow = (uint32_t)(water.save.used_flow * 0.917 + 0.5);
-        
-        g_data_format.data[i++] = (uint8_t)(water.device_status);//Éè±¸×´Ì¬
-        g_data_format.data[i++] = (uint8_t)(water.is_screen_status_off);//ÆÁÄ»×´Ì¬
-        g_data_format.data[i++] = (uint8_t)(water.save.work_mode);//¹¤×÷Ä£Ê½
-        g_data_format.data[i++] = (uint8_t)(remain_flow >> 24);//Ê£ÓàÁ÷Á¿
-        g_data_format.data[i++] = (uint8_t)(remain_flow >> 16);//Ê£ÓàÁ÷Á¿
-        g_data_format.data[i++] = (uint8_t)(remain_flow >> 8);//Ê£ÓàÁ÷Á¿
-        g_data_format.data[i++] = (uint8_t)(remain_flow >> 0);//Ê£ÓàÁ÷Á¿
-        g_data_format.data[i++] = (uint8_t)(water.remain_days >> 8);//Ê£ÓàÌìÊı
-        g_data_format.data[i++] = (uint8_t)(water.remain_days >> 0);//Ê£ÓàÌìÊı
-        g_data_format.data[i++] = (uint8_t)(used_flow >> 24);//ÒÑÓÃÁ÷Á¿
-        g_data_format.data[i++] = (uint8_t)(used_flow >> 16);//ÒÑÓÃÁ÷Á¿
-        g_data_format.data[i++] = (uint8_t)(used_flow >> 8);//ÒÑÓÃÁ÷Á¿
-        g_data_format.data[i++] = (uint8_t)(used_flow >> 0);//ÒÑÓÃÁ÷Á¿
-        g_data_format.data[i++] = (uint8_t)(water.used_days >> 8);//ÒÑÓÃÌìÊı
-        g_data_format.data[i++] = (uint8_t)(water.used_days >> 0);//ÒÑÓÃÌìÊı
-        if (water.save.clean_water_tds_switch == 0)//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+
+        g_data_format.data[i++] = (uint8_t)(water.device_status);//è®¾å¤‡çŠ¶æ€
+        g_data_format.data[i++] = (uint8_t)(water.is_screen_status_off);//å±å¹•çŠ¶æ€
+        g_data_format.data[i++] = (uint8_t)(water.save.work_mode);//å·¥ä½œæ¨¡å¼
+        g_data_format.data[i++] = (uint8_t)(remain_flow >> 24);//å‰©ä½™æµé‡
+        g_data_format.data[i++] = (uint8_t)(remain_flow >> 16);//å‰©ä½™æµé‡
+        g_data_format.data[i++] = (uint8_t)(remain_flow >> 8);//å‰©ä½™æµé‡
+        g_data_format.data[i++] = (uint8_t)(remain_flow >> 0);//å‰©ä½™æµé‡
+        g_data_format.data[i++] = (uint8_t)(water.remain_days >> 8);//å‰©ä½™å¤©æ•°
+        g_data_format.data[i++] = (uint8_t)(water.remain_days >> 0);//å‰©ä½™å¤©æ•°
+        g_data_format.data[i++] = (uint8_t)(used_flow >> 24);//å·²ç”¨æµé‡
+        g_data_format.data[i++] = (uint8_t)(used_flow >> 16);//å·²ç”¨æµé‡
+        g_data_format.data[i++] = (uint8_t)(used_flow >> 8);//å·²ç”¨æµé‡
+        g_data_format.data[i++] = (uint8_t)(used_flow >> 0);//å·²ç”¨æµé‡
+        g_data_format.data[i++] = (uint8_t)(water.used_days >> 8);//å·²ç”¨å¤©æ•°
+        g_data_format.data[i++] = (uint8_t)(water.used_days >> 0);//å·²ç”¨å¤©æ•°
+        if (water.save.clean_water_tds_switch == 0)//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
         {
-            g_data_format.data[i++] = (uint8_t)(water.save.clean_water_ppm >> 8);//¾»Ë®TDS
-            g_data_format.data[i++] = (uint8_t)(water.save.clean_water_ppm >> 0);//¾»Ë®TDS
+            g_data_format.data[i++] = (uint8_t)(water.save.clean_water_ppm >> 8);//å‡€æ°´TDS
+            g_data_format.data[i++] = (uint8_t)(water.save.clean_water_ppm >> 0);//å‡€æ°´TDS
         }
         else
         {
-            g_data_format.data[i++] = (uint8_t)(water.clean_water_ppm >> 8);//¾»Ë®TDS
-            g_data_format.data[i++] = (uint8_t)(water.clean_water_ppm >> 0);//¾»Ë®TDS
+            g_data_format.data[i++] = (uint8_t)(water.clean_water_ppm >> 8);//å‡€æ°´TDS
+            g_data_format.data[i++] = (uint8_t)(water.clean_water_ppm >> 0);//å‡€æ°´TDS
         }
-        if (water.save.raw_water_tds_switch == 0)//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+        if (water.save.raw_water_tds_switch == 0)//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
         {
-            g_data_format.data[i++] = (uint8_t)(water.save.raw_water_ppm >> 8);//Ô­Ë®TDS
-            g_data_format.data[i++] = (uint8_t)(water.save.raw_water_ppm >> 0);//Ô­Ë®TDS
+            g_data_format.data[i++] = (uint8_t)(water.save.raw_water_ppm >> 8);//åŸæ°´TDS
+            g_data_format.data[i++] = (uint8_t)(water.save.raw_water_ppm >> 0);//åŸæ°´TDS
         }
         else
         {
-            g_data_format.data[i++] = (uint8_t)(water.raw_water_ppm >> 8);//Ô­Ë®TDS
-            g_data_format.data[i++] = (uint8_t)(water.raw_water_ppm >> 0);//Ô­Ë®TDS
+            g_data_format.data[i++] = (uint8_t)(water.raw_water_ppm >> 8);//åŸæ°´TDS
+            g_data_format.data[i++] = (uint8_t)(water.raw_water_ppm >> 0);//åŸæ°´TDS
         }
-        g_data_format.data[i++] = (uint8_t)(water.rssi);//ĞÅºÅÇ¿¶ÈÖµ
-        g_data_format.data[i++] = (uint8_t)(water.lac_value >> 8);//LACÖµ
-        g_data_format.data[i++] = (uint8_t)(water.lac_value >> 0);//LACÖµ
-        g_data_format.data[i++] = (uint8_t)(water.cid_value >> 8);//CIDÖµ
-        g_data_format.data[i++] = (uint8_t)(water.cid_value >> 0);//CIDÖµ
+        g_data_format.data[i++] = (uint8_t)(water.rssi);//ä¿¡å·å¼ºåº¦å€¼
+        g_data_format.data[i++] = (uint8_t)(water.lac_value >> 8);//LACå€¼
+        g_data_format.data[i++] = (uint8_t)(water.lac_value >> 0);//LACå€¼
+        g_data_format.data[i++] = (uint8_t)(water.cid_value >> 8);//CIDå€¼
+        g_data_format.data[i++] = (uint8_t)(water.cid_value >> 0);//CIDå€¼
         g_data_format.data[i++] = 0;
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 24);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 16);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 8);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 0);//Êı¾İÊ±¼ä
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 24);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 16);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 8);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 0);//æ•°æ®æ—¶é—´
         g_data_format.length = i;
         struct_to_buf(total_buf, &total_len, g_data_format);
         vSerialPutBytes( NULL, total_buf, total_len );
     }
 }
 
-//ÓÃË®Á¿ÉÏ´«
-//Ã¿´ÎË®ÁúÍ·³öË®10ÃëºóÉÏ´«±¾´ÎÓÃË®Á¿£¬µ¥Î»/10ml¡£µçÄÔ°åÖ÷¶¯ÉÏ´«ÎŞĞèÓ¦´ğ
-void EDP_SendPacketWaterSync(uint32_t water_value) //0x0A,//ÓÃË®Í¬²½
+//ç”¨æ°´é‡ä¸Šä¼ 
+//æ¯æ¬¡æ°´é¾™å¤´å‡ºæ°´10ç§’åä¸Šä¼ æœ¬æ¬¡ç”¨æ°´é‡ï¼Œå•ä½/10mlã€‚ç”µè„‘æ¿ä¸»åŠ¨ä¸Šä¼ æ— éœ€åº”ç­”
+void EDP_SendPacketWaterSync(uint32_t water_value) //0x0A,//ç”¨æ°´åŒæ­¥
 {
     if (edp.is_tcpip_connect)
     {
         uint8_t total_buf[100+15] = {0};
         int total_len = 0;
-        
+
         water.date_time = time(NULL);
-        
+
         g_data_format.cmd = 0x0A;
         int i = 0;
         g_data_format.data[i++] = (uint8_t)(water_value >> 24);
@@ -1180,52 +1209,52 @@ void EDP_SendPacketWaterSync(uint32_t water_value) //0x0A,//ÓÃË®Í¬²½
         g_data_format.data[i++] = (uint8_t)(water_value >> 8);
         g_data_format.data[i++] = (uint8_t)(water_value >> 0);
         g_data_format.data[i++] = 0;
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 24);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 16);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 8);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 0);//Êı¾İÊ±¼ä
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 24);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 16);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 8);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 0);//æ•°æ®æ—¶é—´
         g_data_format.length = i;
         struct_to_buf(total_buf, &total_len, g_data_format);
         vSerialPutBytes( NULL, total_buf, total_len );
     }
 }
 
-//¹¤×÷×´Ì¬Í¬²½
-//Éè±¸ÔËĞĞ×´Ì¬¸üĞÂÊ±£¬Ö÷¶¯ÉÏ´«´ËÏûÏ¢¡£µçÄÔ°åÖ÷¶¯ÉÏ´«ÎŞĞèÓ¦´ğ
+//å·¥ä½œçŠ¶æ€åŒæ­¥
+//è®¾å¤‡è¿è¡ŒçŠ¶æ€æ›´æ–°æ—¶ï¼Œä¸»åŠ¨ä¸Šä¼ æ­¤æ¶ˆæ¯ã€‚ç”µè„‘æ¿ä¸»åŠ¨ä¸Šä¼ æ— éœ€åº”ç­”
 /*
-0x00	Î´ÖÆË®
-0x01	ÕıÔÚÖÆË®
-0x00	Î´Ë®Âú
-0x01	Ë®Âú
-0x00	Õı³£
-0x01	¼ìĞŞ
-0x00	Î´Â©Ë®
-0x01	Â©Ë®
-0x00	¹Ø»ú
-0x01	¿ª»ú
-0x00	Î´È±Ë®
-0x01	È±Ë®
+0x00	æœªåˆ¶æ°´
+0x01	æ­£åœ¨åˆ¶æ°´
+0x00	æœªæ°´æ»¡
+0x01	æ°´æ»¡
+0x00	æ­£å¸¸
+0x01	æ£€ä¿®
+0x00	æœªæ¼æ°´
+0x01	æ¼æ°´
+0x00	å…³æœº
+0x01	å¼€æœº
+0x00	æœªç¼ºæ°´
+0x01	ç¼ºæ°´
 */
 
 
 bool SendPacketStatusSuccess = false;
-void EDP_SendPacketStatus( void )//0x0C,//¹¤×÷×´Ì¬Í¬²½
+void EDP_SendPacketStatus( void )//0x0C,//å·¥ä½œçŠ¶æ€åŒæ­¥
 {
     if (edp.is_tcpip_connect )
     {
         uint8_t total_buf[100+15] = {0};
         int total_len = 0;
-        
+
         g_data_format.cmd = 0x0C;
         int i = 0;
-        g_data_format.data[i++] = (uint8_t)( (bool)water.is_make_water_status );//ÖÆË®×´Ì¬
-        g_data_format.data[i++] = (uint8_t)( (bool)water.is_full_water_status );//Ë®Âú×´Ì¬
-        g_data_format.data[i++] = (uint8_t)( (bool)water.is_overhaul_status );//¼ìĞŞ
-        g_data_format.data[i++] = (uint8_t)( (bool)water.is_drop_water_status );//Â©Ë®
-        g_data_format.data[i++] = (uint8_t)( (bool)water.is_power_on_status );//¿ª¹Ø»ú
-        g_data_format.data[i++] = (uint8_t)( (bool)water.is_shortage_water_status );//È±Ë®
+        g_data_format.data[i++] = (uint8_t)( (bool)water.is_make_water_status );//åˆ¶æ°´çŠ¶æ€
+        g_data_format.data[i++] = (uint8_t)( (bool)water.is_full_water_status );//æ°´æ»¡çŠ¶æ€
+        g_data_format.data[i++] = (uint8_t)( (bool)water.is_overhaul_status );//æ£€ä¿®
+        g_data_format.data[i++] = (uint8_t)( (bool)water.is_drop_water_status );//æ¼æ°´
+        g_data_format.data[i++] = (uint8_t)( (bool)water.is_power_on_status );//å¼€å…³æœº
+        g_data_format.data[i++] = (uint8_t)( (bool)water.is_shortage_water_status );//ç¼ºæ°´
         g_data_format.length = i;
-        
+
         SendPacketStatusSuccess = false;
         struct_to_buf(total_buf, &total_len, g_data_format);
         for (int j = 0; j < 5; j++)
@@ -1238,43 +1267,43 @@ void EDP_SendPacketStatus( void )//0x0C,//¹¤×÷×´Ì¬Í¬²½
     }
 }
 
-//ÂËĞ¾×´Ì¬ÉÏ´«
+//æ»¤èŠ¯çŠ¶æ€ä¸Šä¼ 
 void EDP_SendFilter(void)
 {
     if (edp.is_tcpip_connect)
     {
         uint8_t total_buf[100+15] = {0};
         int total_len = 0;
-        
+
         water.date_time = time(NULL);
-        
+
         g_data_format.cmd = 0x09;
         int i = 0;
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_1 >> 8);//µÚ1¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_1 >> 0);//µÚ1¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_2 >> 8);//µÚ2¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_2 >> 0);//µÚ2¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_3 >> 8);//µÚ3¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_3 >> 0);//µÚ3¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_4 >> 8);//µÚ4¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_4 >> 0);//µÚ4¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_5 >> 8);//µÚ5¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_5 >> 0);//µÚ5¼¶ÂËĞ¾Ê£ÓàÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_1 >> 8);//µÚ1¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_1 >> 0);//µÚ1¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_2 >> 8);//µÚ2¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_2 >> 0);//µÚ2¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_3 >> 8);//µÚ3¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_3 >> 0);//µÚ3¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_4 >> 8);//µÚ4¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_4 >> 0);//µÚ4¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_5 >> 8);//µÚ5¼¶ÂËĞ¾×î´óÖµ
-        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_5 >> 0);//µÚ5¼¶ÂËĞ¾×î´óÖµ
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_1 >> 8);//ç¬¬1çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_1 >> 0);//ç¬¬1çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_2 >> 8);//ç¬¬2çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_2 >> 0);//ç¬¬2çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_3 >> 8);//ç¬¬3çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_3 >> 0);//ç¬¬3çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_4 >> 8);//ç¬¬4çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_4 >> 0);//ç¬¬4çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_5 >> 8);//ç¬¬5çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.filter_remain_value_5 >> 0);//ç¬¬5çº§æ»¤èŠ¯å‰©ä½™å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_1 >> 8);//ç¬¬1çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_1 >> 0);//ç¬¬1çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_2 >> 8);//ç¬¬2çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_2 >> 0);//ç¬¬2çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_3 >> 8);//ç¬¬3çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_3 >> 0);//ç¬¬3çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_4 >> 8);//ç¬¬4çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_4 >> 0);//ç¬¬4çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_5 >> 8);//ç¬¬5çº§æ»¤èŠ¯æœ€å¤§å€¼
+        g_data_format.data[i++] = (uint8_t)(water.save.filter_max_value_5 >> 0);//ç¬¬5çº§æ»¤èŠ¯æœ€å¤§å€¼
         g_data_format.data[i++] = 0;
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 24);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 16);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 8);//Êı¾İÊ±¼ä
-        g_data_format.data[i++] = (uint8_t)(water.date_time >> 0);//Êı¾İÊ±¼ä
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 24);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 16);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 8);//æ•°æ®æ—¶é—´
+        g_data_format.data[i++] = (uint8_t)(water.date_time >> 0);//æ•°æ®æ—¶é—´
         g_data_format.length = i;
         struct_to_buf(total_buf, &total_len, g_data_format);
         vSerialPutBytes( NULL, total_buf, total_len );
@@ -1293,9 +1322,9 @@ int buf_to_struct(data_format_t *data_format, uint8_t *buf, int buf_len)
     data_format->crc[0] = buf[DATA_ADDR_START+data_format->length];
     data_format->crc[1] = buf[DATA_ADDR_START+data_format->length+1];
     uint16_t crc16 = CRC16_MODBUS(buf, buf_len-2);
-    if (crc16 != (((uint16_t)data_format->crc[0] << 8) + (uint16_t)data_format->crc[1])) 
+    if (crc16 != (((uint16_t)data_format->crc[0] << 8) + (uint16_t)data_format->crc[1]))
         return 0;
-    else 
+    else
         return 1;
 }
 
@@ -1319,14 +1348,14 @@ int ProtocolProcess(uint8_t* buf, int len)
 {
     int out_len = 0;
     int resp = 0;
-    
+
     uint8_t cmd = buf[CMD_ADDR_START];
     uint16_t in_len = (buf[LENGTH_ADDR_START] << 8) + buf[LENGTH_ADDR_START+1];
     uint16_t crc16_get = (buf[DATA_ADDR_START+in_len] << 8) + buf[DATA_ADDR_START+in_len+1];
     uint16_t crc16_calc = CRC16_MODBUS(buf, len-2);
     if (crc16_calc != crc16_get)
         return 0;
-    
+
     for (int i = 0; i < cmd_process_cnt; i++)
     {
         if (cmd == cmd_process[i].cmd)
@@ -1353,16 +1382,16 @@ int ProtocolProcess(uint8_t* buf, int len)
         uint16_t crc16 = CRC16_MODBUS(buf, total_len-2);
         buf[total_len-2] = (uint8_t)(crc16 >> 8);
         buf[total_len-1] = (uint8_t)(crc16 >> 0);
-        
+
         vSerialPutBytes( NULL, buf, total_len );
-        
-        if (cmd == CMD_REMOTE_UPGRADE_REBOOT)//ÖØÆô²¢ÔËĞĞĞèÒªÔËĞĞµÄ³ÌĞò
+
+        if (cmd == CMD_REMOTE_UPGRADE_REBOOT)//é‡å¯å¹¶è¿è¡Œéœ€è¦è¿è¡Œçš„ç¨‹åº
         {
             vTaskDelay( pdMS_TO_TICKS(1000) );
             NVIC_SystemReset();
         }
     }
-    
+
     return 0;
 }
 

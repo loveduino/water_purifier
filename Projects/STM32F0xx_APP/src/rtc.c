@@ -2,15 +2,14 @@
 #include "rtc.h"
 #include "i2c_soft.h"
 
-
-unsigned char BCD2HEX(unsigned char bcd_data)    //BCD×ªÎªHEX(orÊ®½øÖÆ)×Ó³ÌĞò  ,0x12(BCD) -> 12(DEC)  ×ªĞ¡
-{   
+unsigned char BCD2HEX(unsigned char bcd_data)    //BCDè½¬ä¸ºHEX(oråè¿›åˆ¶)å­ç¨‹åº  ,0x12(BCD) -> 12(DEC)  è½¬å°
+{
     return (((bcd_data>>4)*10) + (bcd_data & 0x0F));
 }
 
-unsigned char HEX2BCD(unsigned char hex_data)    //HEX(orÊ®½øÖÆ)×ªÎªBCD×Ó³ÌĞò ,12(DEC) -> 0x12(BCD)   ×ª´ó
-{   
-    return (((hex_data/10)<<4) + (hex_data%10));   
+unsigned char HEX2BCD(unsigned char hex_data)    //HEX(oråè¿›åˆ¶)è½¬ä¸ºBCDå­ç¨‹åº ,12(DEC) -> 0x12(BCD)   è½¬å¤§
+{
+    return (((hex_data/10)<<4) + (hex_data%10));
 }
 
 void PCF8563_BufferWrite(uint8_t WriteAddr, const uint8_t* const pBuffer, int NumByteToWrite)
@@ -27,49 +26,49 @@ void PCF8563_BufferRead(uint8_t ReadAddr, uint8_t* const pBuffer, uint16_t NumBy
 
 /*
 struct tm {
-  int tm_sec;   // Ãë£¬Õı³£·¶Î§´Ó 0 µ½ 59£¬µ«ÔÊĞíÖÁ 61
-  int tm_min;   // ·Ö£¬·¶Î§´Ó 0 µ½ 59
-  int tm_hour;  // Ğ¡Ê±£¬·¶Î§´Ó 0 µ½ 23
-  int tm_mday;  // Ò»ÔÂÖĞµÄµÚ¼¸Ìì£¬·¶Î§´Ó 1 µ½ 31
-  int tm_mon;   // ÔÂ£¬·¶Î§´Ó 0 µ½ 11
-  int tm_year;  // ×Ô 1900 ÄêÆğµÄÄêÊı
-  int tm_wday;  // Ò»ÖÜÖĞµÄµÚ¼¸Ìì£¬·¶Î§´Ó 0 µ½ 6£¬´ÓĞÇÆÚÈÕËãÆğ£¬ĞÇÆÚÈÕ±íÊ¾Îª 0
-  int tm_yday;  // Ò»ÄêÖĞµÄµÚ¼¸Ìì£¬·¶Î§´Ó 0 µ½ 365£¬´Ó 1 ÔÂ 1 ÈÕËãÆğ
-  int tm_isdst; // ÏÄÁîÊ±
+  int tm_sec;   // ç§’ï¼Œæ­£å¸¸èŒƒå›´ä» 0 åˆ° 59ï¼Œä½†å…è®¸è‡³ 61
+  int tm_min;   // åˆ†ï¼ŒèŒƒå›´ä» 0 åˆ° 59
+  int tm_hour;  // å°æ—¶ï¼ŒèŒƒå›´ä» 0 åˆ° 23
+  int tm_mday;  // ä¸€æœˆä¸­çš„ç¬¬å‡ å¤©ï¼ŒèŒƒå›´ä» 1 åˆ° 31
+  int tm_mon;   // æœˆï¼ŒèŒƒå›´ä» 0 åˆ° 11
+  int tm_year;  // è‡ª 1900 å¹´èµ·çš„å¹´æ•°
+  int tm_wday;  // ä¸€å‘¨ä¸­çš„ç¬¬å‡ å¤©ï¼ŒèŒƒå›´ä» 0 åˆ° 6ï¼Œä»æ˜ŸæœŸæ—¥ç®—èµ·ï¼Œæ˜ŸæœŸæ—¥è¡¨ç¤ºä¸º 0
+  int tm_yday;  // ä¸€å¹´ä¸­çš„ç¬¬å‡ å¤©ï¼ŒèŒƒå›´ä» 0 åˆ° 365ï¼Œä» 1 æœˆ 1 æ—¥ç®—èµ·
+  int tm_isdst; // å¤ä»¤æ—¶
 }
 
-UTCµÄÊ±¼äÊÇ´Ó¹«Ôª1970Äê1ÔÂ1ÈÕ0Ê±0·Ö0Ãë¿ªÊ¼µÄ¡£
-time¿âµÄÊ±¼äÊÇ´Ó¹«Ôª1900Äê1ÔÂ1ÈÕ0Ê±0·Ö0Ãë¿ªÊ¼µÄ¡£
-Á½ÕßÏà²î2208988800s
+UTCçš„æ—¶é—´æ˜¯ä»å…¬å…ƒ1970å¹´1æœˆ1æ—¥0æ—¶0åˆ†0ç§’å¼€å§‹çš„ã€‚
+timeåº“çš„æ—¶é—´æ˜¯ä»å…¬å…ƒ1900å¹´1æœˆ1æ—¥0æ—¶0åˆ†0ç§’å¼€å§‹çš„ã€‚
+ä¸¤è€…ç›¸å·®2208988800s
 
-GMT 0:00 ¸ñÁÖÄáÖÎ±ê×¼Ê±¼ä
-UT +00:00 È«ÇòÊ±¼ä
-UTC +00:00 Ğ£×¼µÄÈ«ÇòÊ±¼ä
+GMT 0:00 æ ¼æ—å°¼æ²»æ ‡å‡†æ—¶é—´
+UT +00:00 å…¨çƒæ—¶é—´
+UTC +00:00 æ ¡å‡†çš„å…¨çƒæ—¶é—´
 */
-//´Ó¹«Ôª1970Äê1ÔÂ1ÈÕ0Ê±0·Ö0ÃëËãÆğÖÁ½ñµÄUTCÊ±¼äËù¾­¹ıµÄÃëÊı£¬×ª»»ÎªÈÕÆÚÊ±¼äĞ´Èëµ½RTCÖĞ
-void PCF8563_SetTime(time_t seconds)//¸ù¾İUTCÊ±¼äÉèÖÃ±¾µØÊ±¼ä£¬Èç¹ûÒªÉèÖÃµ±µØµÄ±±¾©Ê±¼ä£¬ĞèÒª»ñÈ¡µ±Ç°±±¾©Ê±¼ä¶ÔÓ¦µÄUTCÊ±¼ä
+//ä»å…¬å…ƒ1970å¹´1æœˆ1æ—¥0æ—¶0åˆ†0ç§’ç®—èµ·è‡³ä»Šçš„UTCæ—¶é—´æ‰€ç»è¿‡çš„ç§’æ•°ï¼Œè½¬æ¢ä¸ºæ—¥æœŸæ—¶é—´å†™å…¥åˆ°RTCä¸­
+void PCF8563_SetTime(time_t seconds)//æ ¹æ®UTCæ—¶é—´è®¾ç½®æœ¬åœ°æ—¶é—´ï¼Œå¦‚æœè¦è®¾ç½®å½“åœ°çš„åŒ—äº¬æ—¶é—´ï¼Œéœ€è¦è·å–å½“å‰åŒ—äº¬æ—¶é—´å¯¹åº”çš„UTCæ—¶é—´
 {
     uint8_t time_value[7];
     time_t _seconds = seconds;
     struct tm *set_time = gmtime(&_seconds);
-    
-    time_value[6]/*00¨C99 */ = HEX2BCD((unsigned char)(set_time->tm_year + 1900 - 2000)) & 0xFF;
-    time_value[5]/*01¨C12 */ = HEX2BCD((unsigned char)(set_time->tm_mon + 1)) & 0x1F;   
-    time_value[4]/*00¨C06 */ = HEX2BCD((unsigned char)(set_time->tm_wday)) & 0x07; // Ò»ÖÜÖĞµÄµÚ¼¸Ìì£¬·¶Î§´Ó 0 µ½ 6£¬´ÓĞÇÆÚÈÕËãÆğ£¬ĞÇÆÚÈÕ±íÊ¾Îª 0
-    time_value[3]/*01¨C31 */ = HEX2BCD((unsigned char)(set_time->tm_mday)) & 0x3F;
-    time_value[2]/*00¨C23 */ = HEX2BCD((unsigned char)(set_time->tm_hour)) & 0x3F;  
-    time_value[1]/*00¨C59 */ = HEX2BCD((unsigned char)(set_time->tm_min)) & 0x7F;   
-    time_value[0]/*00¨C59 */ = HEX2BCD((unsigned char)(set_time->tm_sec)) & 0x7F;   
+
+    time_value[6]/*00â€“99 */ = HEX2BCD((unsigned char)(set_time->tm_year + 1900 - 2000)) & 0xFF;
+    time_value[5]/*01â€“12 */ = HEX2BCD((unsigned char)(set_time->tm_mon + 1)) & 0x1F;
+    time_value[4]/*00â€“06 */ = HEX2BCD((unsigned char)(set_time->tm_wday)) & 0x07; // ä¸€å‘¨ä¸­çš„ç¬¬å‡ å¤©ï¼ŒèŒƒå›´ä» 0 åˆ° 6ï¼Œä»æ˜ŸæœŸæ—¥ç®—èµ·ï¼Œæ˜ŸæœŸæ—¥è¡¨ç¤ºä¸º 0
+    time_value[3]/*01â€“31 */ = HEX2BCD((unsigned char)(set_time->tm_mday)) & 0x3F;
+    time_value[2]/*00â€“23 */ = HEX2BCD((unsigned char)(set_time->tm_hour)) & 0x3F;
+    time_value[1]/*00â€“59 */ = HEX2BCD((unsigned char)(set_time->tm_min)) & 0x7F;
+    time_value[0]/*00â€“59 */ = HEX2BCD((unsigned char)(set_time->tm_sec)) & 0x7F;
     PCF8563_BufferWrite(PCF8563_REG_SECONDS, time_value, 7);
 }
 
 //int year;
-//´Ó¹«Ôª1970Äê1ÔÂ1ÈÕ0Ê±0·Ö0 ÃëËãÆğÖÁ½ñµÄUTCÊ±¼äËù¾­¹ıµÄÃëÊı£¬·µ»ØµÄÊÇUTCÊ±¼ä£¬¶ø²»ÊÇ±±¾©Ê±¼ä
+//ä»å…¬å…ƒ1970å¹´1æœˆ1æ—¥0æ—¶0åˆ†0 ç§’ç®—èµ·è‡³ä»Šçš„UTCæ—¶é—´æ‰€ç»è¿‡çš„ç§’æ•°ï¼Œè¿”å›çš„æ˜¯UTCæ—¶é—´ï¼Œè€Œä¸æ˜¯åŒ—äº¬æ—¶é—´
 time_t PCF8563_ReadTime(void)
 {
     uint8_t time_value[7];
     struct tm read_time;
-    
+
     PCF8563_BufferRead(PCF8563_REG_SECONDS, time_value, 7);
     //year = BCD2HEX(time_value[6]);
     read_time.tm_year = BCD2HEX(time_value[6]&0xFF) + 2000 - 1900;
@@ -79,18 +78,18 @@ time_t PCF8563_ReadTime(void)
     read_time.tm_hour = BCD2HEX(time_value[2]&0x3F);
     read_time.tm_min =  BCD2HEX(time_value[1]&0x7F);
     read_time.tm_sec =  BCD2HEX(time_value[0]&0x7F);
-    
+
 //    for (int i = 0; i < 7; i++)
 //    {
 //        printf("time_value[%d] = %02x\r\n", i, time_value[i]);
 //    }
 //    printf("\r\n\r\n");
-//    
+//
 //    printf("%d %d %d  %d:%d:%d\r\n", read_time.tm_year, read_time.tm_mon, read_time.tm_mday, read_time.tm_hour, read_time.tm_min, read_time.tm_sec);
-//    
+//
     read_time.tm_isdst = -1;
-    //mktime()ÓÃÀ´½«²ÎÊıtimeptrËùÖ¸µÄtm½á¹¹Êı¾İ×ª»»³É´Ó¹«Ôª1970Äê1ÔÂ1ÈÕ0Ê±0·Ö0 ÃëËãÆğÖÁ½ñµÄUTCÊ±¼äËù¾­¹ıµÄÃëÊı¡£
-    return mktime(&read_time);//²¢½«Ê±¼ä³õÊ¼»¯¸øÏµÍ³time¿âÊ±¼ä
+    //mktime()ç”¨æ¥å°†å‚æ•°timeptræ‰€æŒ‡çš„tmç»“æ„æ•°æ®è½¬æ¢æˆä»å…¬å…ƒ1970å¹´1æœˆ1æ—¥0æ—¶0åˆ†0 ç§’ç®—èµ·è‡³ä»Šçš„UTCæ—¶é—´æ‰€ç»è¿‡çš„ç§’æ•°ã€‚
+    return mktime(&read_time);//å¹¶å°†æ—¶é—´åˆå§‹åŒ–ç»™ç³»ç»Ÿtimeåº“æ—¶é—´
 }
 
 

@@ -51,7 +51,7 @@
 #define serINVALID_QUEUE				( ( QueueHandle_t ) 0 )
 #define serNO_BLOCK						( ( TickType_t ) 10 / portTICK_PERIOD_MS )
 #define serTX_BLOCK_TIME				( 40 / portTICK_PERIOD_MS )
-#define serRX_BLOCK_TIME				( 10 / portTICK_PERIOD_MS )//ÏàÁÚÁ½Ö¡Êı¾İÖ®¼äµÄ¼ä¸ô£¬¸ù¾İ²¨ÌØÂÊÉè¶¨
+#define serRX_BLOCK_TIME				( 10 / portTICK_PERIOD_MS )//ç›¸é‚»ä¸¤å¸§æ•°æ®ä¹‹é—´çš„é—´éš”ï¼Œæ ¹æ®æ³¢ç‰¹ç‡è®¾å®š
 
 /*-----------------------------------------------------------*/
 
@@ -74,19 +74,19 @@ xComPortHandle xSerialPortInit( unsigned long ulWantedBaud, unsigned portBASE_TY
 	/* Create the queues used to hold Rx/Tx characters. */
 	xRxedChars = xQueueCreate( uxRxQueueLength, ( unsigned portBASE_TYPE ) sizeof( signed char ) );
 	xCharsForTx = xQueueCreate( uxTxQueueLength, ( unsigned portBASE_TYPE ) sizeof( signed char ) );
-    
+
 	/* If the queue/semaphore was created correctly then setup the serial port
 	hardware. */
 	if ( ( xRxedChars != serINVALID_QUEUE ) && ( xCharsForTx != serINVALID_QUEUE ) )
 	{
         /* Enable the USART Interrupt */
         NVIC_InitStructure.NVIC_IRQChannel = EVAL_COM1_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPriority = 8;//ÒòÎª´®¿ÚÖĞ¶Ï»áµ÷ÓÃFreeRTOS API£¬ËùÒÔÕâÀïµÄÓÅÏÈ¼¶ÒªµÍÓÚ configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY
+        NVIC_InitStructure.NVIC_IRQChannelPriority = 8;//å› ä¸ºä¸²å£ä¸­æ–­ä¼šè°ƒç”¨FreeRTOS APIï¼Œæ‰€ä»¥è¿™é‡Œçš„ä¼˜å…ˆçº§è¦ä½äº configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY
         NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
         NVIC_Init(&NVIC_InitStructure);
 
         /* USARTx configured as follow:
-        - BaudRate = baud_rate baud  
+        - BaudRate = baud_rate baud
         - Word Length = 8 Bits
         - One Stop Bit
         - No parity
@@ -99,15 +99,15 @@ xComPortHandle xSerialPortInit( unsigned long ulWantedBaud, unsigned portBASE_TY
         USART_InitStructure.USART_Parity = USART_Parity_No;
         USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
         USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-        
-        USART_OverrunDetectionConfig(EVAL_COM1, USART_OVRDetection_Disable);     
-        
+
+        USART_OverrunDetectionConfig(EVAL_COM1, USART_OVRDetection_Disable);
+
         STM_EVAL_COMInit(COM1, &USART_InitStructure);
-        //Ö»Òª½ÓÊÕÖĞ¶Ï´ò¿ª£¬¼´RXNEIEÉèÖÃÎª1£¬ÄÇÃ´OREÖĞ¶ÏÒ²×Ô¶¯´ò¿ªÁË,Ö»ÓĞµ±USART_IT_ERRÖĞ¶ÏÊ¹ÄÜÊ±£¬²ÅÄÜ¶Áµ½OREÖĞ¶Ï
-        USART_ITConfig(EVAL_COM1, USART_IT_RXNE, ENABLE);   //¿ªÆô´®¿Ú½ÓÊÜÖĞ¶Ï
-        USART_ClearFlag(EVAL_COM1, USART_FLAG_RXNE);        //·ÀÖ¹ÅäÖÃÍê¾Í½øÈëÖĞ¶Ï
-        //USART_ITConfig(EVAL_COM1, USART_IT_ORE, ENABLE);    //¿ªÆô´®¿ÚÒç³öÖĞ¶Ï
-        
+        //åªè¦æ¥æ”¶ä¸­æ–­æ‰“å¼€ï¼Œå³RXNEIEè®¾ç½®ä¸º1ï¼Œé‚£ä¹ˆOREä¸­æ–­ä¹Ÿè‡ªåŠ¨æ‰“å¼€äº†,åªæœ‰å½“USART_IT_ERRä¸­æ–­ä½¿èƒ½æ—¶ï¼Œæ‰èƒ½è¯»åˆ°OREä¸­æ–­
+        USART_ITConfig(EVAL_COM1, USART_IT_RXNE, ENABLE);   //å¼€å¯ä¸²å£æ¥å—ä¸­æ–­
+        USART_ClearFlag(EVAL_COM1, USART_FLAG_RXNE);        //é˜²æ­¢é…ç½®å®Œå°±è¿›å…¥ä¸­æ–­
+        //USART_ITConfig(EVAL_COM1, USART_IT_ORE, ENABLE);    //å¼€å¯ä¸²å£æº¢å‡ºä¸­æ–­
+
         xReturn = ( xComPortHandle ) 1;
     }
 	else
@@ -138,7 +138,7 @@ signed portBASE_TYPE xSerialReadable( xComPortHandle pxPort )
 	}
 }
 /*-----------------------------------------------------------*/
- 
+
 signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *const pcRxedChar, TickType_t xBlockTime )
 {
 	/* The port handle is not required as this driver only supports one port. */
@@ -161,7 +161,7 @@ size_t xSerialGetBytes( xComPortHandle pxPort, unsigned char *const pucRxedBytes
 {
 	/* The port handle is not required as this driver only supports one port. */
 	( void ) pxPort;
-    
+
     size_t get_len = 0;
     unsigned char *p = pucRxedBytes;
     if (pdTRUE != xSerialGetChar( pxPort, (signed char *)p, xBlockTime ))
@@ -238,14 +238,14 @@ void vSerialClose( xComPortHandle xPort )
 
 void EVAL_COM1_IRQHandler( void )
 {
-static portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;//Õâ¸ö²ÎÊıÔÚµ÷ÓÃ xxxFromISR()Ç°±»ÉèÖÃÎª pdFALSE£¬Èç¹ûÔÚµ÷ÓÃÍê³Éºó±»ÖÃÎª pdTRUE£¬ÔòĞèÒª½øĞĞÒ»´ÎÉÏÏÂÎÄÇĞ»»¡£
+static portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;//è¿™ä¸ªå‚æ•°åœ¨è°ƒç”¨ xxxFromISR()å‰è¢«è®¾ç½®ä¸º pdFALSEï¼Œå¦‚æœåœ¨è°ƒç”¨å®Œæˆåè¢«ç½®ä¸º pdTRUEï¼Œåˆ™éœ€è¦è¿›è¡Œä¸€æ¬¡ä¸Šä¸‹æ–‡åˆ‡æ¢ã€‚
 char cChar;
 
-	if( USART_GetITStatus( EVAL_COM1, USART_IT_TXE ) == SET )//Èç¹ûTXÊÇ¿ÕµÄ£¬ËµÃ÷¿ÉÒÔ·¢ËÍÊı¾İ
+	if( USART_GetITStatus( EVAL_COM1, USART_IT_TXE ) == SET )//å¦‚æœTXæ˜¯ç©ºçš„ï¼Œè¯´æ˜å¯ä»¥å‘é€æ•°æ®
 	{
 		/* The interrupt was caused by the THR becoming empty.  Are there any
 		more characters to transmit? */
-		if( xQueueReceiveFromISR( xCharsForTx, &cChar, &xHigherPriorityTaskWoken ) == pdTRUE )//´Ó·¢ËÍ¶ÓÁĞÖĞÈ¡³öÊı¾İ
+		if( xQueueReceiveFromISR( xCharsForTx, &cChar, &xHigherPriorityTaskWoken ) == pdTRUE )//ä»å‘é€é˜Ÿåˆ—ä¸­å–å‡ºæ•°æ®
 		{
 			/* A character was retrieved from the queue so can be sent to the
 			THR now. */
@@ -256,20 +256,20 @@ char cChar;
 			USART_ITConfig( EVAL_COM1, USART_IT_TXE, DISABLE );
 		}
 	}
-	
-	if( USART_GetITStatus( EVAL_COM1, USART_IT_RXNE ) == SET )//Èç¹ûRX·Ç¿Õ£¬ËµÃ÷½ÓÊÕµ½Êı¾İ
+
+	if( USART_GetITStatus( EVAL_COM1, USART_IT_RXNE ) == SET )//å¦‚æœRXéç©ºï¼Œè¯´æ˜æ¥æ”¶åˆ°æ•°æ®
 	{
 		cChar = USART_ReceiveData( EVAL_COM1 );
-		xQueueSendFromISR( xRxedChars, &cChar, &xHigherPriorityTaskWoken );//Ïò½ÓÊÕ¶ÓÁĞÖĞĞ´ÈëÊı¾İ
+		xQueueSendFromISR( xRxedChars, &cChar, &xHigherPriorityTaskWoken );//å‘æ¥æ”¶é˜Ÿåˆ—ä¸­å†™å…¥æ•°æ®
 	}
-    
-    if(USART_GetITStatus(EVAL_COM1, USART_IT_ORE) != RESET)//×¢Òâ£¡²»ÄÜÊ¹ÓÃif(USART_GetITStatus(EVAL_COM1, USART_IT_RXNE) != RESET)À´ÅĞ¶Ï
+
+    if(USART_GetITStatus(EVAL_COM1, USART_IT_ORE) != RESET)//æ³¨æ„ï¼ä¸èƒ½ä½¿ç”¨if(USART_GetITStatus(EVAL_COM1, USART_IT_RXNE) != RESET)æ¥åˆ¤æ–­
     {
         USART_ClearITPendingBit(EVAL_COM1, USART_IT_ORE);
-        USART_ReceiveData( EVAL_COM1 );  //Õâ²½Ò»¶¨ÒªÓĞµÄ£¬Ïàµ±ÓÚÇå¿Õ»º´æÇø
+        USART_ReceiveData( EVAL_COM1 );  //è¿™æ­¥ä¸€å®šè¦æœ‰çš„ï¼Œç›¸å½“äºæ¸…ç©ºç¼“å­˜åŒº
     }
-    
-	//Èç¹ûÎª pdTRUE£¬ÔòÔÚÖĞ¶ÏÍË³öÇ°Ó¦µ±½øĞĞÒ»´ÎÉÏÏÂÎÄÇĞ»»¡£ÕâÑù²ÅÄÜ±£Ö¤ÖĞ¶ÏÖ±½Ó·µ»Øµ½¾ÍĞ÷Ì¬ÈÎÎñÖĞÓÅÏÈ¼¶×î¸ßµÄÈÎÎñÖĞ¡£
+
+	//å¦‚æœä¸º pdTRUEï¼Œåˆ™åœ¨ä¸­æ–­é€€å‡ºå‰åº”å½“è¿›è¡Œä¸€æ¬¡ä¸Šä¸‹æ–‡åˆ‡æ¢ã€‚è¿™æ ·æ‰èƒ½ä¿è¯ä¸­æ–­ç›´æ¥è¿”å›åˆ°å°±ç»ªæ€ä»»åŠ¡ä¸­ä¼˜å…ˆçº§æœ€é«˜çš„ä»»åŠ¡ä¸­ã€‚
 	portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 }
 /*-----------------------------------------------------------*/
@@ -295,11 +295,11 @@ PUTCHAR_PROTOTYPE
 //    /* Place your implementation of fputc here */
 //    /* e.g. write a character to the USART */
 //    USART_SendData(EVAL_COM1, (uint8_t) ch);
-//    
+//
 //    /* Loop until transmit data register is empty */
 //    while (USART_GetFlagStatus(EVAL_COM1, USART_FLAG_TXE) == RESET)
 //    {}
-    
+
     return ch;
 }
 /*-----------------------------------------------------------*/
@@ -314,4 +314,4 @@ GETCHAR_PROTOTYPE
 }
 /*-----------------------------------------------------------*/
 
-	
+

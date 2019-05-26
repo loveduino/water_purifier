@@ -1,11 +1,11 @@
 /**
 ******************************************************************************
-* @file    STM32F0xx_IAP/binary_template/src/stm32f0xx_it.c 
+* @file    STM32F0xx_IAP/binary_template/src/stm32f0xx_it.c
 * @author  MCD Application Team
 * @version V1.0.0
 * @date    29-May-2012
 * @brief   Main Interrupt Service Routines.
-*          This file provides template for all exceptions handler and 
+*          This file provides template for all exceptions handler and
 *          peripherals interrupt service routine.
 ******************************************************************************
 * @attention
@@ -18,8 +18,8 @@
 *
 *        http://www.st.com/software_license_agreement_liberty_v2
 *
-* Unless required by applicable law or agreed to in writing, software 
-* distributed under the License is distributed on an "AS IS" BASIS, 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
@@ -72,7 +72,7 @@ void HardFault_Handler(void)
     }
 }
 
-//±ØÐëÒªÒÆÖ²µÄ´úÂë£¬·ÅÔÚÁËport.cÀïÃæÊµÏÖ¡£ÎªÁËÉÙ¸Ä¶¯Æô¶¯ÎÄ¼þ£¬×¢ÊÍÕâÀïµÄÊµÏÖ¡£
+//å¿…é¡»è¦ç§»æ¤çš„ä»£ç ï¼Œæ”¾åœ¨äº†port.cé‡Œé¢å®žçŽ°ã€‚ä¸ºäº†å°‘æ”¹åŠ¨å¯åŠ¨æ–‡ä»¶ï¼Œæ³¨é‡Šè¿™é‡Œçš„å®žçŽ°ã€‚
 ///**
 //  * @brief  This function handles SVCall exception.
 //  * @param  None
@@ -82,7 +82,7 @@ void HardFault_Handler(void)
 //{
 //}
 
-//±ØÐëÒªÒÆÖ²µÄ´úÂë£¬·ÅÔÚÁËport.cÀïÃæÊµÏÖ¡£ÎªÁËÉÙ¸Ä¶¯Æô¶¯ÎÄ¼þ£¬×¢ÊÍÕâÀïµÄÊµÏÖ¡£
+//å¿…é¡»è¦ç§»æ¤çš„ä»£ç ï¼Œæ”¾åœ¨äº†port.cé‡Œé¢å®žçŽ°ã€‚ä¸ºäº†å°‘æ”¹åŠ¨å¯åŠ¨æ–‡ä»¶ï¼Œæ³¨é‡Šè¿™é‡Œçš„å®žçŽ°ã€‚
 ///**
 //  * @brief  This function handles PendSV_Handler exception.
 //  * @param  None
@@ -97,7 +97,7 @@ void HardFault_Handler(void)
   * @param  None
   * @retval None
   */
-//±ØÐëÒªÒÆÖ²µÄ´úÂë£¬·ÅÔÚÁËport.cÀïÃæÊµÏÖ¡£ÎªÁËÉÙ¸Ä¶¯Æô¶¯ÎÄ¼þ£¬×¢ÊÍÕâÀïµÄÊµÏÖ¡£
+//å¿…é¡»è¦ç§»æ¤çš„ä»£ç ï¼Œæ”¾åœ¨äº†port.cé‡Œé¢å®žçŽ°ã€‚ä¸ºäº†å°‘æ”¹åŠ¨å¯åŠ¨æ–‡ä»¶ï¼Œæ³¨é‡Šè¿™é‡Œçš„å®žçŽ°ã€‚
 ///**
 //  * @brief  This function handles SysTick Handler.
 //  * @param  None
@@ -105,7 +105,7 @@ void HardFault_Handler(void)
 //  */
 //void SysTick_Handler(void)
 //{
-//  xPortSysTickHandler(); 
+//  xPortSysTickHandler();
 //}
 
 #ifdef LSI_TIM_MEASURE
@@ -121,7 +121,7 @@ void TIM14_IRQHandler(void)
     uint32_t Capture = 0;
 
     if (TIM_GetITStatus(TIM14, TIM_IT_CC1) != RESET)
-    {    
+    {
         if(CaptureNumber == 0)
         {
             /* Get the Input Capture value */
@@ -130,24 +130,24 @@ void TIM14_IRQHandler(void)
         else if(CaptureNumber == 1)
         {
             /* Get the Input Capture value */
-            IC1ReadValue2 = TIM_GetCapture1(TIM14); 
-            
+            IC1ReadValue2 = TIM_GetCapture1(TIM14);
+
             /* Capture computation */
             if (IC1ReadValue2 > IC1ReadValue1)
             {
-                Capture = (IC1ReadValue2 - IC1ReadValue1); 
+                Capture = (IC1ReadValue2 - IC1ReadValue1);
             }
             else
             {
-                Capture = ((0xFFFF - IC1ReadValue1) + IC1ReadValue2); 
+                Capture = ((0xFFFF - IC1ReadValue1) + IC1ReadValue2);
             }
-            /* Frequency computation */ 
+            /* Frequency computation */
             LsiFreq = (uint32_t) SystemCoreClock / Capture;
             LsiFreq *= 8;
         }
-        
+
         CaptureNumber++;
-        
+
         /* Clear TIM14 Capture compare interrupt pending bit */
         TIM_ClearITPendingBit(TIM14, TIM_IT_CC1);
     }
@@ -160,12 +160,12 @@ void TIM14_IRQHandler(void)
 //  * @retval None
 //  */
 //void TIM3_IRQHandler(void)
-//{ 
+//{
 //    static uint16_t IC1ReadValue1 = 0, IC1ReadValue2 = 0;
 //    static uint16_t CaptureNumber = 0;
 //    uint32_t Capture = 0;
-//    
-//    if(TIM_GetITStatus(TIM3, TIM_IT_CC1) == SET) 
+//
+//    if(TIM_GetITStatus(TIM3, TIM_IT_CC1) == SET)
 //    {
 //        /* Clear TIM3 Capture compare interrupt pending bit */
 //        TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
@@ -178,22 +178,22 @@ void TIM14_IRQHandler(void)
 //        else if(CaptureNumber == 1)
 //        {
 //            /* Get the Input Capture value */
-//            IC1ReadValue2 = TIM_GetCapture1(TIM3); 
-//            
+//            IC1ReadValue2 = TIM_GetCapture1(TIM3);
+//
 //            /* Capture computation */
 //            if (IC1ReadValue2 > IC1ReadValue1)
 //            {
-//                Capture = (IC1ReadValue2 - IC1ReadValue1); 
+//                Capture = (IC1ReadValue2 - IC1ReadValue1);
 //            }
 //            else if (IC1ReadValue2 < IC1ReadValue1)
 //            {
-//                Capture = ((0xFFFF - IC1ReadValue1) + IC1ReadValue2); 
+//                Capture = ((0xFFFF - IC1ReadValue1) + IC1ReadValue2);
 //            }
 //            else
 //            {
 //                Capture = 0;
 //            }
-//            /* Frequency computation */ 
+//            /* Frequency computation */
 //            TIM3Freq = (uint32_t) SystemCoreClock / Capture;
 //            CaptureNumber = 0;
 //            //printf("TIM3Freq = %d\r\n", TIM3Freq);
@@ -213,26 +213,26 @@ void EXTI4_15_IRQHandler(void)
     if(EXTI_GetITStatus(KEY_BUTTON_EXTI_LINE) != RESET)
     {
         if (STM_EVAL_PBGetState(BUTTON_KEY) == 0x00)
-            key_fall_flag = 1;//Éú³É°´¼ü°´ÏÂ±êÖ¾
+            key_fall_flag = 1;//ç”ŸæˆæŒ‰é”®æŒ‰ä¸‹æ ‡å¿—
         /* Clear the EXTI line 15 pending bit */
         EXTI_ClearITPendingBit(KEY_BUTTON_EXTI_LINE);
     }
-    
-    if(EXTI_GetITStatus(EXTI_Line6) != RESET)//Á÷Á¿¼Æ
+
+    if(EXTI_GetITStatus(EXTI_Line6) != RESET)//æµé‡è®¡
     {
         /* Toggle LED1 */
         //STM_EVAL_LEDToggle(LED1);
-        
+
         /*
-        0	Á÷Á¿Ä£Ê½
-        1	Ê±³¤Ä£Ê½
+        0	æµé‡æ¨¡å¼
+        1	æ—¶é•¿æ¨¡å¼
         */
         if (water.is_test_mode_switch_off == 1)
         {
             water.test_used_flow = 0;
-            water.flowmeter_count++;//Á÷Á¿¼ÆÀÛ¼Ó£¬µ«ÊÇÈç¹û»Ö¸´³ö³§µÄÊ±ºò£¬¾ÍÐèÒªÇåÀí0
+            water.flowmeter_count++;//æµé‡è®¡ç´¯åŠ ï¼Œä½†æ˜¯å¦‚æžœæ¢å¤å‡ºåŽ‚çš„æ—¶å€™ï¼Œå°±éœ€è¦æ¸…ç†0
             water.save.used_flow++;
-            
+
             if (water.save.remain_flow > 0)
             {
                 water.save.remain_flow--;
@@ -241,14 +241,14 @@ void EXTI4_15_IRQHandler(void)
             {
                 water.save.remain_flow = 0;
                 //water.save.is_bind = 0;
-                //water.device_status = 3;//Ç··Ñ
+                //water.device_status = 3;//æ¬ è´¹
             }
         }
         else
         {
             water.test_used_flow++;
         }
-        
+
         /* Clear the EXTI line 8 pending bit */
         EXTI_ClearITPendingBit(EXTI_Line6);
     }
@@ -272,7 +272,7 @@ void EXTI4_15_IRQHandler(void)
 
 /**
 * @}
-*/ 
+*/
 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

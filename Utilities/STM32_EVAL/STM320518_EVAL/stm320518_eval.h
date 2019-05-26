@@ -17,15 +17,15 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
   ******************************************************************************
   */
-  
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM320518_EVAL_H
 #define __STM320518_EVAL_H
@@ -49,13 +49,13 @@
 /** @addtogroup STM320518_EVAL
   * @{
   */
-      
+
 /** @addtogroup STM320518_EVAL_LOW_LEVEL
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
-typedef enum 
+typedef enum
 {
   LED1 = 0,
   LED2 = 1,
@@ -65,37 +65,37 @@ typedef enum
   RUN_LED = LED2
 } Led_TypeDef;
 
-typedef enum 
+typedef enum
 {
-  BUTTON_IO1 = 0,//¸ßÑ¹¿ª¹Ø             =0£¬ÖÆË®£¬                    =1£¬ÖÆË®Íê±Ï
-  BUTTON_IO2 = 1,//µÍÑ¹¿ª¹Ø             =0£¬×ÔÀ´Ë®¹Ü¹ÊÕÏË®Ñ¹Òì³££¬    =1×ÔÀ´Ë®¹ÜË®Ñ¹Õı³£
+  BUTTON_IO1 = 0,//é«˜å‹å¼€å…³             =0ï¼Œåˆ¶æ°´ï¼Œ                    =1ï¼Œåˆ¶æ°´å®Œæ¯•
+  BUTTON_IO2 = 1,//ä½å‹å¼€å…³             =0ï¼Œè‡ªæ¥æ°´ç®¡æ•…éšœæ°´å‹å¼‚å¸¸ï¼Œ    =1è‡ªæ¥æ°´ç®¡æ°´å‹æ­£å¸¸
   BUTTON_KEY = 2
 } Button_TypeDef;
 
-typedef enum 
-{  
+typedef enum
+{
   BUTTON_MODE_GPIO = 0,
   BUTTON_MODE_EXTI = 1
 } ButtonMode_TypeDef;
 
-typedef enum 
+typedef enum
 {
   COM1 = 0
 } COM_TypeDef;
 
 /** @defgroup STM320518_EVAL_LOW_LEVEL_Exported_Constants
   * @{
-  */ 
+  */
 
-/** 
-  * @brief  Define for STM320518_EVAL board  
-  */ 
+/**
+  * @brief  Define for STM320518_EVAL board
+  */
 #if !defined (USE_STM320518_EVAL)
  #define USE_STM320518_EVAL
 #endif
 
 /**
- * @brief Select the revision A or B(default) of the EVAL board used.  
+ * @brief Select the revision A or B(default) of the EVAL board used.
  */
 #if !defined (STM320518_EVAL_REVB)
  #define STM320518_EVAL_REVB
@@ -114,22 +114,22 @@ typedef enum
 #define LED1_PIN                         GPIO_Pin_0
 #define LED1_GPIO_PORT                   GPIOF
 #define LED1_GPIO_CLK                    RCC_AHBPeriph_GPIOF
-  
+
 #define LED2_PIN                         GPIO_Pin_1
 #define LED2_GPIO_PORT                   GPIOF
 #define LED2_GPIO_CLK                    RCC_AHBPeriph_GPIOF
 
 /**
   * @}
-  */ 
+  */
 
 /** @addtogroup STM320518_EVAL_LOW_LEVEL_BUTTON
   * @{
-  */  
+  */
 #define BUTTONn                          3
 
 /**
- * @brief IO1 input     ¸ßÑ¹¿ª¹Ø£¬Ë®Âú£¨Ë®Âú-³£¿ª£¬Ë®Ã»ÓĞÂú-³£±Õ£©
+ * @brief IO1 input     é«˜å‹å¼€å…³ï¼Œæ°´æ»¡ï¼ˆæ°´æ»¡-å¸¸å¼€ï¼Œæ°´æ²¡æœ‰æ»¡-å¸¸é—­ï¼‰
  */
 #define IO1_BUTTON_PIN                   GPIO_Pin_5
 #define IO1_BUTTON_GPIO_PORT             GPIOA
@@ -140,7 +140,7 @@ typedef enum
 #define IO1_BUTTON_EXTI_IRQn             EXTI4_15_IRQn
 
 /**
- * @brief IO2 input     µÍÑ¹¿ª¹Ø£¬½øË®¶Ë¼ì²âÊÇ·ñ¹ÊÕÏ£¨Ë®Ñ¹µÍ-³£¿ª£¬Ë®Ñ¹Õı³£-³£±Õ£©
+ * @brief IO2 input     ä½å‹å¼€å…³ï¼Œè¿›æ°´ç«¯æ£€æµ‹æ˜¯å¦æ•…éšœï¼ˆæ°´å‹ä½-å¸¸å¼€ï¼Œæ°´å‹æ­£å¸¸-å¸¸é—­ï¼‰
  */
 #define IO2_BUTTON_PIN                   GPIO_Pin_4
 #define IO2_BUTTON_GPIO_PORT             GPIOA
@@ -148,7 +148,7 @@ typedef enum
 #define IO2_BUTTON_EXTI_LINE             EXTI_Line4
 #define IO2_BUTTON_EXTI_PORT_SOURCE      EXTI_PortSourceGPIOA
 #define IO2_BUTTON_EXTI_PIN_SOURCE       EXTI_PinSource4
-#define IO2_BUTTON_EXTI_IRQn             EXTI4_15_IRQn 
+#define IO2_BUTTON_EXTI_IRQn             EXTI4_15_IRQn
 
 /**
  * @brief Key push-button
@@ -163,7 +163,7 @@ typedef enum
 
 /**
   * @}
-  */ 
+  */
 
 
 /** @addtogroup STM320518_EVAL_LOW_LEVEL_COM
@@ -173,7 +173,7 @@ typedef enum
 
 /**
  * @brief Definition for COM port1, connected to USART1
- */ 
+ */
 #define EVAL_COM1                        USART1
 #define EVAL_COM1_CLK                    RCC_APB2Periph_USART1
 
@@ -188,7 +188,7 @@ typedef enum
 #define EVAL_COM1_RX_GPIO_CLK            RCC_AHBPeriph_GPIOA
 #define EVAL_COM1_RX_SOURCE              GPIO_PinSource10
 #define EVAL_COM1_RX_AF                  GPIO_AF_1
-   
+
 #define EVAL_COM1_IRQn                   USART1_IRQn
 #define EVAL_COM1_IRQHandler             USART1_IRQHandler
 /**
@@ -221,7 +221,7 @@ void STM_EVAL_COMInit(COM_TypeDef COM, USART_InitTypeDef* USART_InitStruct);
 /**
   * @}
   */
-  
+
 #ifdef __cplusplus
 }
 #endif
@@ -229,11 +229,7 @@ void STM_EVAL_COMInit(COM_TypeDef COM, USART_InitTypeDef* USART_InitStruct);
 #endif /* __STM320518_EVAL_H */
 /**
   * @}
-  */ 
-
-/**
-  * @}
-  */ 
+  */
 
 /**
   * @}
@@ -241,6 +237,10 @@ void STM_EVAL_COMInit(COM_TypeDef COM, USART_InitTypeDef* USART_InitStruct);
 
 /**
   * @}
-  */  
+  */
+
+/**
+  * @}
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

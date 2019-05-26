@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    STM32F0xx_IAP/inc/flash_if.h 
+  * @file    STM32F0xx_IAP/inc/flash_if.h
   * @author  MCD Application Team
   * @version V1.0.0
   * @date    29-May-2012
@@ -16,8 +16,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -47,11 +47,11 @@
 
 /* define the address from where user application will be loaded,
    the application address should be a start sector address */
-#if BOOTLOADER | APP_B      //¸üÐÂAPP_AµÄ¹Ì¼þ
+#if BOOTLOADER | APP_B      //æ›´æ–°APP_Açš„å›ºä»¶
 #define USER_FLASH_LAST_PAGE_ADDRESS  0x0801F800
 #define USER_FLASH_END_ADDRESS        0x0801FFFF
 #define APPLICATION_ADDRESS     (uint32_t)0x08010000
-#elif APP_A                 //¸üÐÂAPP_BµÄ¹Ì¼þ
+#elif APP_A                 //æ›´æ–°APP_Bçš„å›ºä»¶
 #define USER_FLASH_LAST_PAGE_ADDRESS  0x0802F800
 #define USER_FLASH_END_ADDRESS        0x0802FFFF
 #define APPLICATION_ADDRESS     (uint32_t)0x08020000
@@ -63,13 +63,13 @@
 /* Compute the mask to test if the Flash memory, where the user program will be
    loaded, is write protected */
 #define  FLASH_PROTECTED_PAGES   ((uint32_t)~((1 << FLASH_PAGE_NUMBER) - 1))
- 
+
 /* define the user application size */
 #define USER_FLASH_SIZE   (USER_FLASH_END_ADDRESS - APPLICATION_ADDRESS + 1)
 
 
-       
-       
+
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 void FLASH_If_Init(void);

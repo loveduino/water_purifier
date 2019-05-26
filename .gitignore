@@ -1,16 +1,10 @@
 
-*.pdf
-*.png
-*.zip
-*.html
-
-*.doc
-*.docx
-*.chm
-*.eww
-*.eww
-*.wsdt
-
-_htmresc/
 Projects/settings/
 Projects/STM32F0xx_APP/EWARM/
+Projects/STM32F0xx_APP/EWARM/app_a/
+Projects/STM32F0xx_APP/EWARM/app_b/
+Projects/STM32F0xx_APP/EWARM/bootloader/
+Projects/STM32F0xx_APP/EWARM/settings/
+Projects/STM32F0xx_StdPeriph_Templates/EWARM/
+Projects/STM32F0xx_StdPeriph_Templates/MDK-ARM/
+Projects/STM32F0xx_StdPeriph_Templates/TrueSTUDIO/

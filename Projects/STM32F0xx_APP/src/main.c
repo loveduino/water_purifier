@@ -28,7 +28,7 @@
 
 
 /* Standard includes. */
-#include "string.h"
+#include <string.h>
 
 /* FreeRTOS includes. */
 #include "FreeRTOS.h"
@@ -57,7 +57,7 @@
 /* Private define ------------------------------------------------------------*/
 
 /* Private macro -------------------------------------------------------------*/
-    
+
 
 /* Private variables ---------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -75,8 +75,8 @@ __IO uint32_t VectorTable[48] __at(0x20000000);
 #endif
 
 
-uint32_t make_water_time_to_bush = 0;//ÓÃÓÚ¼ÇÂ¼ÖÆË®Ê±³¤£º¶¨Ê±Ç¿³å
-uint32_t make_water_time_to_check = 0;//ÓÃÓÚ¼ÇÂ¼ÖÆË®Ê±³¤£º¼ìĞŞ
+uint32_t make_water_time_to_bush = 0;//ç”¨äºè®°å½•åˆ¶æ°´æ—¶é•¿ï¼šå®šæ—¶å¼ºå†²
+uint32_t make_water_time_to_check = 0;//ç”¨äºè®°å½•åˆ¶æ°´æ—¶é•¿ï¼šæ£€ä¿®
 
 KeyClick_t KeyClick;
 bool key_fall_flag = false;
@@ -98,17 +98,17 @@ void EN1_Config(void);
 void EN2_Config(void);
 static void EXTI4_15_Config(void);
 
-void EDP_SendPacketStatus(void);//0x0C,//¹¤×÷×´Ì¬Í¬²½
+void EDP_SendPacketStatus(void);//0x0C,//å·¥ä½œçŠ¶æ€åŒæ­¥
 
 
 /* Private functions ---------------------------------------------------------*/
 /*
-¿ÉÒÔÔÚÏîÄ¿ÉèÖÃÖĞÉèÖÃÊ±¼äÊ¹ÓÃµÄ±äÁ¿ÀàĞÍ¼ÆÊı·¶Î§
+å¯ä»¥åœ¨é¡¹ç›®è®¾ç½®ä¸­è®¾ç½®æ—¶é—´ä½¿ç”¨çš„å˜é‡ç±»å‹è®¡æ•°èŒƒå›´
 _DLIB_TIME_USES_LONG
 _DLIB_TIME_USES_64
 */
-clock_t clk_count = 0;//ÏµÍ³ÉÏµçºóÔËĞĞÊ±¼ä¼ÆÊı£¬Èç¹ûÊÇ32Î»£¬1msÖÜÆÚÏÂ×î´ó¼ÆÊ±49.7Ìì
-time_t time_dat;//ÉèÖÃlocaltimeÏà¶ÔÓÚ¹«Ôª1970Äê1ÔÂ1ÈÕ0Ê±0·Ö0ÃëËãÆğÖÁ½ñµÄUTCÊ±¼äËù¾­¹ıµÄÃëÊı
+clock_t clk_count = 0;//ç³»ç»Ÿä¸Šç”µåè¿è¡Œæ—¶é—´è®¡æ•°ï¼Œå¦‚æœæ˜¯32ä½ï¼Œ1mså‘¨æœŸä¸‹æœ€å¤§è®¡æ—¶49.7å¤©
+time_t time_dat;//è®¾ç½®localtimeç›¸å¯¹äºå…¬å…ƒ1970å¹´1æœˆ1æ—¥0æ—¶0åˆ†0ç§’ç®—èµ·è‡³ä»Šçš„UTCæ—¶é—´æ‰€ç»è¿‡çš„ç§’æ•°
 
 clock_t clock (void) {
     return (clk_count);
@@ -126,7 +126,7 @@ time_t __time32 (time_t *p) {
 #endif
 /*-----------------------------------------------------------*/
 
-const char * __getzone(void)//Ã»ÓĞÉúĞ§
+const char * __getzone(void)//æ²¡æœ‰ç”Ÿæ•ˆ
 {
     return ": GMT+8:GMT+9:+0800";
 }
@@ -136,7 +136,7 @@ delay_show_tds_t delay_show_tds;
 void WorkMode(WorkMode_t work_mode)
 {
     static WorkMode_t work_mode_last;
-    
+
     if (work_mode_last != work_mode)
     {
         work_mode_last = work_mode;
@@ -165,15 +165,13 @@ void WorkMode(WorkMode_t work_mode)
         break;
     case WORK_BUSH:
         STM_EVAL_LEDOn(BUSH_LED);
-        make_water_time_to_bush = 0;//Èç¹û³åÏ´¹ı£¬¾ÍÖØĞÂ¼ÆËãÕâ¸öÀÛ¼ÓÖÆË®Ê±¼ä£¬ÇåÁã
+        make_water_time_to_bush = 0;//å¦‚æœå†²æ´—è¿‡ï¼Œå°±é‡æ–°è®¡ç®—è¿™ä¸ªç´¯åŠ åˆ¶æ°´æ—¶é—´ï¼Œæ¸…é›¶
         EN1_H;
         EN2_H;
         break;
     default:STM_EVAL_LEDOff(BUSH_LED);break;
     }
 }
-
-#include <string.h>
 
 /**
 * @brief  Main program.
@@ -182,29 +180,28 @@ void WorkMode(WorkMode_t work_mode)
 */
 int main(void)
 {
-    /*!< At this stage the microcontroller clock setting is already configured, 
+    /*!< At this stage the microcontroller clock setting is already configured,
     this is done through SystemInit() function which is called from startup
     file (startup_stm32f0xx.s) before to branch to application main.
     To reconfigure the default setting of SystemInit() function, refer to
     system_stm32f0xx.c file
-    */ 
-    
+    */
+
 #if APP_A
-    /* Relocate by software the vector table to the internal SRAM at 0x20000000 ***/  
+    /* Relocate by software the vector table to the internal SRAM at 0x20000000 ***/
     /* Copy the vector table from the Flash (mapped at the base of the application
     load address 0x08010000) to the base address of the SRAM at 0x20000000. */
-    for (uint32_t i = 0; i < 48; i++)
-    {
+    for (uint32_t i = 0; i < 48; i++) {
         VectorTable[i] = *(__IO uint32_t*)(0x08010000 + (i<<2));
     }
 
     /* Enable the SYSCFG peripheral clock*/
-    //RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, ENABLE);//ÔÚ´Ë´¦Ó¦¸Ã½« RCC_APB2PeriphResetCmd º¯ÊıÌæ»»ÎªRCC_APB2PeriphClockCmd º¯Êı¡£
+    //RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, ENABLE);//åœ¨æ­¤å¤„åº”è¯¥å°† RCC_APB2PeriphResetCmd å‡½æ•°æ›¿æ¢ä¸ºRCC_APB2PeriphClockCmd å‡½æ•°ã€‚
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
     /* Remap SRAM at 0x00000000 */
     SYSCFG_MemoryRemapConfig(SYSCFG_MemoryRemap_SRAM);
 #elif APP_B
-    /* Relocate by software the vector table to the internal SRAM at 0x20000000 ***/  
+    /* Relocate by software the vector table to the internal SRAM at 0x20000000 ***/
     /* Copy the vector table from the Flash (mapped at the base of the application
     load address 0x08010000) to the base address of the SRAM at 0x20000000. */
     for (uint32_t i = 0; i < 48; i++)
@@ -213,25 +210,25 @@ int main(void)
     }
 
     /* Enable the SYSCFG peripheral clock*/
-    //RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, ENABLE);//ÔÚ´Ë´¦Ó¦¸Ã½« RCC_APB2PeriphResetCmd º¯ÊıÌæ»»ÎªRCC_APB2PeriphClockCmd º¯Êı¡£
+    //RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, ENABLE);//åœ¨æ­¤å¤„åº”è¯¥å°† RCC_APB2PeriphResetCmd å‡½æ•°æ›¿æ¢ä¸ºRCC_APB2PeriphClockCmd å‡½æ•°ã€‚
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
     /* Remap SRAM at 0x00000000 */
     SYSCFG_MemoryRemapConfig(SYSCFG_MemoryRemap_SRAM);
 #endif
-    
+
     RCC_Configuration();
-    
+
 #if BOOTLOADER
-    
+
     STM_EVAL_PBInit(BUTTON_KEY, BUTTON_MODE_GPIO);
     if (STM_EVAL_PBGetState(BUTTON_KEY) != 0x00)
     {
         char app_run[10] = {0};
-        
+
         I2C_Config();
-        
+
         I2C_EE_BufferRead(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_O_OFFSET_ADDR, (uint8_t *)&app_run[0], 10);
-        
+
         //APP - A
         /* Test if user code is programmed starting from address "APPLICATION_ADDRESS" */
         //if ((((*(__IO uint32_t*)0x08010000) & 0x2FFE0000 ) != 0x20000000) && (NULL != strstr(app_run, "app_a_on")))
@@ -243,10 +240,10 @@ int main(void)
             /* Jump to user application */
             JumpAddress = *(__IO uint32_t*) (0x08010000 + 4);
             Jump_To_Application = (pFunction) JumpAddress;
-            
+
             /* Initialize user application's Stack Pointer */
             __set_MSP(*(__IO uint32_t*) 0x08010000);
-            
+
             /* Jump to application */
             Jump_To_Application();
         }
@@ -261,26 +258,26 @@ int main(void)
             /* Jump to user application */
             JumpAddress = *(__IO uint32_t*) (0x08020000 + 4);
             Jump_To_Application = (pFunction) JumpAddress;
-            
+
             /* Initialize user application's Stack Pointer */
             __set_MSP(*(__IO uint32_t*) 0x08020000);
-            
+
             /* Jump to application */
             Jump_To_Application();
         }
         else //bootloader
         {
-            
+
         }
     }
 #endif
-    
+
     IWDG_Config();
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
-    
+
     /***************** Add your application code here   ***************************/
-    
+
     /* Init task */
     if( pdPASS != xTaskCreate(Main_task, (char *) "Main", configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1, NULL) )
     {
@@ -291,7 +288,7 @@ int main(void)
         /* Now all the tasks have been started - start the scheduler. */
         vTaskStartScheduler(  );
     }
-    
+
     /* We should never get here as control is now taken by the scheduler */
     for( ;; );
 }
@@ -310,12 +307,12 @@ void Main_task(void * pvParameters)
 {
 	/* Just to stop compiler warnings. */
 	( void ) pvParameters;
-    
-    /*Initialize Leds */ 
+
+    /*Initialize Leds */
     prvSetupHardware();
-    
+
     xSerialPortInit( ser115200, 100, 1000 );
-    
+
 #if BOOTLOADER
     SerialPutString("\r\n= BOOTLOADER  =");
 #elif APP_A
@@ -323,15 +320,15 @@ void Main_task(void * pvParameters)
 #elif APP_B
     SerialPutString("\r\n= APP_B       =");
 #endif
-    
-    //ÔËĞĞµ½ÕâÀïµÄÊ±ºò£¬Çå¿ÕÏÂÒÔºóµÄappÓÃÄÄ¸ö
+
+    //è¿è¡Œåˆ°è¿™é‡Œçš„æ—¶å€™ï¼Œæ¸…ç©ºä¸‹ä»¥åçš„appç”¨å“ªä¸ª
 #if BOOTLOADER
     const char app_run[10] = " ";
     I2C_EE_BufferWrite(0+sizeof(save_data_default)+sizeof(g_data_format.iccid)+APP_O_OFFSET_ADDR, (uint8_t *)app_run, 10);
 #endif
-    
+
     I2C_EE_BufferRead(0+sizeof(save_data_default), (uint8_t *)&g_data_format.iccid[0], sizeof(g_data_format.iccid));
-    
+
     I2C_EE_BufferRead(0, (uint8_t *)&water.save, sizeof(save_data_default));
     if (save_data_default.e2prom_init != water.save.e2prom_init)
     {
@@ -339,33 +336,33 @@ void Main_task(void * pvParameters)
         //set e2prom to default values.
         I2C_EE_BufferWriteSafe(0, (uint8_t *)&save_data_default, sizeof(save_data_default));
     }
-    
+
     time_t seconds = PCF8563_ReadTime();
-    if (seconds < 1514764800)//±±¾©Ê±¼ä2018Äê1ÔÂ1ÈÕ8Ê±0·Ö0Ãë
+    if (seconds < 1514764800)//åŒ—äº¬æ—¶é—´2018å¹´1æœˆ1æ—¥8æ—¶0åˆ†0ç§’
     {
-        //±±¾©Ê±¼ä2018Äê1ÔÂ1ÈÕ8Ê±0·Ö0Ãë¶ÔÓ¦µÄUTCÊ±¼ä´Á
+        //åŒ—äº¬æ—¶é—´2018å¹´1æœˆ1æ—¥8æ—¶0åˆ†0ç§’å¯¹åº”çš„UTCæ—¶é—´æˆ³
         PCF8563_SetTime(1514764800);
         //seconds = PCF8563_ReadTime();
         seconds = 1514764800;
     }
-    time_dat = seconds;//ĞŞ¸ÄÏµÍ³Ê±¼ä
-    
+    time_dat = seconds;//ä¿®æ”¹ç³»ç»Ÿæ—¶é—´
+
     xTaskCreate( prvDataTimeTask, (char *) "DATA TIME", configMINIMAL_STACK_SIZE*2, NULL, tskIDLE_PRIORITY + 8, NULL );
 
     xTaskCreate( prvLedTask, (char *) "LED", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL );
-    
+
     xTaskCreate( prvShowTask, (char *) "SHOW", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 7, NULL );
-    
-    xTaskCreate( prvDeviceMakeStatusTask, (char *) "Device Status", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 5, NULL );//ÖÆË®×´Ì¬¼ì²é
-    
-    xTaskCreate( prvDeviceMakeWaterTask, (char *) "Device Make", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 5, NULL );//ÊÇ·ñĞèÒªÖÆË®¼ì²é
-    
+
+    xTaskCreate( prvDeviceMakeStatusTask, (char *) "Device Status", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 5, NULL );//åˆ¶æ°´çŠ¶æ€æ£€æŸ¥
+
+    xTaskCreate( prvDeviceMakeWaterTask, (char *) "Device Make", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 5, NULL );//æ˜¯å¦éœ€è¦åˆ¶æ°´æ£€æŸ¥
+
     xTaskCreate( prvAdcTask, (char *) "ADC", 200, NULL, tskIDLE_PRIORITY + 4, NULL );
-    
+
     xTaskCreate( prvGprsTask, (char *) "GPRS", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL );
-    
+
     xTaskCreate( prvDeviceSendStatusTask, (char *) "prvDeviceSendStatusTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL );
-    
+
     for( ;; )
     {
         vTaskDelay(200);
@@ -381,29 +378,29 @@ void Main_task(void * pvParameters)
 
 TimerHandle_t xForceFlushTimerHandler = NULL;
 
-//Ç¿³åÏ´°´Å¥µÄÊ¹ÓÃ£¬ÓÃ»§°´ÏÂÇ¿³å°´Å¥Ôò½øĞĞ18ÃëµÄÇ¿ÖÆ³åÏ´
+//å¼ºå†²æ´—æŒ‰é’®çš„ä½¿ç”¨ï¼Œç”¨æˆ·æŒ‰ä¸‹å¼ºå†²æŒ‰é’®åˆ™è¿›è¡Œ18ç§’çš„å¼ºåˆ¶å†²æ´—
 void vForceFlushTimerCallback( TimerHandle_t pxTimer )
 {
     // Optionally do something if the pxTimer parameter is NULL.
     configASSERT( pxTimer );
-    
-    water.io_high_status = -1;//¼ÇÂ¼IO1×´Ì¬,¸ßÑ¹¿ª¹Ø×´Ì¬
+
+    water.io_high_status = -1;//è®°å½•IO1çŠ¶æ€,é«˜å‹å¼€å…³çŠ¶æ€
     water.io_high_last_status = -1;
-    water.io_low_status = -1;//¼ÇÂ¼IO2×´Ì¬,µÍÑ¹¿ª¹Ø×´Ì¬
+    water.io_low_status = -1;//è®°å½•IO2çŠ¶æ€,ä½å‹å¼€å…³çŠ¶æ€
     water.io_low_last_status = -1;
-    
+
     water.is_bushing_now = 0;
     is_beep_on = true;
 }
 
 TimerHandle_t xTestModeTimerHandler = NULL;
 
-//²âÊÔ×´Ì¬Îª20·ÖÖÓ£¬20·ÖÖÓÖ®ºó×Ô¶¯»Ø¸´µ½Ô­×´Ì¬¡£
+//æµ‹è¯•çŠ¶æ€ä¸º20åˆ†é’Ÿï¼Œ20åˆ†é’Ÿä¹‹åè‡ªåŠ¨å›å¤åˆ°åŸçŠ¶æ€ã€‚
 void vTestModeTimerCallback( TimerHandle_t pxTimer )
 {
     // Optionally do something if the pxTimer parameter is NULL.
     configASSERT( pxTimer );
-    
+
     //printf("LONG\r\n");
     water.is_test_mode_switch_off = 1;
     is_beep_on = true;
@@ -418,15 +415,15 @@ static void prvLedTask(void * pvParameters)
             static int count_30s = 0;
             if (water.is_overhaul_beep == 1)
             {
-                
+
                 static bool is_true = false;
                 is_true = !is_true;
                 if (is_true)
                     BEEP_ON;
                 else
                     BEEP_OFF;
-                
-                if (count_30s++ >= 30)//ˆó¾¯15s·äÃùÆ÷Ïì
+
+                if (count_30s++ >= 30)//å ±è­¦15sèœ‚é¸£å™¨å“
                 {
                     count_30s = 0;
                     water.is_overhaul_beep = 0;
@@ -436,7 +433,7 @@ static void prvLedTask(void * pvParameters)
             else
                 count_30s = 0;
         }
-        
+
 #if BOOTLOADER
         //STM_EVAL_LEDToggle(RUN_LED);
         vTaskDelay(500);
@@ -460,12 +457,12 @@ static void prvDeviceSendStatusTask(void * pvParameters)
 {
 	/* Just to stop compiler warnings. */
 	( void ) pvParameters;
-    
+
     for( ;; )
     {
         if (is_send_device_status == true)
         {
-            
+
             vTaskDelay(2000);
             EDP_SendPacketStatus();
             is_send_device_status = false;
@@ -479,7 +476,7 @@ static void prvDeviceMakeStatusTask(void * pvParameters)
 {
 	/* Just to stop compiler warnings. */
 	( void ) pvParameters;
-    
+
     TickType_t xLastWakeTime;
     const TickType_t xPeriod = pdMS_TO_TICKS( 1000 );
     /* The xLastWakeTime variable needs to be initialized with the current tick
@@ -487,16 +484,16 @@ static void prvDeviceMakeStatusTask(void * pvParameters)
     After this assignment, xLastWakeTime is updated automatically internally within
     vTaskDelayUntil(). */
     xLastWakeTime = xTaskGetTickCount();
-    
+
     for( ;; )
     {
-        if (water.is_make_water_status == 1)//3	Õı³£ÖÆË®
+        if (water.is_make_water_status == 1)//3	æ­£å¸¸åˆ¶æ°´
         {
             make_water_time_to_check++;
             make_water_time_to_bush++;
-            
-            //ÀÛ¼ÆÖÆË®2Ğ¡Ê±£¨Ä¬ÈÏÖµÊı¾İºóÌ¨¿ÉÒÔ½øĞĞÉèÖÃ£©£¬ÖĞ¼äÎŞ³åÏ´£¬Ôò×Ô¶¯³åÏ´15Ãë
-            if (make_water_time_to_bush >= water.save.period_flush_time) 
+
+            //ç´¯è®¡åˆ¶æ°´2å°æ—¶ï¼ˆé»˜è®¤å€¼æ•°æ®åå°å¯ä»¥è¿›è¡Œè®¾ç½®ï¼‰ï¼Œä¸­é—´æ— å†²æ´—ï¼Œåˆ™è‡ªåŠ¨å†²æ´—15ç§’
+            if (make_water_time_to_bush >= water.save.period_flush_time)
             {
                 make_water_time_to_bush = 0;
                 water.is_bushing_now = 1;
@@ -504,8 +501,8 @@ static void prvDeviceMakeStatusTask(void * pvParameters)
                 {
                 }
             }
-            
-            //Á¬Ğø8Ğ¡Ê±£¨Ä¬ÈÏÖµ£¬ºóÌ¨¿ÉÒÔ½øĞĞÉèÖÃ£©ÖÆË®£¬ÖĞ¼äÎŞË®Âú£¬ËµÃ÷¾»Ë®»ú³öÏÖ¹ÊÕÏ£¬½øÈë¼ìĞŞ³ÌĞò£¬ÌáÊ¾ÓÃ»§ÁªÏµÊÛºó·şÎñ£¬·äÃùÆ÷¼±´ÙÃù½Ğ30´ÎºóÍ£Ö¹±¨¾¯¡£
+
+            //è¿ç»­8å°æ—¶ï¼ˆé»˜è®¤å€¼ï¼Œåå°å¯ä»¥è¿›è¡Œè®¾ç½®ï¼‰åˆ¶æ°´ï¼Œä¸­é—´æ— æ°´æ»¡ï¼Œè¯´æ˜å‡€æ°´æœºå‡ºç°æ•…éšœï¼Œè¿›å…¥æ£€ä¿®ç¨‹åºï¼Œæç¤ºç”¨æˆ·è”ç³»å”®åæœåŠ¡ï¼Œèœ‚é¸£å™¨æ€¥ä¿ƒé¸£å«30æ¬¡ååœæ­¢æŠ¥è­¦ã€‚
             if (make_water_time_to_check >= water.save.maintenance_time)
             {
                 make_water_time_to_check = 0;
@@ -514,52 +511,52 @@ static void prvDeviceMakeStatusTask(void * pvParameters)
                 is_send_device_status = true;
             }
         }
-        
+
         /* This task should execute every 50 milliseconds. Time is measured
         in ticks. The pdMS_TO_TICKS macro is used to convert milliseconds
         into ticks. xLastWakeTime is automatically updated within vTaskDelayUntil()
         so is not explicitly updated by the task. */
-        vTaskDelayUntil( &xLastWakeTime, xPeriod );       
+        vTaskDelayUntil( &xLastWakeTime, xPeriod );
     }
 }
-    
+
 static void prvDeviceMakeWaterTask(void * pvParameters)
 {
     EN1_Config();
     EN2_Config();
-    
+
     EN1_L;
     EN2_L;
-    
+
     /* TIM Configuration */
     //TIM_CaptureConfig();
-    //Ê¹ÓÃÍâ²¿ÖĞ¶ÏÀ´¼ì²âÂö³å¸öÊı
+    //ä½¿ç”¨å¤–éƒ¨ä¸­æ–­æ¥æ£€æµ‹è„‰å†²ä¸ªæ•°
     EXTI4_15_Config();
-    
+
     STM_EVAL_PBInit(BUTTON_IO1, BUTTON_MODE_GPIO);
     STM_EVAL_PBInit(BUTTON_IO2, BUTTON_MODE_GPIO);
-    
+
     xForceFlushTimerHandler = xTimerCreate(    "Force Flush Timer",   // Just a text name, not used by the kernel.
                                  ( pdMS_TO_TICKS(water.save.force_flush_time*1000) ),   // The timer period in ticks.
                                  pdFALSE,        // The timers will auto-reload themselves when they expire.
                                  ( void * ) NULL, // Assign each timer a unique id equal to its array index.
                                  vForceFlushTimerCallback); // Each timer calls the same callback when it expires.
-    
+
     xTestModeTimerHandler = xTimerCreate(    "Test Mode Timer",   // Just a text name, not used by the kernel.
                                  ( pdMS_TO_TICKS(20*60*1000) ),   // The timer period in ticks.
                                  pdFALSE,        // The timers will auto-reload themselves when they expire.
                                  ( void * ) NULL, // Assign each timer a unique id equal to its array index.
                                  vTestModeTimerCallback); // Each timer calls the same callback when it expires.
-    
+
     if (water.save.is_bind == 1 )
     {
         if( xTimerStart( xForceFlushTimerHandler, pdMS_TO_TICKS(100) ) == pdPASS )
         {
-            //Ç¿ÖÆ³åÏ´
+            //å¼ºåˆ¶å†²æ´—
             water.is_bushing_now = 1;
         }
     }
-    
+
 #if BOOTLOADER
     BEEP_ON;vTaskDelay(100);
     BEEP_OFF;vTaskDelay(100);
@@ -580,7 +577,7 @@ static void prvDeviceMakeWaterTask(void * pvParameters)
     BEEP_ON;vTaskDelay(300);
     BEEP_OFF;vTaskDelay(200);
 #endif
-    
+
     for (;;)
     {
         if ((water.is_overhaul_status != 1) && (water.is_drop_water_status != 1) && (water.is_power_on_status != 0) && (water.is_shortage_water_status != 1))
@@ -588,7 +585,7 @@ static void prvDeviceMakeWaterTask(void * pvParameters)
             if (!water.is_bushing_now)
             {
                 STM_EVAL_LEDOff(BUSH_LED);
-                if (((1 == water.save.is_bind) && ((water.device_status == 0) || (water.device_status == 4)) ) || (0 == water.is_test_mode_switch_off))//ÒÑ°ó¶¨»òÕßÕ¦²âÊÔÄ£Ê½ÏÂ
+                if (((1 == water.save.is_bind) && ((water.device_status == 0) || (water.device_status == 4)) ) || (0 == water.is_test_mode_switch_off))//å·²ç»‘å®šæˆ–è€…å’‹æµ‹è¯•æ¨¡å¼ä¸‹
                 {
                     if (water.is_make_water_status == 1)
                     {
@@ -607,7 +604,7 @@ static void prvDeviceMakeWaterTask(void * pvParameters)
             }
             else
             {
-                //Š³å
+                //å¼·å†²
                 water.is_make_water_status = 0;
                 WorkMode(WORK_BUSH);
             }
@@ -617,27 +614,27 @@ static void prvDeviceMakeWaterTask(void * pvParameters)
             water.is_bushing_now = 0;
             water.is_make_water_status = 0;
             WorkMode(WORK_STOP);
-            //¹Ø±ÕÈí¼ş¶¨Ê±Æ÷£¬Èç¹ûÔÚÔËĞĞµÄ»°
+            //å…³é—­è½¯ä»¶å®šæ—¶å™¨ï¼Œå¦‚æœåœ¨è¿è¡Œçš„è¯
             if( xTimerIsTimerActive( xForceFlushTimerHandler ) != pdFALSE )
             {
                 xTimerStop( xForceFlushTimerHandler, 100 );
             }
         }
-        
+
         if (water.is_drop_water_status != 1)
         {
-            water.io_low_status = STM_EVAL_PBGetState(BUTTON_IO2);////µÍÑ¹¿ª¹Ø             =1£¬×ÔÀ´Ë®¹Ü¹ÊÕÏË®Ñ¹Òì³££¬    =0×ÔÀ´Ë®¹ÜË®Ñ¹Õı³£
-            
+            water.io_low_status = STM_EVAL_PBGetState(BUTTON_IO2);////ä½å‹å¼€å…³             =1ï¼Œè‡ªæ¥æ°´ç®¡æ•…éšœæ°´å‹å¼‚å¸¸ï¼Œ    =0è‡ªæ¥æ°´ç®¡æ°´å‹æ­£å¸¸
+
             static bool shortage_water_exit = false;
-            
+
             if (water.io_low_last_status != water.io_low_status)
             {
                 water.io_low_last_status = water.io_low_status;
-                if (water.io_low_status == 1)//BUTTON_IO2±ÕºÏ£¬=1£¬×ÔÀ´Ë®¹Ü¹ÊÕÏË®Ñ¹Òì³£
+                if (water.io_low_status == 1)//BUTTON_IO2é—­åˆï¼Œ=1ï¼Œè‡ªæ¥æ°´ç®¡æ•…éšœæ°´å‹å¼‚å¸¸
                 {
-                    //×ÔÀ´Ë®¹Ü¹ÊÕÏË®Ñ¹Òì³£
+                    //è‡ªæ¥æ°´ç®¡æ•…éšœæ°´å‹å¼‚å¸¸
                     water.is_shortage_water_status = 1;
-                    water.is_make_water_status = 0;//Î´ÖÆË®
+                    water.is_make_water_status = 0;//æœªåˆ¶æ°´
                     is_send_device_status = true;
                     shortage_water_exit = true;
                 }
@@ -649,7 +646,7 @@ static void prvDeviceMakeWaterTask(void * pvParameters)
                     {
                         shortage_water_exit = false;
                         extern TimerHandle_t xForceFlushTimerHandler;
-                        //ÄÈ±Ë®Ä£Ê½ÍË³öºó³åË¢Ò»´Î
+                        //å¾ç¼ºæ°´æ¨¡å¼é€€å‡ºåå†²åˆ·ä¸€æ¬¡
                         if( xTimerStart( xForceFlushTimerHandler, pdMS_TO_TICKS(100) ) == pdPASS )
                         {
                             water.is_bushing_now = 1;
@@ -657,26 +654,26 @@ static void prvDeviceMakeWaterTask(void * pvParameters)
                     }
                 }
             }
-            
+
             if (water.is_shortage_water_status == 0)
             {
-                //=1×ÔÀ´Ë®¹ÜË®Ñ¹Õı³£
+                //=1è‡ªæ¥æ°´ç®¡æ°´å‹æ­£å¸¸
                 water.io_high_status = (bool)STM_EVAL_PBGetState(BUTTON_IO1);
                 if (water.io_high_last_status != water.io_high_status)
                 {
                     water.io_high_last_status = water.io_high_status;
                     if (water.io_high_status == 0)
                     {
-                        //ĞèÒªÖÆË®
-                        water.is_make_water_status = 1;//Õı³£ÖÆË®£¨£©
-                        water.is_full_water_status = 0;//Î´Ë®Âú
+                        //éœ€è¦åˆ¶æ°´
+                        water.is_make_water_status = 1;//æ­£å¸¸åˆ¶æ°´ï¼ˆï¼‰
+                        water.is_full_water_status = 0;//æœªæ°´æ»¡
                         is_send_device_status = true;
                     }
-                    else//Ë®Ñ¹¸ß£¬ÒÑ¾­ÖÆÂúË®£¬¿ªÂ·
+                    else//æ°´å‹é«˜ï¼Œå·²ç»åˆ¶æ»¡æ°´ï¼Œå¼€è·¯
                     {
-                        //ÖÆË®Íê±Ï
-                        water.is_make_water_status = 0;//Î´ÖÆË®
-                        water.is_full_water_status = 1;//Ë®Âú
+                        //åˆ¶æ°´å®Œæ¯•
+                        water.is_make_water_status = 0;//æœªåˆ¶æ°´
+                        water.is_full_water_status = 1;//æ°´æ»¡
                         is_send_device_status = true;
                         make_water_time_to_check = 0;
                     }
@@ -689,37 +686,37 @@ static void prvDeviceMakeWaterTask(void * pvParameters)
         }
         else
         {
-            water.io_high_status = -1;//¼ÇÂ¼IO1×´Ì¬,¸ßÑ¹¿ª¹Ø×´Ì¬
+            water.io_high_status = -1;//è®°å½•IO1çŠ¶æ€,é«˜å‹å¼€å…³çŠ¶æ€
             water.io_high_last_status = -1;
-            water.io_low_status = -1;//¼ÇÂ¼IO2×´Ì¬,µÍÑ¹¿ª¹Ø×´Ì¬
+            water.io_low_status = -1;//è®°å½•IO2çŠ¶æ€,ä½å‹å¼€å…³çŠ¶æ€
             water.io_low_last_status = -1;
         }
-        
+
         static uint32_t count_5s = 0;
         static uint32_t flowmeter_count = 0;
-        static bool is_change = false;//ÕıÔÚ¸Ä±äÖĞ
-        
-        //Èç¹ûÕıÔÚÁ÷Á¿¼ÆÕıÔÚÔË×ª£¬±ê¼Ç½«Òª¼ÇÂ¼Êı¾İ£¬Í¬Ê±¸´Î»5s¼ÆÊı±äÁ¿£¬ÖØĞÂ¿ªÊ¼¼ÆÊı¡£
-        //µ±Á÷Á¿¼ÆÍ¨Öª×ª¶¯ºó£¬5sºó½«»áÉÏ´«±¾´ÎË®Á¿ĞÅÏ¢
+        static bool is_change = false;//æ­£åœ¨æ”¹å˜ä¸­
+
+        //å¦‚æœæ­£åœ¨æµé‡è®¡æ­£åœ¨è¿è½¬ï¼Œæ ‡è®°å°†è¦è®°å½•æ•°æ®ï¼ŒåŒæ—¶å¤ä½5sè®¡æ•°å˜é‡ï¼Œé‡æ–°å¼€å§‹è®¡æ•°ã€‚
+        //å½“æµé‡è®¡é€šçŸ¥è½¬åŠ¨åï¼Œ5såå°†ä¼šä¸Šä¼ æœ¬æ¬¡æ°´é‡ä¿¡æ¯
         if (water.flowmeter_count != flowmeter_count)
         {
             flowmeter_count = water.flowmeter_count;
             is_change = true;
             count_5s = 0;
         }
-        
+
         if (is_change == true)
         {
             count_5s++;
-            if (count_5s >= 50)//Á÷Á¿¼ÆÍ£Ö¹×ª¶¯5sºó×ö´æ´¢ºÍÉÏ´«¶¯×÷
+            if (count_5s >= 50)//æµé‡è®¡åœæ­¢è½¬åŠ¨5sååšå­˜å‚¨å’Œä¸Šä¼ åŠ¨ä½œ
             {
                 is_change = false;
-                I2C_EE_BufferWriteSafe(0, (uint8_t *)&water.save, sizeof(save_data_default));//ÀÛ¼Æ¼ÇÂ¼Á÷Á¿¼Æ×ª¶¯µÄ´ÎÊı
-                
-                static uint32_t __flowmeter_count = 0; 
-                
+                I2C_EE_BufferWriteSafe(0, (uint8_t *)&water.save, sizeof(save_data_default));//ç´¯è®¡è®°å½•æµé‡è®¡è½¬åŠ¨çš„æ¬¡æ•°
+
+                static uint32_t __flowmeter_count = 0;
+
                 void EDP_SendPacketWaterSync(uint32_t water);
-                EDP_SendPacketWaterSync((uint32_t)((water.flowmeter_count - __flowmeter_count) * 0.917 + 0.5));//·¢ËÍ±¾´ÎµÄÁ÷Á¿Êı¾İ
+                EDP_SendPacketWaterSync((uint32_t)((water.flowmeter_count - __flowmeter_count) * 0.917 + 0.5));//å‘é€æœ¬æ¬¡çš„æµé‡æ•°æ®
                 __flowmeter_count = water.flowmeter_count;
                 I2C_EE_BufferWriteSafe(0, (uint8_t *)&water.save, sizeof(save_data_default));
                 extern bool is_send_device_status;
@@ -737,7 +734,7 @@ static void prvDataTimeTask( void *pvParameters )
 {
 	/* Just to stop compiler warnings. */
 	( void ) pvParameters;
-    
+
     TickType_t xLastWakeTime;
     const TickType_t xPeriod = pdMS_TO_TICKS( 1000 );
     /* The xLastWakeTime variable needs to be initialized with the current tick
@@ -745,10 +742,10 @@ static void prvDataTimeTask( void *pvParameters )
     After this assignment, xLastWakeTime is updated automatically internally within
     vTaskDelayUntil(). */
     xLastWakeTime = xTaskGetTickCount();
-    
+
 	for( ;; )
 	{
-        
+
         if (delay_show_tds.is_make_water == 1)
         {
             delay_show_tds.make_water_count++;
@@ -758,68 +755,68 @@ static void prvDataTimeTask( void *pvParameters )
                 delay_show_tds.is_make_water = 0;
             }
         }
-        
-        
+
+
 //        static int i = 0;
-//        if (i++ >= 3600)//›]Ğ¡•r´ÓÊ±ÖÓĞ¾Æ¬Í¬²½Ò»´ÎÏµÍ³Ê±ÖÓ
+//        if (i++ >= 3600)//æ²’å°æ™‚ä»æ—¶é’ŸèŠ¯ç‰‡åŒæ­¥ä¸€æ¬¡ç³»ç»Ÿæ—¶é’Ÿ
 //        {
 //            i = 0;
 //            /* Perform the periodic actions here. */
 //            time_t rtc = PCF8563_ReadTime();
-//            time_dat = rtc;//ĞŞ¸ÄÏµÍ³Ê±¼ä
-//            //printf("µ±Ç°RTC±¾µØÊ±¼äÎª: %s\r\n", asctime(localtime(&rtc)));
+//            time_dat = rtc;//ä¿®æ”¹ç³»ç»Ÿæ—¶é—´
+//            //printf("å½“å‰RTCæœ¬åœ°æ—¶é—´ä¸º: %s\r\n", asctime(localtime(&rtc)));
 //        }
-        
+
         time_t now;
         now = time(NULL);
-        //printf("µ±Ç°ÏµÍ³±¾µØÊ±¼äÎª: %s\r\n", asctime(localtime(&now)));
-        
+        //printf("å½“å‰ç³»ç»Ÿæœ¬åœ°æ—¶é—´ä¸º: %s\r\n", asctime(localtime(&now)));
+
         if (now > water.save.used_days_timestamp)
             water.used_days = (now - water.save.used_days_timestamp) / (3600 * 24);
         else
             water.used_days = 0;
-        
+
         if (now < water.save.remain_days_timestamp)
             water.remain_days = (water.save.remain_days_timestamp - now) / (3600 * 24);
         else
             water.remain_days = 0;
-            
-        //Ê¹ÓÃÌìÊı = £¨ÏÖÔÚµÄÊ±¼ä´ê-°ó¶¨µÄÊ±¼ä´ê£©/ (Ã¿ÌìµÄÒ»¹²Ê±¼ä´ê)
+
+        //ä½¿ç”¨å¤©æ•° = ï¼ˆç°åœ¨çš„æ—¶é—´æ“-ç»‘å®šçš„æ—¶é—´æ“ï¼‰/ (æ¯å¤©çš„ä¸€å…±æ—¶é—´æ“)
         uint16_t filter_used_value_1 = (now - water.save.filter_used_timestamp_1 ) / (3600 * 24);
         if (water.save.filter_max_value_1 > filter_used_value_1)
             water.filter_remain_value_1 = water.save.filter_max_value_1 - filter_used_value_1;
         else
             water.filter_remain_value_1 = 0;
-        
+
         uint16_t filter_used_value_2 = (now - water.save.filter_used_timestamp_2 ) / (3600 * 24);
         if (water.save.filter_max_value_2 > filter_used_value_2)
             water.filter_remain_value_2 = water.save.filter_max_value_2 - filter_used_value_2;
         else
             water.filter_remain_value_2 = 0;
-        
+
         uint16_t filter_used_value_3 = (now - water.save.filter_used_timestamp_3 ) / (3600 * 24);
         if (water.save.filter_max_value_3 > filter_used_value_3)
             water.filter_remain_value_3 = water.save.filter_max_value_3 - filter_used_value_3;
         else
             water.filter_remain_value_3 = 0;
-        
+
         uint16_t filter_used_value_4 = (now - water.save.filter_used_timestamp_4 ) / (3600 * 24);
         if (water.save.filter_max_value_4 > filter_used_value_4)
             water.filter_remain_value_4 = water.save.filter_max_value_4 - filter_used_value_4;
         else
             water.filter_remain_value_4 = 0;
-        
+
         uint16_t filter_used_value_5 = (now - water.save.filter_used_timestamp_5 ) / (3600 * 24);
         if (water.save.filter_max_value_5 > filter_used_value_5)
             water.filter_remain_value_5 = water.save.filter_max_value_5 - filter_used_value_5;
         else
             water.filter_remain_value_5 = 0;
-        
-        
+
+
         //======================================================================
-        
-        
-        //³äÖµÍêºó¾ÍºÃ¸Ä±äÏàÓ¦µÄÉè±¸×´Ì¬ÁË
+
+
+        //å……å€¼å®Œåå°±å¥½æ”¹å˜ç›¸åº”çš„è®¾å¤‡çŠ¶æ€äº†
         if (water.save.is_bind == 1)
         {
             if (water.is_test_mode_switch_off == 1)
@@ -828,45 +825,45 @@ static void prvDataTimeTask( void *pvParameters )
                 {
                     if ( (water.filter_remain_value_1 > 0) && (water.filter_remain_value_2 > 0) && (water.filter_remain_value_3 > 0) && (water.filter_remain_value_4 > 0) && (water.filter_remain_value_5 > 0) )
                     {
-                        water.device_status = 0;//Õı³££¬²»Ç·ÙMÁË
+                        water.device_status = 0;//æ­£å¸¸ï¼Œä¸æ¬ è²»äº†
                     }
                 }
                 else
-                    water.device_status = 3;//Ç·ÙMÁË
-                
+                    water.device_status = 3;//æ¬ è²»äº†
+
                 if ( (water.filter_remain_value_1 > 0) && (water.filter_remain_value_2 > 0) && (water.filter_remain_value_3 > 0) && (water.filter_remain_value_4 > 0) && (water.filter_remain_value_5 > 0) )
                 {
                     if ( (water.remain_days > 0) && (water.save.remain_flow > 0) )
-                        water.device_status = 0;//Õı³££¬²»Ç·ÙMÁË
+                        water.device_status = 0;//æ­£å¸¸ï¼Œä¸æ¬ è²»äº†
                 }
                 else
                     water.device_status = 4;
             }
             else
-                water.device_status = 5;//Ó²¼şµ÷ÊÔ
+                water.device_status = 5;//ç¡¬ä»¶è°ƒè¯•
         }
         else
-            water.device_status = 1;//´ı¼¤»î
-        
+            water.device_status = 1;//å¾…æ¿€æ´»
+
             static uint8_t device_status_last;
-            
+
             if (device_status_last != water.device_status)
             {
                 device_status_last= water.device_status;
-                water.io_high_status = -1;//¼ÇÂ¼IO1×´Ì¬,¸ßÑ¹¿ª¹Ø×´Ì¬
+                water.io_high_status = -1;//è®°å½•IO1çŠ¶æ€,é«˜å‹å¼€å…³çŠ¶æ€
                 water.io_high_last_status = -1;
-                water.io_low_status = -1;//¼ÇÂ¼IO2×´Ì¬,µÍÑ¹¿ª¹Ø×´Ì¬
+                water.io_low_status = -1;//è®°å½•IO2çŠ¶æ€,ä½å‹å¼€å…³çŠ¶æ€
                 water.io_low_last_status = -1;
             }
 
-        
+
         struct tm *gm_time = gmtime(&now);
         if ((gm_time->tm_hour == 3) && (gm_time->tm_min == 3) && (gm_time->tm_sec == 3))
         {
             void EDP_SendFilter(void);
             EDP_SendFilter();
         }
-        
+
         /* This task should execute every 50 milliseconds. Time is measured
         in ticks. The pdMS_TO_TICKS macro is used to convert milliseconds
         into ticks. xLastWakeTime is automatically updated within vTaskDelayUntil()
@@ -898,10 +895,10 @@ static void EXTI4_15_Config(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
   GPIO_Init(GPIOA, &GPIO_InitStructure);
-  
+
   /* Connect EXTI6 Line to PA6 pin */
   SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource6);
-  
+
   /* Configure EXTI6 line */
   EXTI_InitStructure.EXTI_Line = EXTI_Line6;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
@@ -923,21 +920,21 @@ static void prvSetupHardware( void )
     STM_EVAL_LEDInit(BUSH_LED);
 
     //STM_EVAL_LEDOff(RUN_LED);
-    
+
     STM_EVAL_LEDOff(BUSH_LED);
-    
-    STM_EVAL_PBInit(BUTTON_KEY, BUTTON_MODE_EXTI);//°´æIé_êP
-    
+
+    STM_EVAL_PBInit(BUTTON_KEY, BUTTON_MODE_EXTI);//æŒ‰éµé–‹é—œ
+
     BEEP_Config();
     BEEP_OFF;
-    
+
     I2C_Config();
 #ifndef TDA_AB_TOGGLE
     I2C_EE_Config();
-    E2WP_DISABLE;//keyi xie 
+    E2WP_DISABLE;//keyi xie
 #endif
 }
-    
+
 static void RCC_Configuration(void)
 {
     RCC_DeInit();
@@ -945,24 +942,24 @@ static void RCC_Configuration(void)
 	RCC_HSICmd(ENABLE);
 	while(RCC_GetFlagStatus(RCC_FLAG_HSIRDY) == RESET)
 	{}
-	
+
 	/* Enable Prefetch Buffer */
 	FLASH_PrefetchBufferCmd(ENABLE);
 	/* set Flash Latency, 0-24M: FLASH_Latency_0, 24M < sysclk <48M: FLASH_Latency_1*/
 	FLASH_SetLatency(FLASH_Latency_1);
-	
+
 	/* Configures the AHB clock (HCLK)  */
 	RCC_HCLKConfig(RCC_CFGR_HPRE_DIV1);
-	
+
 	/* Configures the APB clock (PCLK) */
 	RCC_PCLKConfig(RCC_CFGR_PPRE_DIV1);
-	
+
 	/* Configures PLL source, (8M/2) * 12 = 48M */
-	RCC_PLLConfig(RCC_CFGR_PLLSRC_HSI_DIV2, RCC_CFGR_PLLMULL12); 
+	RCC_PLLConfig(RCC_CFGR_PLLSRC_HSI_DIV2, RCC_CFGR_PLLMULL12);
 	RCC_PLLCmd(ENABLE);
 	while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
 	{}
-	
+
 	/* Configures system clock source */
 	RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
     /* Wait till PLL is used as system clock source */
@@ -970,29 +967,29 @@ static void RCC_Configuration(void)
     {}
 }
 
-//ÑÓÊ±nus
-//nusÎªÒªÑÓÊ±µÄusÊı.                                             
+//å»¶æ—¶nus
+//nusä¸ºè¦å»¶æ—¶çš„usæ•°.
 void wait_us(int us)
 {
     uint32_t ticks;
     uint32_t told, tnow, tcnt = 0;
-    uint32_t reload = SysTick->LOAD;//LOADµÄÖµ
-    
-    ticks = us * (SystemCoreClock / 1000000);//ĞèÒªµÄ½ÚÅÄÊı             
+    uint32_t reload = SysTick->LOAD;//LOADçš„å€¼
+
+    ticks = us * (SystemCoreClock / 1000000);//éœ€è¦çš„èŠ‚æ‹æ•°
     tcnt = 0;
-    told = SysTick->VAL;//¸Õ½øÈëÊ±µÄ¼ÆÊıÆ÷Öµ
+    told = SysTick->VAL;//åˆšè¿›å…¥æ—¶çš„è®¡æ•°å™¨å€¼
     for (;;)
     {
-        tnow = SysTick->VAL;  
+        tnow = SysTick->VAL;
         if (tnow != told)
         {
             if (tnow < told)
-                tcnt += told - tnow;//ÕâÀï×¢ÒâÒ»ÏÂSYSTICKÊÇÒ»¸öµİ¼õµÄ¼ÆÊıÆ÷¾Í¿ÉÒÔÁË.
-            else 
+                tcnt += told - tnow;//è¿™é‡Œæ³¨æ„ä¸€ä¸‹SYSTICKæ˜¯ä¸€ä¸ªé€’å‡çš„è®¡æ•°å™¨å°±å¯ä»¥äº†.
+            else
                 tcnt += reload - tnow + told;
             told = tnow;
             if (tcnt >= ticks)
-                break;//Ê±¼ä³¬¹ı/µÈÓÚÒªÑÓ³ÙµÄÊ±¼ä,ÔòÍË³ö.
+                break;//æ—¶é—´è¶…è¿‡/ç­‰äºè¦å»¶è¿Ÿçš„æ—¶é—´,åˆ™é€€å‡º.
         }
     }
 }
@@ -1017,7 +1014,7 @@ static void IWDG_Config(void)
         /* IWDGRST flag set */
         /* Turn on LED1 */
         //STM_EVAL_LEDOn(LED1);
-        
+
         /* Clear reset flags */
         RCC_ClearFlag();
     }
@@ -1027,31 +1024,31 @@ static void IWDG_Config(void)
         /* Turn off LED1 */
         //STM_EVAL_LEDOff(LED1);
     }
-    
+
 #ifdef LSI_TIM_MEASURE
     extern __IO uint16_t CaptureNumber;
     void TIM14_ConfigForLSI(void);
 
     /* TIM Configuration -------------------------------------------------------*/
     TIM14_ConfigForLSI();
-    
+
     /* Wait until the TIM14 get 2 LSI edges */
     while(CaptureNumber != 2)
     {
     }
-    
+
     /* Disable TIM14 CC1 Interrupt Request */
     TIM_ITConfig(TIM14, TIM_IT_CC1, DISABLE);
 #endif /* LSI_TIM_MEASURE */
-    
+
     /* IWDG timeout equal to 250 ms (the timeout may varies due to LSI frequency
     dispersion) */
     /* Enable write access to IWDG_PR and IWDG_RLR registers */
     IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
-    
+
     /* IWDG counter clock: LSI/32 */
     IWDG_SetPrescaler(IWDG_Prescaler_32);
-    
+
     /* Set counter reload value to obtain 250ms IWDG TimeOut.
     Counter Reload Value = 250ms/IWDG counter clock period
     = 250ms / (LSI/32)
@@ -1060,10 +1057,10 @@ static void IWDG_Config(void)
     = LsiFreq/128
     */
     IWDG_SetReload(LsiFreq/16);//1s
-    
+
     /* Reload IWDG counter */
     IWDG_ReloadCounter();
-    
+
     /* Enable IWDG (the LSI oscillator will be enabled by hardware) */
     IWDG_Enable();
 }
@@ -1078,52 +1075,52 @@ static void TIM14_ConfigForLSI(void)
 {
     NVIC_InitTypeDef NVIC_InitStructure;
     TIM_ICInitTypeDef  TIM_ICInitStructure;
-    
+
     /* Enable peripheral clocks ------------------------------------------------*/
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
-    
+
     /* Allow access to the RTC */
     PWR_BackupAccessCmd(ENABLE);
-    
+
     /* Reset RTC Domain */
     RCC_BackupResetCmd(ENABLE);
     RCC_BackupResetCmd(DISABLE);
-    
+
     /*!< LSI Enable */
     RCC_LSICmd(ENABLE);
-    
+
     /*!< Wait till LSI is ready */
     while (RCC_GetFlagStatus(RCC_FLAG_LSIRDY) == RESET)
     {}
-    
+
     /* Select the RTC Clock Source */
     RCC_RTCCLKConfig(RCC_RTCCLKSource_LSI);
-    
+
     /* Enable the RTC Clock */
     RCC_RTCCLKCmd(ENABLE);
-    
+
     /* Wait for RTC APB registers synchronisation */
     RTC_WaitForSynchro();
-    
+
     /* Enable TIM14 clocks */
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM14, ENABLE);  
-    
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM14, ENABLE);
+
     /* Enable the TIM14 Interrupt */
     NVIC_InitStructure.NVIC_IRQChannel = TIM14_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
-    
+
     /* Configure TIM14 prescaler */
     TIM_PrescalerConfig(TIM14, 0, TIM_PSCReloadMode_Immediate);
-    
+
     /* Connect internally the TM14_CH1 Input Capture to the LSI clock output */
     TIM_RemapConfig(TIM14, TIM14_RTC_CLK);
-    
+
     /* TIM14 configuration: Input Capture mode ---------------------
     The LSI oscillator is connected to TIM14 CH1
     The Rising edge is used as active edge,
-    The TIM14 CCR1 is used to compute the frequency value 
+    The TIM14 CCR1 is used to compute the frequency value
     ------------------------------------------------------------ */
     TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;
     TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;
@@ -1131,15 +1128,15 @@ static void TIM14_ConfigForLSI(void)
     TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV8;
     TIM_ICInitStructure.TIM_ICFilter = 0;
     TIM_ICInit(TIM14, &TIM_ICInitStructure);
-    
+
     /* TIM14 Counter Enable */
     TIM_Cmd(TIM14, ENABLE);
-    
+
     /* Reset the flags */
     TIM14->SR = 0;
-    
-    /* Enable the CC1 Interrupt Request */  
-    TIM_ITConfig(TIM14, TIM_IT_CC1, ENABLE);  
+
+    /* Enable the CC1 Interrupt Request */
+    TIM_ITConfig(TIM14, TIM_IT_CC1, ENABLE);
 }
 #endif /* LSI_TIM_MEASURE */
 
@@ -1153,13 +1150,13 @@ static void TIM_CaptureConfig(void)
   TIM_ICInitTypeDef  TIM_ICInitStructure;
   GPIO_InitTypeDef GPIO_InitStructure;
   NVIC_InitTypeDef NVIC_InitStructure;
-  
+
   /* TIM3 clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
   /* GPIOA clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-  
+
   /* TIM3 channel 1 pin (PA6) configuration */
   GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_6;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
@@ -1170,34 +1167,34 @@ static void TIM_CaptureConfig(void)
 
   /* Connect TIM pins to AF1 */
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_1);
-  
+
   /* TIM3 configuration: Input Capture mode ---------------------
-     The external signal is connected to TIM3 CH1 pin (PA.06)  
+     The external signal is connected to TIM3 CH1 pin (PA.06)
      The Rising edge is used as active edge,
-     The TIM3 CCR1 is used to compute the frequency value 
+     The TIM3 CCR1 is used to compute the frequency value
   ------------------------------------------------------------ */
 
-  TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;//Í¨µÀÑ¡Ôñ
-  TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;//ÉÏÉıÑØ´¥·¢
-  TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;//¹Ü½ÅÓë¼Ä´æÆ÷¶ÔÓ¦¹ØÏµ
-  TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;//ÊäÈëÔ¤·ÖÆµ£¬ÒâË¼ÊÇ¿ØÖÆÔÚ¶àÉÙ¸öÊäÈëÖÜÆÚ×öÒ»¸ö²¶»ñ£¬Èç¹ûÊäÈëµÄĞÅºÅÆµÂÊÃ»ÓĞ±ä£¬²âµÃµÄÖÜÆÚÒ²²»»á±ä£¬±ÈÈçÑ¡ÔñËÄ·ÖÆµ£¬ÔòÃ»ËÄ¸öÊäÈëÖÜÆÚ×öÒ»´Î²¶»ñ£¬Õâ°ºÔÙÊäÈëĞÅºÅ²»Æµ·±µÄÇé¿öÏÂ£¬¿ÉÒÔ¼õÉÙÈí¼ş±»²»¶ÏÖĞ¶ÏµÄ´ÎÊı
-  TIM_ICInitStructure.TIM_ICFilter = 0x0;//ÂË²¨ÉèÖÃ£¬¾­Àú¼¸¸öÖÜÆÚÌø±äÈÏ¶¨²¨ĞÎÎÈ¶¨0x0-0xf;
+  TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;//é€šé“é€‰æ‹©
+  TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;//ä¸Šå‡æ²¿è§¦å‘
+  TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;//ç®¡è„šä¸å¯„å­˜å™¨å¯¹åº”å…³ç³»
+  TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;//è¾“å…¥é¢„åˆ†é¢‘ï¼Œæ„æ€æ˜¯æ§åˆ¶åœ¨å¤šå°‘ä¸ªè¾“å…¥å‘¨æœŸåšä¸€ä¸ªæ•è·ï¼Œå¦‚æœè¾“å…¥çš„ä¿¡å·é¢‘ç‡æ²¡æœ‰å˜ï¼Œæµ‹å¾—çš„å‘¨æœŸä¹Ÿä¸ä¼šå˜ï¼Œæ¯”å¦‚é€‰æ‹©å››åˆ†é¢‘ï¼Œåˆ™æ²¡å››ä¸ªè¾“å…¥å‘¨æœŸåšä¸€æ¬¡æ•è·ï¼Œè¿™æ˜‚å†è¾“å…¥ä¿¡å·ä¸é¢‘ç¹çš„æƒ…å†µä¸‹ï¼Œå¯ä»¥å‡å°‘è½¯ä»¶è¢«ä¸æ–­ä¸­æ–­çš„æ¬¡æ•°
+  TIM_ICInitStructure.TIM_ICFilter = 0x0;//æ»¤æ³¢è®¾ç½®ï¼Œç»å†å‡ ä¸ªå‘¨æœŸè·³å˜è®¤å®šæ³¢å½¢ç¨³å®š0x0-0xf;
 
   TIM_ICInit(TIM3, &TIM_ICInitStructure);
-  
-//    //×¢£¨Ò»£©£ºÈôÏë¸Ä±ä²âÁ¿µÄPWMÆµÂÊ·¶Î§£¬¿É½«TIMÊ±ÖÓÆµÂÊ×ö·ÖÆµ´¦Àí 
-//    TIM_TimeBaseStructure.TIM_Period = 0xFFFF;     //ÖÜÆÚ0¡«FFFF 
-//    TIM_TimeBaseStructure.TIM_Prescaler = 5;       //Ê±ÖÓ·ÖÆµ£¬·ÖÆµÊıÎª5+1¼´6·ÖÆµ 
-//    TIM_TimeBaseStructure.TIM_ClockDivision = 0;   //Ê±ÖÓ·Ö¸î 
-//    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;//Ä£Ê½ 
-//    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);//»ù±¾³õÊ¼»¯ 
-  
+
+//    //æ³¨ï¼ˆä¸€ï¼‰ï¼šè‹¥æƒ³æ”¹å˜æµ‹é‡çš„PWMé¢‘ç‡èŒƒå›´ï¼Œå¯å°†TIMæ—¶é’Ÿé¢‘ç‡åšåˆ†é¢‘å¤„ç†
+//    TIM_TimeBaseStructure.TIM_Period = 0xFFFF;     //å‘¨æœŸ0ï½FFFF
+//    TIM_TimeBaseStructure.TIM_Prescaler = 5;       //æ—¶é’Ÿåˆ†é¢‘ï¼Œåˆ†é¢‘æ•°ä¸º5+1å³6åˆ†é¢‘
+//    TIM_TimeBaseStructure.TIM_ClockDivision = 0;   //æ—¶é’Ÿåˆ†å‰²
+//    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;//æ¨¡å¼
+//    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);//åŸºæœ¬åˆå§‹åŒ–
+
   /* TIM enable counter */
   TIM_Cmd(TIM3, ENABLE);
 
   /* Enable the CC1 Interrupt Request */
   TIM_ITConfig(TIM3, TIM_IT_CC1, ENABLE);
-  
+
   /* Enable the TIM3 global Interrupt */
   NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPriority = 0;
@@ -1206,11 +1203,11 @@ static void TIM_CaptureConfig(void)
 }
 
 /*
-* buffer°´Ê®Áù½øÖÆÊä³ö
+* bufferæŒ‰åå…­è¿›åˆ¶è¾“å‡º
 */
 void hexdump(const unsigned char *buf, uint32_t num)
 {
-    for (uint32_t i = 0; i < num; i++) 
+    for (uint32_t i = 0; i < num; i++)
     {
         printf("%02X ", buf[i]);
         if ((i+1)%8 == 0)
@@ -1239,9 +1236,9 @@ void EN2_Config(void)
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_EN2_PORT, ENABLE);
     GPIO_InitStructure.GPIO_Pin 	= EN2_PIN ;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; 
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; 
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
     GPIO_Init(EN2_PORT, &GPIO_InitStructure);
 }
 
@@ -1252,9 +1249,9 @@ void BEEP_Config(void)
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_BEEP_PORT, ENABLE);
     GPIO_InitStructure.GPIO_Pin 	= BEEP_PIN ;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; 
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN; 
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
     GPIO_Init(BEEP_PORT, &GPIO_InitStructure);
 }
 
@@ -1262,72 +1259,72 @@ void BEEP_Config(void)
 
 void TIM3_Int_Init(uint16_t arr, uint16_t psc);
 
-//FreeRTOSÊ±¼äÍ³¼ÆËùÓÃµÄ½ÚÅÄ¼ÆÊıÆ÷
+//FreeRTOSæ—¶é—´ç»Ÿè®¡æ‰€ç”¨çš„èŠ‚æ‹è®¡æ•°å™¨
 volatile unsigned long long FreeRTOSRunTimeTicks;
 
-//³õÊ¼»¯TIM3Ê¹ÆäÎªFreeRTOSµÄÊ±¼äÍ³¼ÆÌá¹©Ê±»ù
+//åˆå§‹åŒ–TIM3ä½¿å…¶ä¸ºFreeRTOSçš„æ—¶é—´ç»Ÿè®¡æä¾›æ—¶åŸº
 void ConfigureTimeForRunTimeStats(void)
 {
 /* -----------------------------------------------------------------------
     TIM3 Configuration: Output Compare Timing Mode:
-    
-    In this example TIM3 input clock (TIM3CLK) is set to 2 * APB1 clock (PCLK1), 
-    since APB1 prescaler is different from 1.   
-      TIM3CLK = 2 * PCLK1  
-      PCLK1 = HCLK / 4 
+
+    In this example TIM3 input clock (TIM3CLK) is set to 2 * APB1 clock (PCLK1),
+    since APB1 prescaler is different from 1.
+      TIM3CLK = 2 * PCLK1
+      PCLK1 = HCLK / 4
       => TIM3CLK = HCLK / 2 = SystemCoreClock /2
-          
+
     To get TIM3 counter clock at 1 MHz, the prescaler is computed as follows:
        Prescaler = (TIM3CLK / TIM3 counter clock) - 1
        Prescaler = ((SystemCoreClock /2) /1 MHz) - 1
 */
-	//¶¨Ê±Æ÷3³õÊ¼»¯£¬¶¨Ê±Æ÷Ê±ÖÓÎª84M£¬·ÖÆµÏµÊıÎª84-1£¬ËùÒÔ¶¨Ê±Æ÷3µÄÆµÂÊ
-	//Îª84M/84=1M£¬×Ô¶¯ÖØ×°ÔØÎª50-1£¬ÄÇÃ´¶¨Ê±Æ÷ÖÜÆÚ¾ÍÊÇ50us
+	//å®šæ—¶å™¨3åˆå§‹åŒ–ï¼Œå®šæ—¶å™¨æ—¶é’Ÿä¸º84Mï¼Œåˆ†é¢‘ç³»æ•°ä¸º84-1ï¼Œæ‰€ä»¥å®šæ—¶å™¨3çš„é¢‘ç‡
+	//ä¸º84M/84=1Mï¼Œè‡ªåŠ¨é‡è£…è½½ä¸º50-1ï¼Œé‚£ä¹ˆå®šæ—¶å™¨å‘¨æœŸå°±æ˜¯50us
 	FreeRTOSRunTimeTicks = 0;
     /* Compute the prescaler value */
     uint16_t rescalerValue = (uint16_t) ((SystemCoreClock / 2) / 1000000) - 1;
-	TIM3_Int_Init(50-1, rescalerValue);	//³õÊ¼»¯TIM3
+	TIM3_Int_Init(50-1, rescalerValue);	//åˆå§‹åŒ–TIM3
 }
 /*-----------------------------------------------------------*/
 
-//Í¨ÓÃ¶¨Ê±Æ÷3ÖĞ¶Ï³õÊ¼»¯
-//ÕâÀïÊ±ÖÓÑ¡ÔñÎªAPB1µÄ2±¶£¬¶øAPB1Îª36M
-//arr£º×Ô¶¯ÖØ×°Öµ¡£
-//psc£ºÊ±ÖÓÔ¤·ÖÆµÊı
-//ÕâÀïÊ¹ÓÃµÄÊÇ¶¨Ê±Æ÷3!
+//é€šç”¨å®šæ—¶å™¨3ä¸­æ–­åˆå§‹åŒ–
+//è¿™é‡Œæ—¶é’Ÿé€‰æ‹©ä¸ºAPB1çš„2å€ï¼Œè€ŒAPB1ä¸º36M
+//arrï¼šè‡ªåŠ¨é‡è£…å€¼ã€‚
+//pscï¼šæ—¶é’Ÿé¢„åˆ†é¢‘æ•°
+//è¿™é‡Œä½¿ç”¨çš„æ˜¯å®šæ—¶å™¨3!
 void TIM3_Int_Init(uint16_t arr,uint16_t psc)
 {
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 
-    //ÖĞ¶ÏÓÅÏÈ¼¶NVICÉèÖÃ
+    //ä¸­æ–­ä¼˜å…ˆçº§NVICè®¾ç½®
 	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
-    
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE); //Ê±ÖÓÊ¹ÄÜ
-	
-	//¶¨Ê±Æ÷TIM3³õÊ¼»¯
-	TIM_TimeBaseStructure.TIM_Period = arr; //ÉèÖÃÔÚÏÂÒ»¸ö¸üĞÂÊÂ¼ş×°Èë»î¶¯µÄ×Ô¶¯ÖØ×°ÔØ¼Ä´æÆ÷ÖÜÆÚµÄÖµ	
-	TIM_TimeBaseStructure.TIM_Prescaler =psc; //ÉèÖÃÓÃÀ´×÷ÎªTIMxÊ±ÖÓÆµÂÊ³ıÊıµÄÔ¤·ÖÆµÖµ
-	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //ÉèÖÃÊ±ÖÓ·Ö¸î:TDTS = Tck_tim
-	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIMÏòÉÏ¼ÆÊıÄ£Ê½
-	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure); //¸ù¾İÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯TIMxµÄÊ±¼ä»ùÊıµ¥Î»
- 
-	TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE ); //Ê¹ÄÜÖ¸¶¨µÄTIM3ÖĞ¶Ï,ÔÊĞí¸üĞÂÖĞ¶Ï
-	TIM_Cmd(TIM3, ENABLE);  //Ê¹ÄÜTIMx
+
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE); //æ—¶é’Ÿä½¿èƒ½
+
+	//å®šæ—¶å™¨TIM3åˆå§‹åŒ–
+	TIM_TimeBaseStructure.TIM_Period = arr; //è®¾ç½®åœ¨ä¸‹ä¸€ä¸ªæ›´æ–°äº‹ä»¶è£…å…¥æ´»åŠ¨çš„è‡ªåŠ¨é‡è£…è½½å¯„å­˜å™¨å‘¨æœŸçš„å€¼
+	TIM_TimeBaseStructure.TIM_Prescaler =psc; //è®¾ç½®ç”¨æ¥ä½œä¸ºTIMxæ—¶é’Ÿé¢‘ç‡é™¤æ•°çš„é¢„åˆ†é¢‘å€¼
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //è®¾ç½®æ—¶é’Ÿåˆ†å‰²:TDTS = Tck_tim
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIMå‘ä¸Šè®¡æ•°æ¨¡å¼
+	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure); //æ ¹æ®æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–TIMxçš„æ—¶é—´åŸºæ•°å•ä½
+
+	TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE ); //ä½¿èƒ½æŒ‡å®šçš„TIM3ä¸­æ–­,å…è®¸æ›´æ–°ä¸­æ–­
+	TIM_Cmd(TIM3, ENABLE);  //ä½¿èƒ½TIMx
 }
 /*-----------------------------------------------------------*/
 
-//¶¨Ê±Æ÷3ÖĞ¶Ï·şÎñº¯Êı
+//å®šæ—¶å™¨3ä¸­æ–­æœåŠ¡å‡½æ•°
 void TIM3_IRQHandler(void)
 {
-	if(TIM_GetITStatus(TIM3, TIM_IT_Update)==SET) //Òç³öÖĞ¶Ï
+	if(TIM_GetITStatus(TIM3, TIM_IT_Update)==SET) //æº¢å‡ºä¸­æ–­
 	{
 		FreeRTOSRunTimeTicks++;
 	}
-	TIM_ClearITPendingBit(TIM3, TIM_IT_Update);  //Çå³ıÖĞ¶Ï±êÖ¾Î»
+	TIM_ClearITPendingBit(TIM3, TIM_IT_Update);  //æ¸…é™¤ä¸­æ–­æ ‡å¿—ä½
 }
 
 #endif
@@ -1360,8 +1357,8 @@ void vApplicationIdleHook( void )
 	important that vApplicationIdleHook() is permitted to return to its calling
 	function, because it is the responsibility of the idle task to clean up
 	memory allocated by the kernel to any task that has since been deleted. */
-    //Èç¹û²»ÏëĞŞ¸Ä¿ÕÈÎÎñ£¬»¹¿ÉÒÔÍ¨¹ı¿ÕÈÎÎñµÄ¹³×Óº¯Êı²åÈëÊµÏÖµÍ¹¦ºÄµÄ´úÂë¡£
-    //ÔÚ´ó¶àÊıÇ¶ÈëÊ½²Ù×÷ÏµÍ³ÖĞ¿ÉÒÔÔÚÏµÍ³µÎ´ğÖĞ¶Ïº¯ÊıÖĞÍË³öµÍ¹¦ºÄÄ£Ê½¡£ 
+    //å¦‚æœä¸æƒ³ä¿®æ”¹ç©ºä»»åŠ¡ï¼Œè¿˜å¯ä»¥é€šè¿‡ç©ºä»»åŠ¡çš„é’©å­å‡½æ•°æ’å…¥å®ç°ä½åŠŸè€—çš„ä»£ç ã€‚
+    //åœ¨å¤§å¤šæ•°åµŒå…¥å¼æ“ä½œç³»ç»Ÿä¸­å¯ä»¥åœ¨ç³»ç»Ÿæ»´ç­”ä¸­æ–­å‡½æ•°ä¸­é€€å‡ºä½åŠŸè€—æ¨¡å¼ã€‚
 }
 /*-----------------------------------------------------------*/
 
@@ -1385,9 +1382,9 @@ void vApplicationTickHook( void )
 	added here, but the tick hook is called from an interrupt context, so
 	code must not attempt to block, and only the interrupt safe FreeRTOS API
 	functions can be used (those that end in FromISR()). */
-    
-    static portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;//Õâ¸ö²ÎÊıÔÚµ÷ÓÃ xxxFromISR()Ç°±»ÉèÖÃÎª pdFALSE£¬Èç¹ûÔÚµ÷ÓÃÍê³Éºó±»ÖÃÎª pdTRUE£¬ÔòĞèÒª½øĞĞÒ»´ÎÉÏÏÂÎÄÇĞ»»¡£
-    
+
+    static portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;//è¿™ä¸ªå‚æ•°åœ¨è°ƒç”¨ xxxFromISR()å‰è¢«è®¾ç½®ä¸º pdFALSEï¼Œå¦‚æœåœ¨è°ƒç”¨å®Œæˆåè¢«ç½®ä¸º pdTRUEï¼Œåˆ™éœ€è¦è¿›è¡Œä¸€æ¬¡ä¸Šä¸‹æ–‡åˆ‡æ¢ã€‚
+
     //time.h
     extern clock_t clk_count;
     extern time_t time_dat;
@@ -1395,28 +1392,28 @@ void vApplicationTickHook( void )
     if ((clk_count % 1000) == 0) {
         time_dat++;
     }
-    
-    {//°´¼ü´¦Àí
+
+    {//æŒ‰é”®å¤„ç†
         static bool _keyUpFlag = false;
         static int _key_up_last_count = 0;
         extern bool key_fall_flag;
-        
-        if (true == key_fall_flag)//·¢Éú°´¼ü°´ÏÂÊÂ¼ş
+
+        if (true == key_fall_flag)//å‘ç”ŸæŒ‰é”®æŒ‰ä¸‹äº‹ä»¶
         {
-            static int _key_holdon_count = 0;//¼ÇÂ¼Ã¿Ò»´Î°´ÏÂµÄÊ±¼ä³¤¶È
-            if (STM_EVAL_PBGetState(BUTTON_KEY) == 0x00) //°´¼ü KEY//°´¼ü³ÖĞø°´ÏÂ
+            static int _key_holdon_count = 0;//è®°å½•æ¯ä¸€æ¬¡æŒ‰ä¸‹çš„æ—¶é—´é•¿åº¦
+            if (STM_EVAL_PBGetState(BUTTON_KEY) == 0x00) //æŒ‰é”® KEY//æŒ‰é”®æŒç»­æŒ‰ä¸‹
             {
                 if (_key_holdon_count <= 5000)
                 {
                     _key_holdon_count++;
                 }
-                else //°´¼ü°´ÏÂµ½2000ms¾ÍÅĞ¶Ï³¤°´Ê±¼ä³ÉÁ¢£¬Éú³É³¤°´±êÖ¾ 
+                else //æŒ‰é”®æŒ‰ä¸‹åˆ°2000mså°±åˆ¤æ–­é•¿æŒ‰æ—¶é—´æˆç«‹ï¼Œç”Ÿæˆé•¿æŒ‰æ ‡å¿—
                 {
-                    key_fall_flag = false;//Çå°´¼ü°´ÏÂ±êÖ¾ 
-                    _key_holdon_count = 0; 
+                    key_fall_flag = false;//æ¸…æŒ‰é”®æŒ‰ä¸‹æ ‡å¿—
+                    _key_holdon_count = 0;
                     //printf("LONG\r\n");
                     KeyClick = LONG;
-                    
+
                     if ((water.is_overhaul_status != 1) && (water.is_drop_water_status != 1) && (water.is_power_on_status != 0) && (water.is_shortage_water_status != 1))
                     {
                         is_beep_on = true;
@@ -1426,7 +1423,7 @@ void vApplicationTickHook( void )
                         {
                             if( xTimerStartFromISR( xTestModeTimerHandler, &xHigherPriorityTaskWoken ) == pdPASS )
                             {
-                                // Ò»Ö±°´Ç¿ÖÆ³åÏ´°´Å¥5Ãë£¬Ôò½øÈë²âÊÔÄ£Ê½
+                                // ä¸€ç›´æŒ‰å¼ºåˆ¶å†²æ´—æŒ‰é’®5ç§’ï¼Œåˆ™è¿›å…¥æµ‹è¯•æ¨¡å¼
                                 water.is_test_mode_switch_off = 0;
                             }
                         }
@@ -1434,11 +1431,11 @@ void vApplicationTickHook( void )
                         {
                             if( xTimerStopFromISR( xTestModeTimerHandler, &xHigherPriorityTaskWoken ) == pdPASS )
                             {
-                                //Ò²¿ÉÒÔÔÙ°´×¡Ç¿³å°´Å¥5Ãë²»·Å£¬»Ö¸´µ½Ô­×´Ì¬
+                                //ä¹Ÿå¯ä»¥å†æŒ‰ä½å¼ºå†²æŒ‰é’®5ç§’ä¸æ”¾ï¼Œæ¢å¤åˆ°åŸçŠ¶æ€
                                 water.is_test_mode_switch_off = 1;
                             }
                         }
-                        
+
                         water.is_bushing_now = 0;
                         if( xTimerIsTimerActive( xForceFlushTimerHandler ) != pdFALSE )
                         {
@@ -1451,35 +1448,35 @@ void vApplicationTickHook( void )
                     }
                 }
             }
-            else //°´¼üÌ§Æğ
+            else //æŒ‰é”®æŠ¬èµ·
             {
-                if (_key_holdon_count > 50)//°´ÏÂÊ±¼ä´óÓÚ50ms£¬Éú³Éµ¥»÷±êÖ¾
+                if (_key_holdon_count > 50)//æŒ‰ä¸‹æ—¶é—´å¤§äº50msï¼Œç”Ÿæˆå•å‡»æ ‡å¿—
                 {
-                    key_fall_flag  = false;//Çå°´¼ü°´ÏÂ±êÖ¾
-                    _keyUpFlag = true;//µ¥»÷Ì§Æğ°´¼üºó£¬Éú³É°´¼üÌ§Æğ±êÖ¾ 
+                    key_fall_flag  = false;//æ¸…æŒ‰é”®æŒ‰ä¸‹æ ‡å¿—
+                    _keyUpFlag = true;//å•å‡»æŠ¬èµ·æŒ‰é”®åï¼Œç”ŸæˆæŒ‰é”®æŠ¬èµ·æ ‡å¿—
                     _key_holdon_count = 0;
-                    //¾àÀëÉÏ´Îµ¥»÷Ê±¼äÔÚ100~500msÖ®¼ä£¬ÔòÈÏÎª·¢ÉúÁ¬»÷ÊÂ¼ş
+                    //è·ç¦»ä¸Šæ¬¡å•å‡»æ—¶é—´åœ¨100~500msä¹‹é—´ï¼Œåˆ™è®¤ä¸ºå‘ç”Ÿè¿å‡»äº‹ä»¶
                     if (_key_up_last_count > 100 && _key_up_last_count < 500)
                     {
-                        _key_up_last_count = 0;//Èç¹ûÊÇÁ¬»÷ÊÂ¼şÁË£¬¾Í²»»áÔÙÊÇµ¥»÷ÊÂ¼ş
+                        _key_up_last_count = 0;//å¦‚æœæ˜¯è¿å‡»äº‹ä»¶äº†ï¼Œå°±ä¸ä¼šå†æ˜¯å•å‡»äº‹ä»¶
                         _keyUpFlag = false;//
                         //printf("DOUBLE\r\n");
                         KeyClick = DOUBLE;
                     }
                 }
-                else  //°´¼ü³ÖĞøÊ±¼äĞ¡ÓÚ50ms£¬ºöÂÔ
+                else  //æŒ‰é”®æŒç»­æ—¶é—´å°äº50msï¼Œå¿½ç•¥
                 {
-                    key_fall_flag  = false;//Çå°´¼ü°´ÏÂ±êÖ¾
+                    key_fall_flag  = false;//æ¸…æŒ‰é”®æŒ‰ä¸‹æ ‡å¿—
                     _key_holdon_count = 0;
-                    
-                    KeyClick = NONE;//¸²¸ÇÉÏÒ»´Î°´¼üÏûÏ¢
+
+                    KeyClick = NONE;//è¦†ç›–ä¸Šä¸€æ¬¡æŒ‰é”®æ¶ˆæ¯
                 }
             }
-        }// if(key_fall_flag==1)//·¢Éú°´¼ü°´ÏÂÊÂ¼ş
-        
-        if (_keyUpFlag)//µ¥»÷Ì§Æğºó£¬Æô¶¯¼ÆÊı£¬¼ÆÊıµ½500ms  
+        }// if(key_fall_flag==1)//å‘ç”ŸæŒ‰é”®æŒ‰ä¸‹äº‹ä»¶
+
+        if (_keyUpFlag)//å•å‡»æŠ¬èµ·åï¼Œå¯åŠ¨è®¡æ•°ï¼Œè®¡æ•°åˆ°500ms
             _key_up_last_count++;
-        if (_key_up_last_count > 500)//ÅĞ¶Ï±¾´Î°´ÏÂºÍÉÏ´Î°´ÏÂµÄÊ±¼ä£¬ÊÇ·ñ´óÓÚ500ms£¬Èç¹û´óÓÚËµÃ÷ÊÇµ¥»÷¡£µ¥»÷ÊÂ¼ş±ØĞë»áÓĞ500msµÄÊ±¼äÓÃÓÚÅĞ¶ÏÊÇ·ñ»áÓĞÏÂÒ»´ÎµÄµ¥»÷³öÏÖ£¬ÓÃÓÚÅĞ¶ÏÊÇ·ñÊÇË«»÷
+        if (_key_up_last_count > 500)//åˆ¤æ–­æœ¬æ¬¡æŒ‰ä¸‹å’Œä¸Šæ¬¡æŒ‰ä¸‹çš„æ—¶é—´ï¼Œæ˜¯å¦å¤§äº500msï¼Œå¦‚æœå¤§äºè¯´æ˜æ˜¯å•å‡»ã€‚å•å‡»äº‹ä»¶å¿…é¡»ä¼šæœ‰500msçš„æ—¶é—´ç”¨äºåˆ¤æ–­æ˜¯å¦ä¼šæœ‰ä¸‹ä¸€æ¬¡çš„å•å‡»å‡ºç°ï¼Œç”¨äºåˆ¤æ–­æ˜¯å¦æ˜¯åŒå‡»
         {
             _key_up_last_count = 0;
             _keyUpFlag = false;
@@ -1487,14 +1484,14 @@ void vApplicationTickHook( void )
             KeyClick = SHORT;
             if (((water.save.is_bind == 1) || (water.is_test_mode_switch_off == 0) ) && (water.is_overhaul_status != 1) && (water.is_drop_water_status != 1) && (water.is_power_on_status != 0) && (water.is_shortage_water_status != 1))
             {
-                
-                //Èç¹ûÔÚÔËĞĞµÄ»°
-                
+
+                //å¦‚æœåœ¨è¿è¡Œçš„è¯
+
                 if( xTimerIsTimerActive( xForceFlushTimerHandler ) == pdFALSE )
                 {
                     if( xTimerStartFromISR( xForceFlushTimerHandler, &xHigherPriorityTaskWoken ) == pdPASS )
                     {
-                        //ÓÃ»§°´ÏÂÇ¿³å°´Å¥Ôò½øĞĞ18ÃëµÄÇ¿ÖÆ³åÏ´
+                        //ç”¨æˆ·æŒ‰ä¸‹å¼ºå†²æŒ‰é’®åˆ™è¿›è¡Œ18ç§’çš„å¼ºåˆ¶å†²æ´—
                         water.is_bushing_now = 1;
                         is_beep_on = true;
                     }
@@ -1502,8 +1499,8 @@ void vApplicationTickHook( void )
             }
         }
     }
-    
-	//Èç¹ûÎª pdTRUE£¬ÔòÔÚÖĞ¶ÏÍË³öÇ°Ó¦µ±½øĞĞÒ»´ÎÉÏÏÂÎÄÇĞ»»¡£ÕâÑù²ÅÄÜ±£Ö¤ÖĞ¶ÏÖ±½Ó·µ»Øµ½¾ÍĞ÷Ì¬ÈÎÎñÖĞÓÅÏÈ¼¶×î¸ßµÄÈÎÎñÖĞ¡£
+
+	//å¦‚æœä¸º pdTRUEï¼Œåˆ™åœ¨ä¸­æ–­é€€å‡ºå‰åº”å½“è¿›è¡Œä¸€æ¬¡ä¸Šä¸‹æ–‡åˆ‡æ¢ã€‚è¿™æ ·æ‰èƒ½ä¿è¯ä¸­æ–­ç›´æ¥è¿”å›åˆ°å°±ç»ªæ€ä»»åŠ¡ä¸­ä¼˜å…ˆçº§æœ€é«˜çš„ä»»åŠ¡ä¸­ã€‚
 	portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 }
 
@@ -1517,10 +1514,10 @@ void vApplicationTickHook( void )
 * @retval None
 */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
+{
     /* User can add his own implementation to report the file name and line number,
     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-    
+
     /* Infinite loop */
     while (1)
     {

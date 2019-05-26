@@ -46,7 +46,8 @@ typedef enum {
     CMD_REMOTE_UPGRADE_NEW = 0x8A,//下次启动设备时是否运行新固件
     CMD_REMOTE_UPGRADE_SWITCH = 0x9A,//运行固件切换
     CMD_SCREEN_MODE_SWITCH = 0x5A,//屏幕显示模式切换0x5A
-    CMD_OVERHAUL_STATUS_SWITCH = 0x6A//检修状态切换0x6A
+    CMD_OVERHAUL_STATUS_SWITCH = 0x6A,//检修状态切换0x6A
+    CMD_GET_DEVICE_WORK_STATUS = 0x1C,//获取设备工作状态0x1c
 }cmd_type_t;
 
 typedef int (*cmd_process_cb)(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len);
@@ -97,6 +98,7 @@ extern int cmd_remote_upgrade_new(uint8_t* out_buf, int* out_len, uint8_t* in_bu
 extern int cmd_remote_upgrade_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len);//0x9A,//33、运行固件切换
 extern int cmd_screen_mode_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len);//0x5A,//屏幕显示模式切换
 extern int cmd_overhaul_status_switch(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len);//0x6A,//检修状态切换0x6A
+extern int cmd_get_device_work_status(uint8_t* out_buf, int* out_len, uint8_t* in_buf, int in_len);//0x1c, 获取设备工作状态0x1c
 
 struct screen_mode_switch_t{
     uint8_t day;//0x00	已用天数   0x01	剩余天数

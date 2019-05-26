@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-//i2cÈí¼şÄ£Äâ
+//i2cè½¯ä»¶æ¨¡æ‹Ÿ
 #include "stm32f0xx.h"
 
 #define NO_ERROR            0x00
@@ -12,7 +12,7 @@
 #define NULL_ERROR          0x03
 #define TIME_OUT_ERROR		0x04
 
-/* ----------------------¸ù¾İĞèÒªĞŞ¸Ä-------------------------------------*/
+/* ----------------------æ ¹æ®éœ€è¦ä¿®æ”¹-------------------------------------*/
 #define SCL_PIN 		            GPIO_Pin_11
 #define SDA_PIN 		            GPIO_Pin_12
 #define I2C_PORT 		            GPIOA
@@ -40,7 +40,7 @@
 /* ------------------------------------------------------------------*/
 #define SCL_H         do{GPIO_SetBits(I2C_PORT, SCL_PIN);}while(__LINE__==-1)
 #define SCL_L         do{GPIO_ResetBits(I2C_PORT, SCL_PIN);}while(__LINE__==-1)
-   
+
 #define SDA_H         do{GPIO_SetBits(I2C_PORT, SDA_PIN);}while(__LINE__==-1)
 #define SDA_L         do{GPIO_ResetBits(I2C_PORT, SDA_PIN);}while(__LINE__==-1)
 
@@ -62,7 +62,7 @@ int I2C_ReadBytesAfterCommand(uint8_t slaveAddr, uint8_t *const pregValue, int l
 int I2C_WriteRegisterBytes(uint8_t slaveAddr, uint8_t regAddr, const uint8_t *const pregValue, int len);
 int I2C_ReadRegisterBytes(uint8_t slaveAddr, uint8_t regAddr, uint8_t *const pregValue, int len);
 
-#endif 
+#endif
 
 
 

@@ -15,48 +15,48 @@ static void ADC_Config(void)
 {
   ADC_InitTypeDef     ADC_InitStructure;
   GPIO_InitTypeDef    GPIO_InitStructure;
-  
+
   /* GPIOA Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-  
+
    /* ADC1 Periph clock enable */
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
-  
+
   /* Configure ADC1 Channel0, Channel1 and channel2 as analog input */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
   GPIO_Init(GPIOA, &GPIO_InitStructure);
-  
-  /* ADC1 DeInit */  
+
+  /* ADC1 DeInit */
   ADC_DeInit(ADC1);
-  
+
   /* Initialize ADC structure */
   ADC_StructInit(&ADC_InitStructure);
-  
-  /* Configure the ADC1 in continuous mode withe a resolution equal to 12 bits  */
-  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;/*≈‰÷√ADC∑÷±Ê¬ Œ™12Œª*/
-  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE; /*ø™∆Ù¡¨–¯◊™ªª*/
-  ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;/*Ω˚÷π¥•∑¢ºÏ≤‚£¨ π”√»Ìº˛¥•∑¢*/
-  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;/*ADC≤…ºØ ˝æ›”“∂‘∆Î*/
-  ADC_InitStructure.ADC_ScanDirection = ADC_ScanDirection_Upward;/*œÚ…œ…®√Ë*/
-  ADC_Init(ADC1, &ADC_InitStructure); 
 
-  /* Convert the ADC1 Channel0, Channel1 and channel2 with 55.5 Cycles as sampling time */ 
-  ADC_ChannelConfig(ADC1, ADC_Channel_0 , ADC_SampleTime_55_5Cycles); 
-  ADC_ChannelConfig(ADC1, ADC_Channel_1 , ADC_SampleTime_55_5Cycles); 
-  ADC_ChannelConfig(ADC1, ADC_Channel_2 , ADC_SampleTime_55_5Cycles); 
-  
+  /* Configure the ADC1 in continuous mode withe a resolution equal to 12 bits  */
+  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;/*ÈÖçÁΩÆADCÂàÜËæ®Áéá‰∏∫12‰Ωç*/
+  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE; /*ÂºÄÂêØËøûÁª≠ËΩ¨Êç¢*/
+  ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;/*Á¶ÅÊ≠¢Ëß¶ÂèëÊ£ÄÊµãÔºå‰ΩøÁî®ËΩØ‰ª∂Ëß¶Âèë*/
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;/*ADCÈááÈõÜÊï∞ÊçÆÂè≥ÂØπÈΩê*/
+  ADC_InitStructure.ADC_ScanDirection = ADC_ScanDirection_Upward;/*Âêë‰∏äÊâ´Êèè*/
+  ADC_Init(ADC1, &ADC_InitStructure);
+
+  /* Convert the ADC1 Channel0, Channel1 and channel2 with 55.5 Cycles as sampling time */
+  ADC_ChannelConfig(ADC1, ADC_Channel_0 , ADC_SampleTime_55_5Cycles);
+  ADC_ChannelConfig(ADC1, ADC_Channel_1 , ADC_SampleTime_55_5Cycles);
+  ADC_ChannelConfig(ADC1, ADC_Channel_2 , ADC_SampleTime_55_5Cycles);
+
   /* ADC Calibration */
   ADC_GetCalibrationFactor(ADC1);
-  
+
   /* Enable the ADC peripheral */
-  ADC_Cmd(ADC1, ENABLE);     
-  
+  ADC_Cmd(ADC1, ENABLE);
+
   /* Wait the ADRDY flag */
-  //while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_ADRDY)); 
-  
-  /* ADC1 regular Software Start Conv */ 
+  //while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_ADRDY));
+
+  /* ADC1 regular Software Start Conv */
   //ADC_StartOfConversion(ADC1);
 }
 
@@ -82,29 +82,29 @@ void prvAdcTask( void *pvParameters )
 {
 	/* Just to stop compiler warnings. */
 	( void ) pvParameters;
-    
+
     /* ADC1 configuration */
     ADC_Config();
 
     STM_EVAL_LEDInit(RUN_LED);
     STM_EVAL_LEDOff(RUN_LED);
     TDS_A_L;
-            
+
 	for( ;; )
     {
         float adc_value = 0;
         static int count = 0;
-        
+
         if (count++ == 2)
         {
             count  = 0;
             TDS_A_L;
             //wait_us(500);
             vTaskDelay( pdMS_TO_TICKS(1) );
-            
+
             extern delay_show_tds_t delay_show_tds;
-            
-            //‘⁄÷∆ÀÆ«∞10s «≤ªª·∏¸–¬tds÷µµƒ°£
+
+            //Âú®Âà∂Ê∞¥Ââç10sÊòØ‰∏ç‰ºöÊõ¥Êñ∞tdsÂÄºÁöÑ„ÄÇ
             if (delay_show_tds.is_make_water == 0)
             {
                 raw_water_voltage = adc_value = (uint16_t)((float)ADC_Get_Result(ADC_Channel_1, 10)   * 3300 / 4095/* * 0.4 - 10.2*/);
@@ -112,21 +112,21 @@ void prvAdcTask( void *pvParameters )
                     water.raw_water_ppm = 0;
                 else
                     water.raw_water_ppm = (uint16_t)(adc_value*adc_value*0.0007+adc_value*0.2505+1.7221);
-                
+
                 clean_water_voltage = adc_value = (uint16_t)((float)ADC_Get_Result(ADC_Channel_0, 10)   * 3300 / 4095/* * 0.4 - 10.2*/);
                 if (adc_value < 6)
                     water.clean_water_ppm = 0;
                 else
                     water.clean_water_ppm = (uint16_t)(adc_value*adc_value*0.0007+adc_value*0.2505+1.7221);
             }
-            
+
             //wait_us(500);
             vTaskDelay( pdMS_TO_TICKS(1) );
-            
+
             TDS_A_H;
             vTaskDelay( pdMS_TO_TICKS(1) );
         }
-        
+
         if (ADC_Get_Result(ADC_Channel_2, 10) > (uint16_t)(1.5/3.3*4095))
         {
             water.is_drop_water_status = 1;
@@ -142,7 +142,7 @@ void prvAdcTask( void *pvParameters )
             is_drop_water_status = water.is_drop_water_status;
             is_send_device_status = true;
         }
-        
+
         vTaskDelay( pdMS_TO_TICKS(1000) );
     }
 }

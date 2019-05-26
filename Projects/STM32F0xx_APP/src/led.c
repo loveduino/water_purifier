@@ -4,9 +4,9 @@
 
 #include "led.h"
 #include "main.h"
-#include "protocol.h"      
+#include "protocol.h"
 
-//¶ÎÂë 0¡¢1¡¢2¡¢3¡¢4¡¢5¡¢6¡¢7¡¢8¡¢9¡¢A¡¢B¡¢C¡¢D¡¢E¡¢F¡¢Ãğ(16)¡¢-ÖĞ(17)¡¢_Æ«Ğ¡(18)¡¢¡¥Æ«´ó(19)
+//æ®µç  0ã€1ã€2ã€3ã€4ã€5ã€6ã€7ã€8ã€9ã€Aã€Bã€Cã€Dã€Eã€Fã€ç­(16)ã€-ä¸­(17)ã€_åå°(18)ã€Ë‰åå¤§(19)
 const uint8_t seg_code[] = {0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0x88,0x83,0xc6,0xa1,0x86,0x8e,0xFF,0xBF,0xF7,0xFE};
 static uint8_t g_value[24];
 
@@ -88,33 +88,33 @@ static led_clean_ppm_t led_clean_ppm = CLEAN_PPM_0;
 
 
 
-//¹²ÑôÊıÂë¹Ü£ºµÍµçÆ½Ñ¡ÔñÂë¶Î
+//å…±é˜³æ•°ç ç®¡ï¼šä½ç”µå¹³é€‰æ‹©ç æ®µ
 static void LED_SegInit(uint32_t RCC_AHBPeriph, GPIO_TypeDef* GPIOx, uint32_t GPIO_Pin)
 {
     GPIO_InitTypeDef  GPIO_InitStructure;
-    
+
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph, ENABLE);
-    
+
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
     GPIO_Init(GPIOx, &GPIO_InitStructure);
     GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_SET);
 }
 
-//¹²ÑôÊıÂë¹Ü£º¸ßµçÆ½Ñ¡ÔñÎ»
+//å…±é˜³æ•°ç ç®¡ï¼šé«˜ç”µå¹³é€‰æ‹©ä½
 static void LED_PosInit(uint32_t RCC_AHBPeriph, GPIO_TypeDef* GPIOx, uint32_t GPIO_Pin)
 {
     GPIO_InitTypeDef  GPIO_InitStructure;
-    
+
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph, ENABLE);
-    
+
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
     GPIO_Init(GPIOx, &GPIO_InitStructure);
     GPIO_WriteBit(GPIOx, GPIO_Pin, Bit_RESET);
@@ -129,7 +129,7 @@ static void LED_Init(void)
     LED_SegInit(N5_RCC_AHBPeriph_PORT, N5_PORT, N5_PIN);
     LED_SegInit(N6_RCC_AHBPeriph_PORT, N6_PORT, N6_PIN);
     LED_SegInit(N7_RCC_AHBPeriph_PORT, N7_PORT, N7_PIN);
-    
+
     LED_PosInit(D8_RCC_AHBPeriph_PORT, D8_PORT, D8_PIN);
     LED_PosInit(D9_RCC_AHBPeriph_PORT, D9_PORT, D9_PIN);
     LED_PosInit(D10_RCC_AHBPeriph_PORT, D10_PORT, D10_PIN);
@@ -156,7 +156,7 @@ static void LED_Init(void)
     LED_PosInit(D31_RCC_AHBPeriph_PORT, D31_PORT, D31_PIN);
 }
 
-//¹²ÑôÊıÂë¹Ü£ºµÍµçÆ½Ñ¡ÔñÂë¶Î
+//å…±é˜³æ•°ç ç®¡ï¼šä½ç”µå¹³é€‰æ‹©ç æ®µ
 static void seg_select(uint8_t seg, uint8_t val)
 {
     switch(seg)
@@ -168,11 +168,11 @@ static void seg_select(uint8_t seg, uint8_t val)
     case 4:  if(val==0)  N5_H;  else N5_L; break;
     case 5:  if(val==0)  N6_H;  else N6_L; break;
     case 6:  if(val==0)  N7_H;  else N7_L; break;
-    default:break; 
+    default:break;
     }
 }
 
-//¹²ÑôÊıÂë¹Ü£º¸ßµçÆ½Ñ¡ÔñÎ»
+//å…±é˜³æ•°ç ç®¡ï¼šé«˜ç”µå¹³é€‰æ‹©ä½
 static void pos_select(uint8_t pos, uint8_t val)
 {
     switch(pos)
@@ -201,7 +201,7 @@ static void pos_select(uint8_t pos, uint8_t val)
     case 21: if(val!=0)  D29_H; else D29_L; break;
     case 22: if(val!=0)  D30_H; else D30_L; break;
     case 23: if(val!=0)  D31_H; else D31_L; break;
-    default:break; 
+    default:break;
     }
 }
 
@@ -234,12 +234,12 @@ static void show_single_graph(uint8_t graph)
 void show_callback(void)
 {
     static uint8_t i = 0;
-    
-    g_value[23-8] = (uint8_t)led_multifunc;                                     //(())      ÏÔÊ¾¿ØÖÆ
-    g_value[24-8] = (uint8_t)led_drops & (uint8_t)led_signal;                   //'''ĞÅºÅ   ÏÔÊ¾¿ØÖÆ
-    g_value[30-8] = (uint8_t)led_time & (uint8_t)led_day & (uint8_t)led_flow & (uint8_t)led_liter & (uint8_t)led_raw_water & (uint8_t)led_raw_ppm_d30;//Ê±¼ä DAY Á÷Á¿ LITER Ô­Ë®ppm    ÏÔÊ¾¿ØÖÆ
-    g_value[31-8] = (uint8_t)led_raw_ppm_d31 & (uint8_t)led_clean_water & (uint8_t)led_clean_ppm;//ppm  ¾»Ë®ppm                   ÏÔÊ¾¿ØÖÆ
-    
+
+    g_value[23-8] = (uint8_t)led_multifunc;                                     //(())      æ˜¾ç¤ºæ§åˆ¶
+    g_value[24-8] = (uint8_t)led_drops & (uint8_t)led_signal;                   //'''ä¿¡å·   æ˜¾ç¤ºæ§åˆ¶
+    g_value[30-8] = (uint8_t)led_time & (uint8_t)led_day & (uint8_t)led_flow & (uint8_t)led_liter & (uint8_t)led_raw_water & (uint8_t)led_raw_ppm_d30;//æ—¶é—´ DAY æµé‡ LITER åŸæ°´ppm    æ˜¾ç¤ºæ§åˆ¶
+    g_value[31-8] = (uint8_t)led_raw_ppm_d31 & (uint8_t)led_clean_water & (uint8_t)led_clean_ppm;//ppm  å‡€æ°´ppm                   æ˜¾ç¤ºæ§åˆ¶
+
     switch(i)
     {
     case 0: pos_select( 23,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
@@ -257,15 +257,15 @@ void show_callback(void)
     case 12:pos_select(i-1,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
     case 13:pos_select(i-1,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
     case 14:pos_select(i-1,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
-    case 15:pos_select(i-1,0);pos_select(i,1);show_single_graph(g_value[i]);i++;break;//(())      ÏÔÊ¾¿ØÖÆ
-    case 16:pos_select(i-1,0);pos_select(i,1);show_single_graph(g_value[i]);i++;break;//'''ĞÅºÅ   ÏÔÊ¾¿ØÖÆ
+    case 15:pos_select(i-1,0);pos_select(i,1);show_single_graph(g_value[i]);i++;break;//(())      æ˜¾ç¤ºæ§åˆ¶
+    case 16:pos_select(i-1,0);pos_select(i,1);show_single_graph(g_value[i]);i++;break;//'''ä¿¡å·   æ˜¾ç¤ºæ§åˆ¶
     case 17:pos_select(i-1,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
     case 18:pos_select(i-1,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
     case 19:pos_select(i-1,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
     case 20:pos_select(i-1,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
     case 21:pos_select(i-1,0);pos_select(i,1);show_single_num(g_value[i]);i++;break;
-    case 22:pos_select(i-1,0);pos_select(i,1);show_single_graph(g_value[i]);i++;break;//Ê±¼ä DAY Á÷Á¿ LITER Ô­Ë®ppm    ÏÔÊ¾¿ØÖÆ
-    case 23:pos_select(i-1,0);pos_select(i,1);show_single_graph(g_value[i]);i=0;break;//ppm  ¾»Ë®ppm                   ÏÔÊ¾¿ØÖÆ
+    case 22:pos_select(i-1,0);pos_select(i,1);show_single_graph(g_value[i]);i++;break;//æ—¶é—´ DAY æµé‡ LITER åŸæ°´ppm    æ˜¾ç¤ºæ§åˆ¶
+    case 23:pos_select(i-1,0);pos_select(i,1);show_single_graph(g_value[i]);i=0;break;//ppm  å‡€æ°´ppm                   æ˜¾ç¤ºæ§åˆ¶
     default:i=0;break;
     }
 }
@@ -336,7 +336,7 @@ static void prvShowRefreshTask( void *pvParameters )
 {
     /* Just to stop compiler warnings. */
 	( void ) pvParameters;
-    
+
 	for( ;; )
 	{
         vTaskDelay( pdMS_TO_TICKS(1) );
@@ -349,11 +349,11 @@ void prvShowTask( void *pvParameters )
 {
 	/* Just to stop compiler warnings. */
 	( void ) pvParameters;
-    
+
     LED_Init();
-    
+
     xTaskCreate( prvShowRefreshTask, (char *) "Show Refresh", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 9, NULL );
-        
+
     int left_up_num = 0;
     int left_down_num = 0;
     int right_up_num = 0;
@@ -371,30 +371,30 @@ void prvShowTask( void *pvParameters )
     left_down_num =  num / 100000            % 100000;//5
     right_down_num = num / 1                 % 100000;//5
 #endif
-    //ÓÃ»§¼¤»îÉè±¸Ì×²ÍÖ®ºó£¬Ã¿´Î¶ÏµçÖØÆôÉè±¸Ê±£¬ÆÁÄ»¶¼»áÉÁË¸ÏÔÊ¾Éè±¸µÄÖ÷°å±àÂëĞÅÏ¢£¬ÏÔÊ¾Ê±¼äÎª15Ãë£¬15ÃëÖ®ºóÏÔÊ¾Õı³£ĞÅÏ¢¡£
+    //ç”¨æˆ·æ¿€æ´»è®¾å¤‡å¥—é¤ä¹‹åï¼Œæ¯æ¬¡æ–­ç”µé‡å¯è®¾å¤‡æ—¶ï¼Œå±å¹•éƒ½ä¼šé—ªçƒæ˜¾ç¤ºè®¾å¤‡çš„ä¸»æ¿ç¼–ç ä¿¡æ¯ï¼Œæ˜¾ç¤ºæ—¶é—´ä¸º15ç§’ï¼Œ15ç§’ä¹‹åæ˜¾ç¤ºæ­£å¸¸ä¿¡æ¯ã€‚
     for (int i = 0; i < 15; i++)
     {
         show_left_up(left_up_num, true);
         show_left_down(left_down_num, true);
         show_right_up(right_up_num, true);
         show_right_down(right_down_num, true);
-        
+
         vTaskDelay( pdMS_TO_TICKS(500) );
-        
+
         show_left_up(0, false);
         show_left_down(0, false);
         show_right_up(0, false);
         show_right_down(0, false);
-        
+
         vTaskDelay( pdMS_TO_TICKS(500) );
     }
-    
+
     for( ;; )
     {
         vTaskDelay( pdMS_TO_TICKS(100) );
-        
-        //Éè±¸µÚÒ»´ÎÆô¶¯£¬ÎªÎ´×¢²á×´Ì¬µÄ×´Ì¬ÏÂ£¬ÏÔÊ¾ÆÁ¢Ù¢Ú¢Û¢ÜÒ»Ö±ÏÔÊ¾Ö÷°åµÄÉè±¸±àÂëĞÅÏ¢£¬²¢½øĞĞÉÁË¸ÏÔÊ¾£¬Ö±µ½ÓÃ»§°ó¶¨Éè±¸Ö®ºó¼¤»îÌ×²Í¡£
-        //Èç¹ûÓÃ»§Ì×²ÍÒÑ¾­Ê¹ÓÃÍê£¬»òÕßÒÑµ½ÆÚ£¬ÔòÉè±¸×´Ì¬±äÎªÎ´¼¤»î×´Ì¬£¬Î´¼¤»î×´Ì¬ºÍÎ´×¢²á×´Ì¬£¬Ç··ÑÖ»ÈÃÏÔÊ¾Ê±¼ä»òÁ÷Á¿µÄµÈÉÁË¸
+
+        //è®¾å¤‡ç¬¬ä¸€æ¬¡å¯åŠ¨ï¼Œä¸ºæœªæ³¨å†ŒçŠ¶æ€çš„çŠ¶æ€ä¸‹ï¼Œæ˜¾ç¤ºå±â‘ â‘¡â‘¢â‘£ä¸€ç›´æ˜¾ç¤ºä¸»æ¿çš„è®¾å¤‡ç¼–ç ä¿¡æ¯ï¼Œå¹¶è¿›è¡Œé—ªçƒæ˜¾ç¤ºï¼Œç›´åˆ°ç”¨æˆ·ç»‘å®šè®¾å¤‡ä¹‹åæ¿€æ´»å¥—é¤ã€‚
+        //å¦‚æœç”¨æˆ·å¥—é¤å·²ç»ä½¿ç”¨å®Œï¼Œæˆ–è€…å·²åˆ°æœŸï¼Œåˆ™è®¾å¤‡çŠ¶æ€å˜ä¸ºæœªæ¿€æ´»çŠ¶æ€ï¼Œæœªæ¿€æ´»çŠ¶æ€å’Œæœªæ³¨å†ŒçŠ¶æ€ï¼Œæ¬ è´¹åªè®©æ˜¾ç¤ºæ—¶é—´æˆ–æµé‡çš„ç­‰é—ªçƒ
         if ((0 == water.save.is_bind) &&  (water.is_test_mode_switch_off == 1))
         {
             led_time = TIME_0;
@@ -406,15 +406,15 @@ void prvShowTask( void *pvParameters )
             led_raw_ppm_d31 = RAW_PPM_D31_0;
             led_clean_water = CLEAN_WATER_0;
             led_clean_ppm = CLEAN_PPM_0;
-            
+
             led_multifunc = MULTIFUNC_0;
             led_drops = DROPS_0;
             //led_signal = SIGNAL_0;
-            
+
             if (0 == water.is_screen_status_off)
             {
                 static uint8_t count_500ms = 0;
-                if (count_500ms++ >= 5)//ÉÁË¸ÏÔÊ¾Éè±¸±àÂë
+                if (count_500ms++ >= 5)//é—ªçƒæ˜¾ç¤ºè®¾å¤‡ç¼–ç 
                 {
                     count_500ms = 0;
                     static bool is_show = false;
@@ -440,7 +440,7 @@ void prvShowTask( void *pvParameters )
         }
         else
         {
-            if (1 == water.is_screen_status_off || (water.is_power_on_status == 0))//6	¹Ø»ú
+            if (1 == water.is_screen_status_off || (water.is_power_on_status == 0))//6	å…³æœº
             {
                 led_time = TIME_0;
                 led_day = DAY_0;
@@ -451,11 +451,11 @@ void prvShowTask( void *pvParameters )
                 led_raw_ppm_d31 = RAW_PPM_D31_0;
                 led_clean_water = CLEAN_WATER_0;
                 led_clean_ppm = CLEAN_PPM_0;
-                
+
                 led_multifunc = MULTIFUNC_0;
                 led_drops = DROPS_0;
                 led_signal = SIGNAL_0;
-                
+
                 show_left_up(0, 0);
                 show_left_down(0, 0);
                 show_right_up(0, 0);
@@ -472,20 +472,20 @@ void prvShowTask( void *pvParameters )
                 led_raw_ppm_d31 = RAW_PPM_D31_1;
                 led_clean_water = CLEAN_WATER_1;
                 led_clean_ppm = CLEAN_PPM_1;
-                
+
                 if (!edp.is_tcpip_connect)
                     led_signal = SIGNAL_0;
                 else
                     led_signal = SIGNAL_1;
-                
+
                 static uint8_t count_200ms = 0;
                 if (count_200ms++ >= 2)
                 {
                     count_200ms = 0;
 
-                    if (1 == water.is_drop_water_status)//Â©Ë®£¨´«¸ĞÆ÷£©
+                    if (1 == water.is_drop_water_status)//æ¼æ°´ï¼ˆä¼ æ„Ÿå™¨ï¼‰
                     {
-                        //¶à¹¦ÄÜµÆÏ¨Ãğ£¬Ë®µÎµÆ´ÓÉÏÍùÏÂÉÁË¸ËµÃ÷Â©Ë®±£»¤¿ªÆô
+                        //å¤šåŠŸèƒ½ç¯ç†„ç­ï¼Œæ°´æ»´ç¯ä»ä¸Šå¾€ä¸‹é—ªçƒè¯´æ˜æ¼æ°´ä¿æŠ¤å¼€å¯
                         led_multifunc = MULTIFUNC_0;
                         static uint8_t n = 0;
                         switch (n)
@@ -497,15 +497,15 @@ void prvShowTask( void *pvParameters )
                         default:n = 0;break;
                         }
                     }
-                    else if (1 == water.is_shortage_water_status)//Ë®Ñ¹²»¹»
+                    else if (1 == water.is_shortage_water_status)//æ°´å‹ä¸å¤Ÿ
                     {
-                        //¶à¹¦ÄÜµÆÏ¨Ãğ
+                        //å¤šåŠŸèƒ½ç¯ç†„ç­
                         led_multifunc = MULTIFUNC_0;
                         led_drops = DROPS_0;
                     }
-                    else if (1 == water.is_overhaul_status)//¹ÊÕÏ9¼ì²â¸ßÑ¹¿ª¹Ø³ÖĞøÊ±¼ä
+                    else if (1 == water.is_overhaul_status)//æ•…éšœ9æ£€æµ‹é«˜å‹å¼€å…³æŒç»­æ—¶é—´
                     {
-                        //¶à¹¦ÄÜµÆÒ»Ö±ÉÁË¸±íÃ÷Éè±¸ĞèÒª¼ìĞŞ
+                        //å¤šåŠŸèƒ½ç¯ä¸€ç›´é—ªçƒè¡¨æ˜è®¾å¤‡éœ€è¦æ£€ä¿®
                         static uint8_t n = 0;
                         switch (n)
                         {
@@ -517,19 +517,19 @@ void prvShowTask( void *pvParameters )
                     }
                     else if (1 == water.is_bushing_now)
                     {
-                        //¶à¹¦ÄÜµÆ³£ÁÁ£¬±íÃ÷Ñ¹Á¦Í°Ë®Âú
+                        //å¤šåŠŸèƒ½ç¯å¸¸äº®ï¼Œè¡¨æ˜å‹åŠ›æ¡¶æ°´æ»¡
                         led_multifunc = MULTIFUNC_2;
                         led_drops = DROPS_0;
                     }
-                    else if (1 == water.is_full_water_status)//Ë®Âú
+                    else if (1 == water.is_full_water_status)//æ°´æ»¡
                     {
-                        //¶à¹¦ÄÜµÆ³£ÁÁ£¬±íÃ÷Ñ¹Á¦Í°Ë®Âú
+                        //å¤šåŠŸèƒ½ç¯å¸¸äº®ï¼Œè¡¨æ˜å‹åŠ›æ¡¶æ°´æ»¡
                         led_multifunc = MULTIFUNC_3;
                         led_drops = DROPS_0;
                     }
-                    else if (1 == water.is_make_water_status)//Õı³£ÖÆË®
+                    else if (1 == water.is_make_water_status)//æ­£å¸¸åˆ¶æ°´
                     {
-                        //¶à¹¦ÄÜµÆÓÉÄÚÏòÍâÁÁ±íÃ÷Éè±¸ÕıÔÚÖÆË®
+                        //å¤šåŠŸèƒ½ç¯ç”±å†…å‘å¤–äº®è¡¨æ˜è®¾å¤‡æ­£åœ¨åˆ¶æ°´
                         static uint8_t n = 0;
                         switch(n)
                         {
@@ -546,40 +546,40 @@ void prvShowTask( void *pvParameters )
                         led_multifunc = MULTIFUNC_0;
                         led_drops = DROPS_0;
                     }
-                    
+
                     if (water.is_test_mode_switch_off == 1)
                     {
                         if ( water.device_status == 4 )
                         {
                             static bool is_show = false;
                             is_show = !is_show;
-                            if (water.save.raw_water_tds_switch == 0)//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+                            if (water.save.raw_water_tds_switch == 0)//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
                                 show_left_up(water.save.raw_water_ppm, is_show);
                             else if (water.save.raw_water_tds_switch == 1)
                                 show_left_up(water.raw_water_ppm, is_show);
-                            
-                            if (water.save.clean_water_tds_switch == 0)//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+
+                            if (water.save.clean_water_tds_switch == 0)//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
                                 show_right_up(water.save.clean_water_ppm, is_show);
                             else if (water.save.clean_water_tds_switch == 1)
                                 show_right_up(water.clean_water_ppm, is_show);
                         }
                         else
                         {
-                            if (water.save.raw_water_tds_switch == 0)//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+                            if (water.save.raw_water_tds_switch == 0)//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
                                 show_left_up(water.save.raw_water_ppm, 1);
                             else if (water.save.raw_water_tds_switch == 1)
                                 show_left_up(water.raw_water_ppm, 1);
-                            
-                            if (water.save.clean_water_tds_switch == 0)//0ÏÔÊ¾Ä¬ÈÏÖµ£¬1ÏÔÊ¾ÊµÊ±Öµ
+
+                            if (water.save.clean_water_tds_switch == 0)//0æ˜¾ç¤ºé»˜è®¤å€¼ï¼Œ1æ˜¾ç¤ºå®æ—¶å€¼
                                 show_right_up(water.save.clean_water_ppm, 1);
                             else if (water.save.clean_water_tds_switch == 1)
                                 show_right_up(water.clean_water_ppm, 1);
                         }
-                        
-                        
-                        if (water.save.screen_mode_switch.day == 0x00)//ÒÑÓÃÌìÊı
+
+
+                        if (water.save.screen_mode_switch.day == 0x00)//å·²ç”¨å¤©æ•°
                         {
-                            if (water.device_status == 0x03)//Ç··Ñ
+                            if (water.device_status == 0x03)//æ¬ è´¹
                             {
                                 static bool is_show = false;
                                 is_show = !is_show;
@@ -588,9 +588,9 @@ void prvShowTask( void *pvParameters )
                             else
                                 show_left_down(water.used_days, 1);
                         }
-                        else if (water.save.screen_mode_switch.day == 0x01)//Ê£ÓàÌìÊı
+                        else if (water.save.screen_mode_switch.day == 0x01)//å‰©ä½™å¤©æ•°
                         {
-                            if (water.device_status == 0x03)//Ç··Ñ
+                            if (water.device_status == 0x03)//æ¬ è´¹
                             {
                                 static bool is_show = false;
                                 is_show = !is_show;
@@ -599,15 +599,15 @@ void prvShowTask( void *pvParameters )
                             else
                                 show_left_down(water.remain_days, 1);
                         }
-                        
-                        
-                        if (water.save.work_mode == 0x01) //1	Ê±³¤Ä£Ê½
+
+
+                        if (water.save.work_mode == 0x01) //1	æ—¶é•¿æ¨¡å¼
                         {
-                            show_right_down((uint32_t)(water.save.used_flow*0.917 / 1000 + 0.5), 1);//Èç¹ûÊÇ•réLÄ£Ê½µÄÔ’£¬¾ÍÖ»ï@Ê¾ÒÑÓÃÁ÷Á¿£¬Ê£ğNÁ÷Á¿²»ÓÃ¿¼‘]£¬KÇÒ²»ÓÃ¹ÜÊÇ·ñÊ£ğNÁ÷Á¿¶àÉÙ†–î}
+                            show_right_down((uint32_t)(water.save.used_flow*0.917 / 1000 + 0.5), 1);//å¦‚æœæ˜¯æ™‚é•·æ¨¡å¼çš„è©±ï¼Œå°±åªé¡¯ç¤ºå·²ç”¨æµé‡ï¼Œå‰©é¤˜æµé‡ä¸ç”¨è€ƒæ…®ï¼Œä¸¦ä¸”ä¸ç”¨ç®¡æ˜¯å¦å‰©é¤˜æµé‡å¤šå°‘å•é¡Œ
                         }
-                        else if (water.save.screen_mode_switch.flow == 0x02)//ÒÑÓÃÁ÷Á¿         
+                        else if (water.save.screen_mode_switch.flow == 0x02)//å·²ç”¨æµé‡
                         {
-                            if (water.device_status == 0x03)//Ç··Ñ
+                            if (water.device_status == 0x03)//æ¬ è´¹
                             {
                                 static bool is_show = false;
                                 is_show = !is_show;
@@ -616,9 +616,9 @@ void prvShowTask( void *pvParameters )
                             else
                                 show_right_down((uint32_t)(water.save.used_flow*0.917 / 1000 + 0.5), 1);
                         }
-                        else if (water.save.screen_mode_switch.flow == 0x03)//Ê£ÓàÁ÷Á¿
+                        else if (water.save.screen_mode_switch.flow == 0x03)//å‰©ä½™æµé‡
                         {
-                            if (water.device_status == 0x03)//Ç··Ñ
+                            if (water.device_status == 0x03)//æ¬ è´¹
                             {
                                 static bool is_show = false;
                                 is_show = !is_show;
@@ -628,7 +628,7 @@ void prvShowTask( void *pvParameters )
                                 show_right_down((uint32_t)(water.save.remain_flow*0.917 / 1000 + 0.5), 1);
                         }
                     }
-                    else//²âÊÔÄ£Ê½ÏÂÉÁË¸LEDµÆ
+                    else//æµ‹è¯•æ¨¡å¼ä¸‹é—ªçƒLEDç¯
                     {
 //                        static int count_500ms = 0;
 //                        if (count_500ms++ >= 2)
@@ -642,7 +642,7 @@ void prvShowTask( void *pvParameters )
                             show_right_down((uint32_t)(water.test_used_flow*0.917 / 1000 + 0.5), is_show);
 //                        }
                     }
-                    
+
                 }//if (count_200ms++ >= 2)
             }//if (1 == water.is_screen_status_off || (water.is_power_on_status == 0))
         }//if (0 == water.save.is_bind)
